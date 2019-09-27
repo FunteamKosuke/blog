@@ -128,8 +128,8 @@
                         while (($csv = fgetcsv($handle, 1000, ",")) !== false) {
                             // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                             if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN)){
-                                // 郵便番号と町域が一致したデータを更新したいデータとする。
-
+                                // 郵便番号と町域と市区町村が一致したデータを更新したいデータとする。
+                                // find firstでupdate
                                 $update = $this->Address->find('first', array(
                                             			    'conditions'=>array(
                                             			         'zipcode' => $csv[2],
@@ -169,12 +169,104 @@
                                 // 変更理由
                                 $update['Address']['reason_change'] = $csv[14];
                                 $save_data[] = $update;
-                                // $update_array = $this->Address->find('all');
-                                // if (count($update_array) > 1) {
-                                //     $this->log('csvupdate');
-                                //     $this->log($update_array);
+
+                                // find allでupdate
+                                // $update_array = $this->Address->find('all', array(
+                                //             			    'conditions'=>array(
+                                //             			         'zipcode' => $csv[2],
+                                //                                  'city_kannzi' => $csv[7],
+                                //                                  'town_area_kannzi' => $csv[8]
+                                //             				),
+                                //             			));
+                                // // if (count($update_array) > 1) {
+                                // //     $this->log('csvupdate');
+                                // //     $this->log($update_array);
+                                // // }
+                                // // 郵便局が作成しているcsvファイルなのに全く同じデータが入ってるので、その対応。
+                                // foreach ($update_array as $update) {
+                                //     // 地方コードの設定
+                                //     $update['Address']['region_code'] = $csv[0];
+                                //     // 旧郵便番号の設定
+                                //     $update['Address']['old_zipcode'] = $csv[1];
+                                //     // 現郵便番号の設定
+                                //     $update['Address']['zipcode'] = $csv[2];
+                                //     // 都道府県名(カタカナ)の設定
+                                //     $update['Address']['prefectures_kana'] = $csv[3];
+                                //     // 市区町村(カタカナ)の設定
+                                //     $update['Address']['city_kana'] = $csv[4];
+                                //     // 町域(カタカナ)の設定
+                                //     $update['Address']['town_area_kana'] = $csv[5];
+                                //     // 都道府県(漢字)の設定
+                                //     $update['Address']['prefectures_kannzi'] = $csv[6];
+                                //     // 市区町村(漢字)の設定
+                                //     $update['Address']['city_kannzi'] = $csv[7];
+                                //     // 町域(漢字)の設定
+                                //     $update['Address']['town_area_kannzi'] = $csv[8];
+                                //     // 一町域が二以上の郵便番号で表される場合の表示
+                                //     $update['Address']['town_two'] = $csv[9];
+                                //     // 小字毎に番地が起番されている町域の表示
+                                //     $update['Address']['town_address'] = $csv[10];
+                                //     // 丁目を有する町域の場合の表示
+                                //     $update['Address']['chome_town'] = $csv[11];
+                                //     // 一つの郵便番号で二以上の町域を表す場合の表示
+                                //     $update['Address']['zip_two'] = $csv[12];
+                                //     // 更新の表示
+                                //     $update['Address']['update_display'] = $csv[13];
+                                //     // 変更理由
+                                //     $update['Address']['reason_change'] = $csv[14];
+                                //     $save_data[] = $update;
                                 // }
-                                //郵便局が作成しているcsvファイルなのに全く同じデータが入ってるので、その対応。
+                                // queryでデータを取得する。
+                                // $query = "SELECT * FROM addresses as Address where zipcode=${csv[2]} AND city_kannzi='";
+                                // $query .= $csv[7];
+                                // $query .= "'AND town_area_kannzi='";
+                                // $query .= $csv[8];
+                                // $query .= "'";
+                                // $update_array = $this->Address->query($query);
+                                //
+                                // // 郵便局が作成しているcsvファイルなのに全く同じデータが入ってるので、その対応。
+                                // foreach ($update_array as $update) {
+                                //     // 地方コードの設定
+                                //     $update['Address']['region_code'] = $csv[0];
+                                //     // 旧郵便番号の設定
+                                //     $update['Address']['old_zipcode'] = $csv[1];
+                                //     // 現郵便番号の設定
+                                //     $update['Address']['zipcode'] = $csv[2];
+                                //     // 都道府県名(カタカナ)の設定
+                                //     $update['Address']['prefectures_kana'] = $csv[3];
+                                //     // 市区町村(カタカナ)の設定
+                                //     $update['Address']['city_kana'] = $csv[4];
+                                //     // 町域(カタカナ)の設定
+                                //     $update['Address']['town_area_kana'] = $csv[5];
+                                //     // 都道府県(漢字)の設定
+                                //     $update['Address']['prefectures_kannzi'] = $csv[6];
+                                //     // 市区町村(漢字)の設定
+                                //     $update['Address']['city_kannzi'] = $csv[7];
+                                //     // 町域(漢字)の設定
+                                //     $update['Address']['town_area_kannzi'] = $csv[8];
+                                //     // 一町域が二以上の郵便番号で表される場合の表示
+                                //     $update['Address']['town_two'] = $csv[9];
+                                //     // 小字毎に番地が起番されている町域の表示
+                                //     $update['Address']['town_address'] = $csv[10];
+                                //     // 丁目を有する町域の場合の表示
+                                //     $update['Address']['chome_town'] = $csv[11];
+                                //     // 一つの郵便番号で二以上の町域を表す場合の表示
+                                //     $update['Address']['zip_two'] = $csv[12];
+                                //     // 更新の表示
+                                //     $update['Address']['update_display'] = $csv[13];
+                                //     // 変更理由
+                                //     $update['Address']['reason_change'] = $csv[14];
+                                //     $save_data[] = $update;
+                                // }
+                                // queryでデータを取得する。
+                                // $query = "SELECT * FROM addresses as Address where zipcode=${csv[2]} AND city_kannzi='";
+                                // $query .= $csv[7];
+                                // $query .= "'AND town_area_kannzi='";
+                                // $query .= $csv[8];
+                                // $query .= "' LIMIT 1";
+                                // $update_array = $this->Address->query($query);
+                                //
+                                // // 郵便局が作成しているcsvファイルなのに全く同じデータが入ってるので、その対応。
                                 // foreach ($update_array as $update) {
                                 //     // 地方コードの設定
                                 //     $update['Address']['region_code'] = $csv[0];
