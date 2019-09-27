@@ -1,0 +1,54 @@
+<!-- File: /app/View/Posts/add.ctp -->
+<h1>記事の追加</h1>
+<?php echo $this->Form->create( 'Post', array( 'type'=>'file', 'enctype' => 'multipart/form-data')); ?>
+<div class="form-group">
+    <h3>タイトル</h3>
+    <?php echo $this->Form->input('title', array('label' => false, 'class' => 'form-control')); ?>
+</div>
+<div class="form-group">
+    <h3>内容</h3>
+    <?php echo $this->Form->input('body', array('label' => false, 'rows' => '3', 'class' => 'form-control')); ?>
+</div>
+<div class="form-group">
+    <h3>カテゴリー</h3>
+    <?php echo $this->Form->input('Category.category_id', array('label' => false, 'class' => 'form-control')); // プルダウンメニュー ?>
+</div>
+<div class="form-group">
+    <h3>タグ</h3>
+    <small>*スペース区切りで入力することで、入力した分だけのタグを設定することができます。</small><br>
+    <?php echo $this->Form->input('Tag.tag_str', array('label' => false, 'class' => 'form-control')); ?>
+</div>
+<div class="form-group">
+    <h3>画像を投稿する</h3>
+    <small>*複数投稿可</small><br>
+    <label class="label-file btn btn-outline-primary" for="label-file-image">
+    ファイルを選択してください
+    <?php // 画像を投稿する。
+    echo $this->Form->input( 'Image.files.', array(
+                                                    'type' => 'file',
+                                                    'multiple',
+                                                    'id' => 'label-file-image',
+                                                    'class' => 'form-control-file label-file-name')); ?>
+    </label>
+    <div class="form-group">
+        <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="未選択">
+    </div>
+</div>
+<div class="form-group">
+    <h3>サムネイルを設定する</h3>
+    <label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
+    ファイルを選択してください
+    <?php /// サムネイルを設定する。
+    echo $this->Form->input('Thumbnail.thumbnail', array(
+                                                        'type' => 'file',
+                                                        'id' => 'label-file-thumbnail',
+                                                        'class' => 'form-control-file label-file-name')); ?>
+    </label>
+    <div class="form-group">
+        <input type="text" id="file-name-thumbnail" class="form-control file-name-input" readonly="readonly" placeholder="未選択">
+    </div>
+</div>
+<label class='label-submit btn btn-outline-primary btn-block' for="label-submit">
+    記事を投稿する
+<?php echo $this->Form->end(array('id' => 'label-submit')); ?>
+</label>

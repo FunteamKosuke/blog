@@ -1,0 +1,342 @@
+/* ヘッダー、コンテンツ、フッターの親ブロックのスタイルを定義する */
+#container{
+  background-color: #fff;
+}
+
+
+/* ヘッダーのスタイルを定義する */
+#header{
+  /* ヘッダーが無駄に大きくなるのを防ぐため */
+  height: 60px;
+  padding: 0;
+}
+
+#header .container-fluid{
+    height: 100%;
+}
+
+#header .container-fluid .row{
+    height: 100%;
+}
+
+
+
+#header a{
+  /* 下線を消す。 */
+  text-decoration: none;
+
+  /* メニューの縦位置を揃えるため */
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-top: 16px;
+}
+
+#header a:link{
+}
+
+#header ul{
+  /* リストの点を消す */
+  height: 100%;
+  list-style: none;
+  margin: 0;
+}
+
+#header ul li{
+  /* 横並びにする。 */
+  display: inline;
+}
+
+/* menu */
+#header #menu{
+  padding: 0;
+  height: 100%;
+}
+
+/* search */
+
+#header #search{
+    height: 100%;
+}
+
+
+/* アイコンのサイズはマージン含めてヘッダーと同じサイズでないと検索フォームが非表示の時と表示の時ではレイアウトがずれる。 */
+#header #search #icon{
+  /* 検索アイコンが入力フォームに引っ付かないようにする。 */
+  margin: 5px 5px auto 5px;
+  cursor: pointer;
+}
+
+#header #search #icon img{
+
+}
+
+#header #search input{
+}
+
+#header #search div{
+  /* 検索フォームの入力フォームとボタンが大きくなるのを防ぐ */
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#header #search_toggle{
+    display: none;
+}
+
+#header .search_toggle{
+    display: none;
+}
+
+#header .nav-item{
+}
+
+#header .dropdown-menu{
+  background-color: #3ed832;
+}
+
+#header .dropdown-menu a{
+  color: #fff;
+  padding-left: 8px;
+}
+
+#header .dropdown-menu a:hover{
+  background-color: #000;
+}
+
+
+/* コンテンツ部分のスタイルを適用する */
+#content{
+
+}
+
+/* フッターのスタイルを定義する。 */
+#footer{
+    background-color: #000;
+    color: #fff;
+}
+
+#footer .copyright{
+    margin: 40px auto;
+}
+
+/* コントローラーごとのスタイルを定義する */
+/* users/add */
+#users__add #town-select, #users__add #twon_msg{
+    display: none;
+}
+
+
+/* posts/index */
+#post__index{
+  margin-top: 30px;
+}
+
+#post__index .container-fluid{
+  margin-top: 30px;
+}
+
+/* post/view */
+#post__view{
+    margin-top: 70px;
+    width: 100%;
+}
+#post__view #view-title{
+    font-size: 4rem;
+}
+
+#post__view .view-image{
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+#post__view .view-image .image{
+    width: 100%;
+    overflow: hidden;
+}
+
+#post__view .view-image .image img{
+    width: 100%;
+    max-height: 300px;
+    background-color: #F2F2F2;
+    object-fit: contain;
+}
+
+#post__view .back-curtain{
+    background: rgba(0, 0, 0, 0.5); // ③透過率５０％
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+}
+
+#post__view .view-image .largeImg{
+    position: fixed;
+    height: 500px;
+    background-color: #A4A4A4;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 1000;
+    display: none;
+    border-radius: 10px;
+    border: solid 10px #fff;
+}
+
+#post__view .slide{
+position:relative;
+}
+#post__view .slide .largeImg img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 999;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#post__view .slide-operation{
+    display: none;
+    position:fixed;
+    top: 0;
+    left: 0;
+    /* width: 100000px;
+    height: 100000px; */
+    z-index: 999;
+}
+
+#post__view .next{
+    display: none;
+    position:absolute;
+    top: 40%;
+    left: 85%;
+    z-index: 1000;
+    font-size: 8rem;
+    width: 100px;
+    height: 100px;
+    color: #fff;
+    cursor: pointer;
+}
+
+#post__view .prev{
+    display: none;
+    position: absolute;
+    top: 40%;
+    left: 10%;
+    z-index: 1000;
+    font-size: 8rem;
+    width: 100px;
+    height: 100px;
+    color: #fff;
+    cursor: pointer;
+}
+
+#post__view .view-image .image-delete{
+    width: 50%;
+    padding: 2px 5px;
+}
+
+#post__view .view-image .image-edit{
+    width: 50%;
+    padding: 2px 5px;
+}
+/* images/upload */
+
+/* addresses/csv_upload */
+
+
+/****** 全てのページに適用するスタイルを以下に定義する。 ******/
+
+/* 記事を一覧で表示する部分のスタイル */
+.post-list .title{
+  font-size: 3rem;
+}
+
+.post-list .read-next{
+    margin-top: 15px;
+}
+
+.post-list .thumbnail{
+    width: 100%;
+    overflow: hidden;
+}
+
+.post-list .thumbnail img{
+    width: 100%;
+    max-height: 300px;
+    background-color: #F2F2F2;
+    object-fit: contain;
+}
+
+/* 記事やヘッダーの部品、フッターの部品を中央に表示するためのクラス */
+.blog-middle{
+  margin: auto auto auto auto;
+  width: 912px;
+}
+
+@media (max-width: 912px){
+  .blog-middle{
+    margin: 0 0 0 0;
+    width: 100%;
+  }
+}
+
+/* input fileにデザインを適用するためのスタイル */
+.label-file input[type="file"] {
+   display: none;
+   padding: 0;
+   margin: 0;
+}
+.label-file {
+cursor:pointer; /* マウスカーソルの形を指定する */
+}
+
+/* htmlヘルパーによって作成される無駄なdivを非表示にする */
+.label-file div{
+    display: none;
+}
+/* ファイル選択フォームで、file formのみの場合ははじめにボタンを非表示にし、ファイルを選択したらボタンを表示する。 */
+.label-file-button{
+    display: none;
+}
+
+
+/* submitボタンにデザインを適用するためのスタイル。そのままだと色の変更ができない。 */
+.label-submit input[type="submit"]{
+    display: none;
+}
+
+.label-submit{
+    cursor: pointer;
+}
+
+.label-submit div{
+    display: none;
+}
+
+.loading{
+    display: none;
+    margin-top: 40px;
+    height: 50px;
+    width: 100%;
+    position: relative;
+}
+
+.loading .dot-spin{
+    position: absolute;
+    top: 0;
+    left: 47%;
+}
+
+.loading p{
+    position: absolute;
+    top: -5px;
+    left: 50%;
+}
