@@ -7,12 +7,101 @@ $(function(){
 
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
-    // 町域を選択するセレクトボックス が選択された場合に使用する、都道府県と市区町村を格納するための変数
-    var pref_city_str = '';
+
+    // 地方選択ボックスを画面読み込み時に作成する。
+    $region = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州'];
+    AddselectElem('region-select', $region);
+
+    // 地方選択ボックスが選択された時に関連する都道府県の選択ボックスを作成する。
+    $('#region-select').change(function(){
+        var pref = new Array();
+        switch ($('#region-select option:selected').text()) {
+            case '北海道':
+                pref.push('北海道');
+                break;
+            case '東北':
+                pref.push('青森県', '岩手県', '秋田県', '宮城県', '山形県', '福島県');
+                break;
+            case '関東':
+                pref.push('茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県');
+                break;
+            case '中部':
+                pref.push('新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県');
+                break;
+            case '近畿':
+                pref.push('三重県', '滋賀県', '奈良県', '和歌山県', '京都府', '大阪府', '兵庫県');
+                break;
+            case '中国':
+                pref.push('岡山県', '広島県', '鳥取県', '島根県', '山口県');
+                break;
+            case '四国':
+                pref.push('香川県', '徳島県', '愛媛県', '高知県');
+                break;
+            case '九州':
+                pref.push('福島県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県');
+                break;
+            default:
+                pref.push('地方以外のデータ渡してんじゃねえよ');
+        }
+        $('#pref-select').empty();
+        AddselectElem('pref-select', pref);
+        $('#pref-select').show();
+    });
+
+    // 選択された都道府県に関連する市区町村の選択ボックスを作成する。
+    $('#pref-select').change(function(){
+        $.ajax({
+            type: "POST",
+            url: "../addresses/searchSelectElem",
+            data: {
+                "distinct_column": 'city_kannzi',
+                "search_column": 'prefectures_kannzi',
+                "search_data": $('#pref-select option:selected').text()
+            },
+            success: function(json_search_result){
+                var search_result = $.parseJSON(json_search_result);
+                $('#city-select').empty();
+                AddselectElem('city-select', search_result);
+                $('#city-select').show();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert('通信に失敗しました。');
+                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                console.log("textStatus     : " + textStatus);
+                console.log("errorThrown    : " + errorThrown.message);
+            }
+        });
+    });
+
+    // 選択された市区町村に関連する町域の選択ボックスを作成する。
+    $('#city-select').change(function(){
+        $.ajax({
+            type: "POST",
+            url: "../addresses/searchSelectElem",
+            data: {
+                "distinct_column": 'town_area_kannzi',
+                "search_column": 'city_kannzi',
+                "search_data": $('#city-select option:selected').text()
+            },
+            success: function(json_search_result){
+                var search_result = $.parseJSON(json_search_result);
+                $('#town-select').empty();
+                AddselectElem('town-select', search_result);
+                $('#town-select').show();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert('通信に失敗しました。');
+                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                console.log("textStatus     : " + textStatus);
+                console.log("errorThrown    : " + errorThrown.message);
+            }
+        });
+    });
+
     // ［検索］ボタンクリックで郵便番号検索を実行
     $('#zipcode').keyup(function() {
         // 郵便番号入力欄に7桁の数字が入力されたら検索を開始する。
-        if(0 <= $(this).val().search(/\d{7}/)){
+        if(0 == $(this).val().search(/\d{7}/)){
             $.ajax({
                 type: "POST",
                 url: "../addresses/search",
@@ -25,32 +114,27 @@ $(function(){
                     var search_result = $.parseJSON(json_search_result);
                     if (search_result.length > 0) {
                         //町域選択欄を最初に空にする
-                        $('#twon_msg').empty();
-                        $('#town-select').empty();
+                        $('#address_msg').empty().hide();
+                        $('#address-select').empty().hide();
 
-                        if (search_result.length == 1) { // 町域が一意な場合
+                        if (search_result.length == 1) { // 住所が一意な場合
                             var address = search_result[0]['Address']['prefectures_kannzi'] +
                                           search_result[0]['Address']['city_kannzi'] +
                                           search_result[0]['Address']['town_area_kannzi'];
-
-                        } else {// 郵便番号に複数の町域が含まれている場合の対応
-                            // 都道府県名と市区町村までは同じなので通常通り入力欄に入力する。
-                            var address = search_result[0]['Address']['prefectures_kannzi'] +
-                                          search_result[0]['Address']['city_kannzi'];
-                            // セレクトボックス変更時に使用する
-                            pref_city_str = address;
-                            // 町域はセレクトボックスを作成して選択された町域が入力欄に追加されるようにする。
+                        $('#address').val(address);
+                    } else {// 郵便番号に複数の住所が含まれている場合の対応
+                            // 住所が複数ある場合はセレクトボックス を表示し、選択すると住所欄に入力されるようにする。
                             var select_str = '<option>選択してください</option>'
                             $.each(search_result, function(index, elem){
-                                select_str += '<option>' + elem['Address']['town_area_kannzi'] + '</option>'
+                                select_str += '<option>' + elem['Address']['prefectures_kannzi'] +
+                                                           elem['Address']['city_kannzi'] +
+                                                           elem['Address']['town_area_kannzi'] + '</option>'
                             });
-                            // 空にしてから追加
-                            var town_msg = '*郵便番号に複数の町域が含まれています。該当の町域を選択してください。';
-
-                            $('#twon_msg').text(town_msg).show();
-                            $('#town-select').append(select_str).show();
+                            var address_msg = '*郵便番号に複数の住所が含まれています。該当の住所を選択してください。';
+                            $('#address').val('');
+                            $('#address_msg').text(address_msg).show();
+                            $('#address-select').append(select_str).show();
                         }
-                        $('#address').val(address);
                     } else {
                         $('#address').val('該当の住所が存在しません。手動で入力してください。');
                     }
@@ -66,9 +150,9 @@ $(function(){
     });
 
     // 住所欄に入力される町域が選択された町域になるようにする
-    $('#town-select').change(function() {
-        if (!($('#town-select option:selected').text() == '選択してください')) {
-            var address_str = pref_city_str + $('#town-select option:selected').text();
+    $('#address-select').change(function() {
+        if (!($('#address-select option:selected').text() == '選択してください')) {
+            var address_str = $('#address-select option:selected').text();
             $('#address').val(address_str);
         }
     });
@@ -240,5 +324,17 @@ $(function(){
 
         // 画面を覆っているタグを削除する
         $("#" + id).remove();
+    }
+
+    // selectボックスに要素を追加する関数。
+    // セレクトボックス のidと追加したい要素を配列で渡すと追加される。
+    // class名も考慮しようと思ったがそもそも同じようなセレクトボックス を
+    // 同じ画面に何個も作成することがないので対応しない。
+    function AddselectElem(select_id_name, select_array){
+        select_str = '';
+        $.each(select_array, function(index, elem){
+            select_str += '<option>' + elem + '</option>'
+        });
+        $("#" + select_id_name).append(select_str);
     }
 });

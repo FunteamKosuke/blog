@@ -20,13 +20,26 @@
             <label  id="address-search" class='btn btn-outline-primary form-control'>検索</label>
         </div>
         <!-- 郵便番号に複数の町域が含まれていた時に使用する。 -->
-        <small id="twon_msg"></small><br>
+        <small id="address_msg"></small><br>
         <div class="form-group form-inline">
-            <select id="town-select" class='form-control'></select>
+            <select id="address-select" class='form-control'></select>
         </div>
         <div class="form-group">
             <h3>住所</h3>
             <?php echo $this->Form->input('address', array('label' => false, 'id' => 'address', 'class' => 'form-control')); ?>
+        </div>
+        <!-- 地方選択ボックス -->
+        <div class="form-group form-inline">
+            <select id="region-select" class='form-control'></select>
+        </div>
+        <div class="form-group form-inline">
+            <select id="pref-select" class='form-control'></select>
+        </div>
+        <div class="form-group form-inline">
+            <select id="city-select" class='form-control'></select>
+        </div>
+        <div class="form-group form-inline">
+            <select id="town-select" class='form-control'></select>
         </div>
         <div class="form-group">
             <h3>ユーザーに付与する権限</h3>

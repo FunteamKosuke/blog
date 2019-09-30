@@ -122,7 +122,7 @@
 
 /* コントローラーごとのスタイルを定義する */
 /* users/add */
-#users__add #town-select, #users__add #twon_msg{
+#users__add #address-select, #users__add #address_msg{
     display: none;
 }
 
