@@ -4,14 +4,13 @@
 
         public function beforeFilter(){
     		parent::beforeFilter();
-    		$this->Auth->allow('search','searchSelectElem');
+    		$this->Auth->allow('search','getSelectElem');
     	}
 
         // csvインポート用
         public function csv_upload(){
             if ($this->request->is('post')) {
                 $time_start = microtime(true);
-                $this->log($this->request->data['Address']['csv_file']);
                 // ファイルの保存先パスを作成する
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
@@ -20,38 +19,7 @@
                         while (($csv = fgetcsv($handle, 1000, ",")) !== false) {
                                 // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                                 if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN)){
-                                    $data = array();
-                                    // 地方コードの設定
-                                    $data['Address']['region_code'] = $csv[0];
-                                    // 旧郵便番号の設定
-                                    $data['Address']['old_zipcode'] = $csv[1];
-                                    // 現郵便番号の設定
-                                    $data['Address']['zipcode'] = $csv[2];
-                                    // 都道府県名(カタカナ)の設定
-                                    $data['Address']['prefectures_kana'] = $csv[3];
-                                    // 市区町村(カタカナ)の設定
-                                    $data['Address']['city_kana'] = $csv[4];
-                                    // 町域(カタカナ)の設定
-                                    $data['Address']['town_area_kana'] = $csv[5];
-                                    // 都道府県(漢字)の設定
-                                    $data['Address']['prefectures_kannzi'] = $csv[6];
-                                    // 市区町村(漢字)の設定
-                                    $data['Address']['city_kannzi'] = $csv[7];
-                                    // 町域(漢字)の設定
-                                    $data['Address']['town_area_kannzi'] = $csv[8];
-                                    // 一町域が二以上の郵便番号で表される場合の表示
-                                    $data['Address']['town_two'] = $csv[9];
-                                    // 小字毎に番地が起番されている町域の表示
-                                    $data['Address']['town_address'] = $csv[10];
-                                    // 丁目を有する町域の場合の表示
-                                    $data['Address']['chome_town'] = $csv[11];
-                                    // 一つの郵便番号で二以上の町域を表す場合の表示
-                                    $data['Address']['zip_two'] = $csv[12];
-                                    // 更新の表示
-                                    $data['Address']['update_display'] = $csv[13];
-                                    // 変更理由
-                                    $data['Address']['reason_change'] = $csv[14];
-                                    $save_data[] = $data;
+                                    $save_data[] = self::setCsvData($csv);
                                 }
                         }
                         fclose($handle);
@@ -103,6 +71,7 @@
                     // 時間計測
                     // $time = microtime(true) - $time_start;
                     // $this->log("{$time} 秒");
+
                     // 保存用のデータが作成できたらアップロードしたファイルは削除する。
                     unlink($upload_path);
                     if ($save_data) {
@@ -129,7 +98,7 @@
                 // $this->log(count($address_column));
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
                     // 更新用のcsvデータを読み込む
-                    $update_data = array();
+                    $save_data = array();
                     if (($handle = fopen($upload_path, "r")) !== false) {
                         while (($csv = fgetcsv($handle, 1000, ",")) !== false) {
                             // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
@@ -137,7 +106,7 @@
                             if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN )){
                                 // 郵便番号と町域と市区町村が一致したデータを更新したいデータとする。
                                 // find firstでupdate
-                                $data = $this->Address->find('first', array(
+                                $address_data = $this->Address->find('first', array(
                                             			    'conditions'=>array(
                                             			         'zipcode' => $csv[2],
                                                                  'city_kannzi' => $csv[7],
@@ -158,37 +127,8 @@
                                 // データが見つからなかった場合に、新規追加扱いしないことも考えたが、
                                 // そうなると新しいデータを追加する場合にわざわざ全てのデータが入ったcsvファイルを作成して
                                 // インポートする必要があったので、それはさすがにめんどくさいので却下。
-                                // 地方コードの設定
-                                $data['Address']['region_code'] = $csv[0];
-                                // 旧郵便番号の設定
-                                $data['Address']['old_zipcode'] = $csv[1];
-                                // 現郵便番号の設定
-                                $data['Address']['zipcode'] = $csv[2];
-                                // 都道府県名(カタカナ)の設定
-                                $data['Address']['prefectures_kana'] = $csv[3];
-                                // 市区町村(カタカナ)の設定
-                                $data['Address']['city_kana'] = $csv[4];
-                                // 町域(カタカナ)の設定
-                                $data['Address']['town_area_kana'] = $csv[5];
-                                // 都道府県(漢字)の設定
-                                $data['Address']['prefectures_kannzi'] = $csv[6];
-                                // 市区町村(漢字)の設定
-                                $data['Address']['city_kannzi'] = $csv[7];
-                                // 町域(漢字)の設定
-                                $data['Address']['town_area_kannzi'] = $csv[8];
-                                // 一町域が二以上の郵便番号で表される場合の表示
-                                $data['Address']['town_two'] = $csv[9];
-                                // 小字毎に番地が起番されている町域の表示
-                                $data['Address']['town_address'] = $csv[10];
-                                // 丁目を有する町域の場合の表示
-                                $data['Address']['chome_town'] = $csv[11];
-                                // 一つの郵便番号で二以上の町域を表す場合の表示
-                                $data['Address']['zip_two'] = $csv[12];
-                                // 更新の表示
-                                $data['Address']['update_display'] = $csv[13];
-                                // 変更理由
-                                $data['Address']['reason_change'] = $csv[14];
-                                $save_data[] = $data;
+
+                                $save_data[] = self::setCsvData($csv, $address_data);
 
                                 // find allでupdate
                                 // $update_array = $this->Address->find('all', array(
@@ -332,7 +272,7 @@
                         // $this->log("{$time} 秒");
                     }
                 }
-                $this->Flash->error(__('csvインポートに失敗しました。'));
+                $this->Flash->error(__('csvアップデートに失敗しました。'));
             }
         }
 
@@ -344,32 +284,21 @@
                             			         'zipcode'=>$this->request->data['zipcode'],
                             				),
                             			));
-                // $this->log($search_result);
                 //別言語に渡す時はjson形式で渡さないとエラーになる。
-                $this->log($search_result);
                 return json_encode($search_result);
-                // return $search_result;
-            //     $this->log($this->request->data);
-            //     if ($this->Address->findByZipcode($this->request->data['zipcode'])) {
-            //         $this->log($this->Address->findByZipcode($this->request->data['zipcode']));
-            // //         $this->log();
-            //         return true;
-            //     } else {
-            //         $this->log('存在してなかったよ');
-            //         return false;
-            //     }
             }
         }
 
-        public function searchSelectElem(){
+        // 市区町村と町域のセレクトボックス の要素を取得するための
+        public function getSelectElem(){
             $this->autoRender = FALSE; // 自動でviewが読み込まれるのを防ぐ
             if($this->request->is('ajax')) {
-                $select_data = $this->Address->find('all', array('fields' => array('DISTINCT Address.' . $this->request->data['distinct_column']),
-                                                                'conditions' => array($this->request->data['search_column'] => $this->request->data['search_data'])));
+                $get_data = $this->Address->find('all', array('fields' => array('DISTINCT Address.' . $this->request->data['distinct_column']),
+                                                                'conditions' => array($this->request->data['get_column'] => $this->request->data['get_data'])));
 
                 // 連想配列で取得したので、通常の配列として渡す。
                 $select_elem = array();
-                foreach ($select_data as $data) {
+                foreach ($get_data as $data) {
                     // 町域が空欄の場合があるので、データがある場合のみselect boxのデータとする。
                     if ($data['Address'][$this->request->data['distinct_column']]) {
                         $select_elem[] = $data['Address'][$this->request->data['distinct_column']];
@@ -379,27 +308,40 @@
             }
         }
 
-        // public function csv_import(){
-        //     if ($this->request->is('post')) {
-        //         // 入れ替える仕様のため、保存する前に一度全て削除する
-        //         $this->Zipcode->truncate();
-        //         $save_data = array();
-        //         foreach ($this->request->data['zip'] as $zip) {
-        //             $data['Zipcode']['title'] = $zip;
-        //             $save_data[] = $data;
-        //         }
-        //         if ($this->Zipcode->saveAll($save_data, array('deep' => true))) {
-        //             $this->Flash->success(__('郵便番号の登録に成功しました。'));
-        //             return $this->redirect(array('controller' => 'zipcodes', 'action' => 'zip_info'));
-        //         } else {
-        //             $this->Flash->error(__('郵便番号の登録に失敗しました。'));
-        //         }
-        //     }
-        // }
-        //
-        // public function zip_info(){
-        //     $zips = array('' => '選択してください') + $this->Zipcode->find('list', array('fields'=>array('id','title')));
-        //     $this->set('zipcodes',$zips);
-        // }
+        // dbから取得したアドレスのデータを渡すとidが含まれているので、更新扱いとなる。
+        // csvファイルのデータだけ渡した場合は、idが無いので、新規扱いとなる。
+        private function setCsvData($csv, $address_data = null){
+            // 地方コードの設定
+            $address_data['Address']['region_code'] = $csv[0];
+            // 旧郵便番号の設定
+            $address_data['Address']['old_zipcode'] = $csv[1];
+            // 現郵便番号の設定
+            $address_data['Address']['zipcode'] = $csv[2];
+            // 都道府県名(カタカナ)の設定
+            $address_data['Address']['prefectures_kana'] = $csv[3];
+            // 市区町村(カタカナ)の設定
+            $address_data['Address']['city_kana'] = $csv[4];
+            // 町域(カタカナ)の設定
+            $address_data['Address']['town_area_kana'] = $csv[5];
+            // 都道府県(漢字)の設定
+            $address_data['Address']['prefectures_kannzi'] = $csv[6];
+            // 市区町村(漢字)の設定
+            $address_data['Address']['city_kannzi'] = $csv[7];
+            // 町域(漢字)の設定
+            $address_data['Address']['town_area_kannzi'] = $csv[8];
+            // 一町域が二以上の郵便番号で表される場合の表示
+            $address_data['Address']['town_two'] = $csv[9];
+            // 小字毎に番地が起番されている町域の表示
+            $address_data['Address']['town_address'] = $csv[10];
+            // 丁目を有する町域の場合の表示
+            $address_data['Address']['chome_town'] = $csv[11];
+            // 一つの郵便番号で二以上の町域を表す場合の表示
+            $address_data['Address']['zip_two'] = $csv[12];
+            // 更新の表示
+            $address_data['Address']['update_display'] = $csv[13];
+            // 変更理由
+            $address_data['Address']['reason_change'] = $csv[14];
+            return $address_data;
+        }
     }
 ?>

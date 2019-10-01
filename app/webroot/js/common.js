@@ -8,94 +8,126 @@ $(function(){
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
 
+    // 地方、都道府県、市区町村、町域選択ボックスに関する初期化
+    initAddressSelect();
+
     // 地方選択ボックスを画面読み込み時に作成する。
-    $region = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州'];
+    $region = new Array('選択してください', '北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州');
     AddselectElem('region-select', $region);
 
     // 地方選択ボックスが選択された時に関連する都道府県の選択ボックスを作成する。
     $('#region-select').change(function(){
-        var pref = new Array();
-        switch ($('#region-select option:selected').text()) {
-            case '北海道':
-                pref.push('北海道');
-                break;
-            case '東北':
-                pref.push('青森県', '岩手県', '秋田県', '宮城県', '山形県', '福島県');
-                break;
-            case '関東':
-                pref.push('茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県');
-                break;
-            case '中部':
-                pref.push('新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県');
-                break;
-            case '近畿':
-                pref.push('三重県', '滋賀県', '奈良県', '和歌山県', '京都府', '大阪府', '兵庫県');
-                break;
-            case '中国':
-                pref.push('岡山県', '広島県', '鳥取県', '島根県', '山口県');
-                break;
-            case '四国':
-                pref.push('香川県', '徳島県', '愛媛県', '高知県');
-                break;
-            case '九州':
-                pref.push('福島県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県');
-                break;
-            default:
-                pref.push('地方以外のデータ渡してんじゃねえよ');
+        if (!('選択してください' == $('#region-select option:selected').text())) {
+            var pref = new Array();
+            switch ($('#region-select option:selected').text()) {
+                case '北海道':
+                    pref.push('北海道');
+                    break;
+                case '東北':
+                    pref.push('青森県', '岩手県', '秋田県', '宮城県', '山形県', '福島県');
+                    break;
+                case '関東':
+                    pref.push('茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県');
+                    break;
+                case '中部':
+                    pref.push('新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県');
+                    break;
+                case '近畿':
+                    pref.push('三重県', '滋賀県', '奈良県', '和歌山県', '京都府', '大阪府', '兵庫県');
+                    break;
+                case '中国':
+                    pref.push('岡山県', '広島県', '鳥取県', '島根県', '山口県');
+                    break;
+                case '四国':
+                    pref.push('香川県', '徳島県', '愛媛県', '高知県');
+                    break;
+                case '九州':
+                    pref.push('福島県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県');
+                    break;
+                default:
+                    pref.push('地方以外のデータ渡してんじゃねえよ');
+            }
+            $('#pref-select').empty();
+            pref.unshift('選択してください。');
+            AddselectElem('pref-select', pref);
+            $('#pref-select').show();
+            // 関係ないところは空にして非表示にする。
+            // 一度町域まで表示させて、再度都道府県を選択した際に町域等が残っていたらおかしいのでその対策。
+            $('#city-select').empty().hide();
+            $('#town-select').empty().hide();
         }
-        $('#pref-select').empty();
-        AddselectElem('pref-select', pref);
-        $('#pref-select').show();
     });
 
     // 選択された都道府県に関連する市区町村の選択ボックスを作成する。
     $('#pref-select').change(function(){
-        $.ajax({
-            type: "POST",
-            url: "../addresses/searchSelectElem",
-            data: {
-                "distinct_column": 'city_kannzi',
-                "search_column": 'prefectures_kannzi',
-                "search_data": $('#pref-select option:selected').text()
-            },
-            success: function(json_search_result){
-                var search_result = $.parseJSON(json_search_result);
-                $('#city-select').empty();
-                AddselectElem('city-select', search_result);
-                $('#city-select').show();
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown){
-                alert('通信に失敗しました。');
-                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-                console.log("textStatus     : " + textStatus);
-                console.log("errorThrown    : " + errorThrown.message);
-            }
-        });
+        if (!('選択してください' == $('#pref-select option:selected').text())) {
+            $.ajax({
+                type: "POST",
+                url: "../addresses/getSelectElem",
+                data: {
+                    "distinct_column": 'city_kannzi',
+                    "get_column": 'prefectures_kannzi',
+                    "get_data": $('#pref-select option:selected').text()
+                },
+                success: function(json_search_result){
+                    var search_result = $.parseJSON(json_search_result);
+                    // 空にしてから追加しないと選択するたびにselect要素が追加されてしまう。
+                    $('#city-select').empty();
+                    search_result.unshift('選択してください。');
+                    AddselectElem('city-select', search_result);
+                    $('#city-select').show();
+                    // 関係ないところは空にして非表示にする。
+                    // 一度町域まで表示させて、再度都道府県を選択した際に町域等が残っていたらおかしいのでその対策。
+                    $('#town-select').empty().hide();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert('通信に失敗しました。');
+                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                    console.log("textStatus     : " + textStatus);
+                    console.log("errorThrown    : " + errorThrown.message);
+                }
+            });
+        }
     });
 
     // 選択された市区町村に関連する町域の選択ボックスを作成する。
     $('#city-select').change(function(){
-        $.ajax({
-            type: "POST",
-            url: "../addresses/searchSelectElem",
-            data: {
-                "distinct_column": 'town_area_kannzi',
-                "search_column": 'city_kannzi',
-                "search_data": $('#city-select option:selected').text()
-            },
-            success: function(json_search_result){
-                var search_result = $.parseJSON(json_search_result);
-                $('#town-select').empty();
-                AddselectElem('town-select', search_result);
-                $('#town-select').show();
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown){
-                alert('通信に失敗しました。');
-                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-                console.log("textStatus     : " + textStatus);
-                console.log("errorThrown    : " + errorThrown.message);
-            }
-        });
+        if (!('選択してください' == $('#city-select option:selected').text())) {
+            $.ajax({
+                type: "POST",
+                url: "../addresses/getSelectElem",
+                data: {
+                    "distinct_column": 'town_area_kannzi',
+                    "get_column": 'city_kannzi',
+                    "get_data": $('#city-select option:selected').text()
+                },
+                success: function(json_search_result){
+                    var search_result = $.parseJSON(json_search_result);
+                    // 空にしてから追加しないと選択するたびにselect要素が追加されてしまう。
+                    $('#town-select').empty();
+                    search_result.unshift('選択してください。');
+                    AddselectElem('town-select', search_result);
+                    $('#town-select').show();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert('通信に失敗しました。');
+                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                    console.log("textStatus     : " + textStatus);
+                    console.log("errorThrown    : " + errorThrown.message);
+                }
+            });
+        }
+    });
+
+    $('#town-select').change(function(){
+        if (!('選択してください' == $('#town-select option:selected').text())) {
+            // var region_name = $('#region-select option:selected').text();
+            var pref_name = $('#pref-select option:selected').text();
+            var city_name = $('#city-select option:selected').text();
+            var town_name = $('#town-select option:selected').text();
+            var select_address = pref_name + city_name + town_name;
+            $('#select-address').val(select_address);
+        }
     });
 
     // ［検索］ボタンクリックで郵便番号検索を実行
@@ -336,5 +368,12 @@ $(function(){
             select_str += '<option>' + elem + '</option>'
         });
         $("#" + select_id_name).append(select_str);
+    }
+
+    function initAddressSelect(){
+        // 都道府県、市区町村、町域の選択ボックスについては最初は非表示。
+        $('#pref-select').hide();
+        $('#city-select').hide();
+        $('#town-select').hide();
     }
 });

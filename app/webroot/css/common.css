@@ -122,6 +122,15 @@
 
 /* コントローラーごとのスタイルを定義する */
 /* users/add */
+#users__add{
+    width: 450px;
+    margin: auto;
+    margin-top: 30px;
+    padding: 14px 18px;
+    border-radius: 15px;
+    border: solid 1px #E6E6E6;
+}
+
 #users__add #address-select, #users__add #address_msg{
     display: none;
 }
@@ -339,4 +348,26 @@ cursor:pointer; /* マウスカーソルの形を指定する */
     position: absolute;
     top: -5px;
     left: 50%;
+}
+
+.success{
+    margin: 5px auto;
+    color: #fff;
+    background-color: #01DF3A;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 2rem;
+}
+
+.error{
+    margin: 5px auto;
+    color: #fff;
+    background-color: #FE2E2E;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 2rem;
+}
+.success,.error{
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
+    font-family: arial;
 }
