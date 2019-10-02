@@ -69,7 +69,7 @@
                 echo $this->Html->link(
                     'csvファイルアップロード',
                     array('controller' => 'addresses',
-                          'action' => 'csv_upload'),
+                          'action' => 'csv_import'),
                     array('class' => 'dropdown-item')
                 );
                 echo $this->Html->link(

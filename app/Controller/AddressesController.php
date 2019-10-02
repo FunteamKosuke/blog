@@ -8,21 +8,26 @@
     	}
 
         // csvインポート用
-        public function csv_upload(){
-            if ($this->request->is('post')) {
+        public function csv_import(){
+            if ($this->request->is('ajax')) {
+                $this->autoRender = FALSE; // 設定しないと返却されるデータがhtmlになってしまう。
                 $time_start = microtime(true);
                 // ファイルの保存先パスを作成する
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
+                    $fp = self::readCsvFile($upload_path);
+                    if ($fp == null) {
+                        return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
+                    }
                     $save_data = array();
-                    if (($handle = fopen($upload_path, "r")) !== false) {
-                        while (($csv = fgetcsv($handle, 1000, ",")) !== false) {
+                    if ($fp !== false) {
+                        while (($csv = fgetcsv($fp, 1000, ",")) !== false) {
                                 // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                                 if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN)){
                                     $save_data[] = self::setCsvData($csv);
                                 }
                         }
-                        fclose($handle);
+                        fclose($fp);
                     }
                     // 記事では以下のやり方の方が早いと記述がありましたが、実際測ってみるとfgetcsvの方が早かった。
                     // 環境の違い？
@@ -75,32 +80,38 @@
                     // 保存用のデータが作成できたらアップロードしたファイルは削除する。
                     unlink($upload_path);
                     if ($save_data) {
-                        $this->Address->truncate(); // 新しくインポートする際は入れ替えたいので一度削除する。
+                        // $this->Address->truncate(); // 新しくインポートする際は入れ替えたいので一度削除する。
                         if ($this->Address->saveAll($save_data)) {
                             // 画面遷移はしないようにする。
-                            return $this->Flash->success(__('csvインポートに成功しました。'));
+                            return json_encode('インポートに成功しました。');
                         }
                     }
+                    $this->log('csvファイルの読み込みに失敗しました。');
+                    return json_encode('インポートに失敗しました。');
+
                 }
-                $this->Flash->error(__('csvインポートに失敗しました。'));
+                $this->log('ファイルのアップロードに失敗しました。');
+                return json_encode('インポートに失敗しました。');
             }
         }
         // csv更新用
         // 更新方法としては、更新したいデータを取得し、csvファイルに記述されている内容に入れ替えてからsaveAllをする。
         public function csv_update(){
-            if ($this->request->is('post')) {
-                $select_elem = $this->Address->find('all', array('fields' => array('DISTINCT Address.city_kannzi'),
-                                                                'conditions' => array('prefectures_kannzi' => '東京都')));
-                $this->log($select_elem);
+            if ($this->request->is('ajax')) {
+                $this->autoRender = FALSE; // 設定しないと返却されるデータがhtmlになってしまう。
                 // $time_start = microtime(true);
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 // $address_column = $this->Address->getColumnTypes();
                 // $this->log(count($address_column));
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
+                    $fp = self::readCsvFile($upload_path);
+                    if ($fp == null) {
+                        return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
+                    }
                     // 更新用のcsvデータを読み込む
                     $save_data = array();
-                    if (($handle = fopen($upload_path, "r")) !== false) {
-                        while (($csv = fgetcsv($handle, 1000, ",")) !== false) {
+                    if ($fp !== false) {
+                        while (($csv = fgetcsv($fp, 1000, ",")) !== false) {
                             // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                             // idとcreatedとmodifyの数を引いた数をカラム数とする。
                             if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN )){
@@ -262,17 +273,28 @@
                                 // }
                             }
                         }
+                        fclose($fp);
                         unlink($upload_path);
                         //一括更新する
                         if ($save_data && $this->Address->saveAll($save_data)) {
-                            return $this->Flash->success(__('csvアップデートに成功しました。'));
+                            return json_encode('アップデートに成功しました。');
                         }
+                        $this->log('csvファイルの読み込みに失敗しました。');
+                        return json_encode('インポートに失敗しました。');
                         // 時間計測
                         // $time = microtime(true) - $time_start;
                         // $this->log("{$time} 秒");
                     }
                 }
-                $this->Flash->error(__('csvアップデートに失敗しました。'));
+                $this->log('ファイルのアップロードに失敗しました。');
+                return json_encode('アップデートに失敗しました。');
+            }
+        }
+
+        public function abort(){
+            if ($this->request->is('ajax')) {
+                $this->autoRender = FALSE;
+                $this->log('サーバーをabortしたよ');
             }
         }
 
@@ -342,6 +364,35 @@
             // 変更理由
             $address_data['Address']['reason_change'] = $csv[14];
             return $address_data;
+        }
+
+        // 文字コードによってcsvファイルの読み込み方が異なるので、その対応した関数。
+        // 現在はutf-8とSJISのみ対応
+        private function readCsvFile($filepath){
+            // 検出する文字コードの設定
+            mb_detect_order("UTF-8,UTF-7,ASCII,EUC-JP,SJIS,eucJP-win,sjis-win,JIS,ISO-2022-JP,Unicode");
+            // ファイルを開く
+            $data = file_get_contents($filepath);
+            $this->log(mb_detect_encoding($data));
+            // ファイルの文字コードによって読み込み方を変更する。
+            switch (mb_detect_encoding($data)) {
+                case 'SJIS': //SJIS対応
+                    // ユニークな一時ファイル作成する
+                    $csv_file = tmpfile();
+                    // 文字コード変換して一時ファイルに書き込む
+                    fwrite($csv_file, mb_convert_encoding($data, 'UTF-8', 'SJIS'));
+                    // $this->log(mb_detect_encoding($fp));
+                    // ポインタを先頭に
+                    fseek($csv_file, 0);
+                    break;
+                case 'UTF-8': //UTF-8対応
+                    $csv_file = fopen($filepath, "r");
+                    break;
+                default:
+                    $csv_file = null;
+                    break;
+            }
+            return $csv_file;
         }
     }
 ?>

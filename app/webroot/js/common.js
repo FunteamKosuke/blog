@@ -305,11 +305,106 @@ $(function(){
         clearInterval(Timer);
     }
 
-    /*** addresses/csv_upload ***/
-    $("#csv-upload").submit(function(){
+    /*** address/upload ***/
+    var ajaxHandle = null;
+    $('#addresses__csv_import #csv-upload').submit(function(){
+        $('#result_msg').empty();
+        var filedata = new FormData($("#addresses__csv_import #csv-upload")[0]); //選択されたファイルデータを取得する。
+        ajaxHandle = $.ajax({ //キャンs流処理を有効にするためにajaxのハンドルを取得する。
+            type: "POST",
+            url: "csv_import",
+            dataType: 'json',
+            data: filedata,
+            processData: false,
+            contentType: false,
+            success: function(msg)
+            {
+                $('#result_msg').text(msg);
+                $('.loading').hide();
+                $('#addresses__csv_import #cancel').hide();
+                unlockScreen(lockId);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                $('.loading').hide();
+                $('#addresses__csv_import #cancel').hide();
+                unlockScreen(lockId);
+                // キャンセルボタンが押下された際は、その旨のメッセージを出力する。
+                if (textStatus == 'abort') {
+                    $('#result_msg').text('インポートがキャンセルされました。');
+                    $.ajax({
+                        type: "POST",
+                        url: "abort"
+                    });
+                }
+                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                console.log("textStatus     : " + textStatus);
+                console.log("errorThrown    : " + errorThrown.message);
+            }
+        });
+        // .done(function( data ) {
+        //     // alert(data);
+        //     alert('hkfjgk');
+        //     // $('#result').text(data.width + "x" + data.height);
+        // });
         $('.loading').show();
+        $('#addresses__csv_import #cancel').show();
         lockScreen(lockId);
+        return false;
     });
+
+    $('#addresses__csv_update #csv-update').submit(function(){
+        $('#result_msg').empty();
+        var filedata = new FormData($("#addresses__csv_update #csv-update")[0]); //選択されたファイルデータを取得する。
+        ajaxHandle = $.ajax({ //キャンs流処理を有効にするためにajaxのハンドルを取得する。
+            type: "POST",
+            url: "csv_update",
+            dataType: 'json',
+            data: filedata,
+            processData: false,
+            contentType: false,
+            success: function(msg)
+            {
+                $('#result_msg').text(msg);
+                $('.loading').hide();
+                $('#addresses__csv_update #cancel').hide();
+                unlockScreen(lockId);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                $('.loading').hide();
+                $('#addresses__csv_update #cancel').hide();
+                unlockScreen(lockId);
+                // キャンセルボタンが押下された際は、その旨のメッセージを出力する。
+                if (textStatus == 'abort') {
+                    $('#result_import_msg').text('インポートがキャンセルされました。');
+                    $.ajax({
+                        type: "POST",
+                        url: "abort"
+                    });
+                }
+                console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                console.log("textStatus     : " + textStatus);
+                console.log("errorThrown    : " + errorThrown.message);
+            }
+        });
+        // .done(function( data ) {
+        //     // alert(data);
+        //     alert('hkfjgk');
+        //     // $('#result').text(data.width + "x" + data.height);
+        // });
+        $('.loading').show();
+        $('#addresses__csv_update #cancel').show();
+        lockScreen(lockId);
+        return false;
+    });
+
+    $('#cancel').click(function(){
+        ajaxHandle.abort();
+        ajaxHandle = null;
+    });
+
+    /*** address/apdate ***/
 
     /***** 共通で使用する *****/
     // 選択したファイルのファイル名をinputタグに入力する。

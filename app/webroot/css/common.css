@@ -258,8 +258,31 @@ position:relative;
 }
 /* images/upload */
 
-/* addresses/csv_upload */
+/* addresses/csv_import */
 
+#addresses__csv_import .button,#addresses__csv_update .button{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#addresses__csv_import #result_msg,#addresses__csv_update #result_msg{
+    text-align: center;
+}
+
+#addresses__csv_import #csv-upload-label{
+    margin-right: 5px;
+}
+#addresses__csv_import #cancel,#addresses__csv_update #cancel{
+    display: none;
+    position: relative;
+    z-index: 20000; /*画面ロックの幕より優先順位を上にする。キャンセルだけ押せるようにするため。*/
+    margin-left: 5px;
+}
+
+#addresses__csv_import #csv-upload-label, #addresses__csv_import #cancel,
+#addresses__csv_update #csv-update-label, #addresses__csv_update #cancel{
+    margin: 0;
+}
 
 /****** 全てのページに適用するスタイルを以下に定義する。 ******/
 
