@@ -9,15 +9,23 @@
     <h3>内容</h3>
     <?php echo $this->Form->input('body', array('label' => false, 'rows' => '3', 'class' => 'form-control')); ?>
 </div>
+<!-- <?php echo $this->Form->input( 'body', array(
+    'type' => 'select',
+    'multiple'=> 'checkbox',
+    'options' => $bodys)); ?> -->
 <div class="form-group">
     <h3>カテゴリー</h3>
     <?php echo $this->Form->input('Category.category_id', array('label' => false, 'class' => 'form-control')); // プルダウンメニュー ?>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <h3>タグ</h3>
     <small>*スペース区切りで入力することで、入力した分だけのタグを設定することができます。</small><br>
     <?php echo $this->Form->input('Tag.tag_str', array('label' => false, 'class' => 'form-control')); ?>
-</div>
+</div> -->
+<?php echo $this->Form->input( 'Tag.Tag', array(
+    'type' => 'select',
+    'multiple'=> 'checkbox',
+    'options' => $tags)); ?>
 <div class="form-group">
     <h3>画像を投稿する</h3>
     <small>*複数投稿可</small><br>

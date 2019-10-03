@@ -49,10 +49,15 @@
       // Viewでカテゴリをプルダウンメニューで表示するためにタグのデータを全て取得する。
       $this->set('categories',$this->Category->find('list', array('fields'=>array('id','name'))));
       // ViewでタグをSELECTボックスで表示するためにタグのデータを全て取得する。
-      $this->set( 'select1', $this->Tag->find( 'list', array(
+      $this->set( 'tags', $this->Tag->find( 'list', array(
                                               'fields' => array( 'id', 'name'))));
+
+      $post_body = array('yuou' => 'djghdjgfhkfgk', 'dhgjfg' => 'dghjghjkgfh', 'ghjf' => 'dtyjdykdg');
+      $this->set('bodys', $post_body);
       // 記事の追加処理
       if ($this->request->is('post')) {
+          $this->Tag->set($this->request->data['Tag']['Tag']);
+          $this->Tag->validates();
         // アソシエーションの形式で保存するための配列を作成する。
         // 記事の情報を設定する
         $save_data['Post'] = $this->request->data['Post'];
@@ -61,23 +66,26 @@
         // 記事をカテゴリに関連づけるために、カテゴリのidを['Category']['id']の形で格納する。
         $save_data['Category']['id'] = $this->request->data['Category']['category_id'];
         // スペース区切りのタグを取得し、それをまとめて保存できるような形式の配列を作成する。
-        $tag_array = preg_split('/[\s|\x{3000}]+/u', $this->request->data['Tag']['tag_str']);
-        $tag_data = array();
-        // 指定したタグを全て保存する
-        foreach ($tag_array as $tag) {
-            // 既に追加されているタグは保存しない。
-            if (!($this->Post->Tag->findByName($tag))) {
-                $data['Tag']['name'] = $tag;
-                $tag_data[] = $data;
-            }
-        }
-        $this->Post->Tag->saveAll($tag_data);
-        // 保存したタグのidを取得する。
-        $tag_id = array();
-        foreach ($tag_array as $tag_name) {
-            $tag_id[] = $this->Post->Tag->findByName($tag_name)['Tag']['id'];
-        }
-        $save_data['Tag']['Tag'] = $tag_id;
+        // $tag_array = preg_split('/[\s|\x{3000}]+/u', $this->request->data['Tag']['tag_str']);
+        // $tag_data = array();
+        // // 指定したタグを全て保存する
+        // foreach ($tag_array as $tag) {
+        //     // 既に追加されているタグは保存しない。
+        //     if (!($this->Post->Tag->findByName($tag))) {
+        //         $data['Tag']['name'] = $tag;
+        //         $tag_data[] = $data;
+        //     }
+        // }
+        // $this->Post->Tag->saveAll($tag_data);
+        // // 保存したタグのidを取得する。
+        // $tag_id = array();
+        // foreach ($tag_array as $tag_name) {
+        //     $tag_id[] = $this->Post->Tag->findByName($tag_name)['Tag']['id'];
+        // }
+        // $save_data['Tag']['Tag'] = $tag_id;
+        // チェックボックスでタグを設定する。
+        $this->log($this->request->data['Tag']['Tag']);
+        $save_data['Tag']['Tag'] = $this->request->data['Tag']['Tag'];
         // 画像を投稿する。
         if ($this->request->data['Image']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
             $save_data['Image'] = array();

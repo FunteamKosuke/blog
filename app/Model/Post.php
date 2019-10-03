@@ -23,8 +23,16 @@
         // 'title' => array(
         //     'rule' => 'notBlank'
         // ),
+        // 'body' => array(
+        //     'rule' => 'notBlank'
+        // ),
         'body' => array(
-            'rule' => 'notBlank'
+            'rule' => array('multiple', array('min' => 1, 'max' => 3)),
+            'message'  => '興味のある物を選択してください（1個～3個）',
+        ),
+        'Tag.Tag' => array(
+            'rule' => array('multiple', array('min' => 1, 'max' => 3)),
+            'message'  => '興味のある物を選択してください（1個～3個）',
         )
     );
 

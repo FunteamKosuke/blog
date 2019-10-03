@@ -12,7 +12,11 @@
             if ($this->request->is('ajax')) {
                 $this->autoRender = FALSE; // 設定しないと返却されるデータがhtmlになってしまう。
                 $time_start = microtime(true);
+                // cancel処理用にデータをaddressesのデータを全てjson形式で書き出しておく。
+                // バックアップ用
+                // $backup_path = WWW_ROOT
                 // ファイルの保存先パスを作成する
+                $this->log('呼ばれてるんですが？');
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
                     $fp = self::readCsvFile($upload_path);
@@ -20,6 +24,7 @@
                         return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
                     }
                     $save_data = array();
+                    //csvデータの読み込みとデータの作成
                     if ($fp !== false) {
                         while (($csv = fgetcsv($fp, 1000, ",")) !== false) {
                                 // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
@@ -373,7 +378,7 @@
             mb_detect_order("UTF-8,UTF-7,ASCII,EUC-JP,SJIS,eucJP-win,sjis-win,JIS,ISO-2022-JP,Unicode");
             // ファイルを開く
             $data = file_get_contents($filepath);
-            $this->log(mb_detect_encoding($data));
+            $this->log(mb_detect_encoding($data . 'ファイルの文字コード'));
             // ファイルの文字コードによって読み込み方を変更する。
             switch (mb_detect_encoding($data)) {
                 case 'SJIS': //SJIS対応

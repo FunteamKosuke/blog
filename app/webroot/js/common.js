@@ -13,7 +13,7 @@ $(function(){
 
     // 地方選択ボックスを画面読み込み時に作成する。
     $region = new Array('選択してください', '北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州');
-    AddselectElem('region-select', $region);
+    addSelectElem('region-select', $region);
 
     // 地方選択ボックスが選択された時に関連する都道府県の選択ボックスを作成する。
     $('#region-select').change(function(){
@@ -45,11 +45,11 @@ $(function(){
                     pref.push('福島県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県');
                     break;
                 default:
-                    pref.push('地方以外のデータ渡してんじゃねえよ');
+                    pref.push('地方以外のデータ渡してんじゃXXXXXXXXXXXX!!!');
             }
             $('#pref-select').empty();
-            pref.unshift('選択してください。');
-            AddselectElem('pref-select', pref);
+            pref.unshift('選択してください');
+            addSelectElem('pref-select', pref);
             $('#pref-select').show();
             // 関係ないところは空にして非表示にする。
             // 一度町域まで表示させて、再度都道府県を選択した際に町域等が残っていたらおかしいのでその対策。
@@ -73,8 +73,8 @@ $(function(){
                     var search_result = $.parseJSON(json_search_result);
                     // 空にしてから追加しないと選択するたびにselect要素が追加されてしまう。
                     $('#city-select').empty();
-                    search_result.unshift('選択してください。');
-                    AddselectElem('city-select', search_result);
+                    search_result.unshift('選択してください');
+                    addSelectElem('city-select', search_result);
                     $('#city-select').show();
                     // 関係ないところは空にして非表示にする。
                     // 一度町域まで表示させて、再度都道府県を選択した際に町域等が残っていたらおかしいのでその対策。
@@ -105,8 +105,8 @@ $(function(){
                     var search_result = $.parseJSON(json_search_result);
                     // 空にしてから追加しないと選択するたびにselect要素が追加されてしまう。
                     $('#town-select').empty();
-                    search_result.unshift('選択してください。');
-                    AddselectElem('town-select', search_result);
+                    search_result.unshift('選択してください');
+                    addSelectElem('town-select', search_result);
                     $('#town-select').show();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -145,7 +145,7 @@ $(function(){
                     //データを受け取っていれば、住所欄に入力する。
                     var search_result = $.parseJSON(json_search_result);
                     if (search_result.length > 0) {
-                        //町域選択欄を最初に空にする
+                        //住所選択欄を最初に空にする
                         $('#address_msg').empty().hide();
                         $('#address-select').empty().hide();
 
@@ -457,7 +457,7 @@ $(function(){
     // セレクトボックス のidと追加したい要素を配列で渡すと追加される。
     // class名も考慮しようと思ったがそもそも同じようなセレクトボックス を
     // 同じ画面に何個も作成することがないので対応しない。
-    function AddselectElem(select_id_name, select_array){
+    function addSelectElem(select_id_name, select_array){
         select_str = '';
         $.each(select_array, function(index, elem){
             select_str += '<option>' + elem + '</option>'

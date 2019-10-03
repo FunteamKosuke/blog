@@ -4,7 +4,7 @@
       // 関連づけたい記事のidを渡す。
       $this->set('post_id', Hash::get($this->request->query, "post_id"));
       if ($this->request->is('post')){
-
+          $this->log($this->request->data);
         $save_data = array();
         // 保存するための形式で配列を作成する。
         foreach ($this->request->data['Image']['files'] as $file) {
@@ -21,7 +21,6 @@
         } else {
           $this->Flash->error(__('画像のアップロードに失敗しました。'));
         }
-
       }
     }
 
