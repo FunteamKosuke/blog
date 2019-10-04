@@ -20,21 +20,70 @@
         ),
       );
     public $validate = array(
-        // 'title' => array(
-        //     'rule' => 'notBlank'
-        // ),
-        // 'body' => array(
-        //     'rule' => 'notBlank'
-        // ),
-        'body' => array(
-            'rule' => array('multiple', array('min' => 1, 'max' => 3)),
-            'message'  => '興味のある物を選択してください（1個～3個）',
+        'title' => array(
+            'rule' => 'notBlank'
         ),
-        'Tag.Tag' => array(
-            'rule' => array('multiple', array('min' => 1, 'max' => 3)),
-            'message'  => '興味のある物を選択してください（1個～3個）',
-        )
+        'body' => array(
+            'rule' => 'notBlank',
+            'message'  => '記事の内容を入力してください。',
+        ),
+        'Tag' => array(
+            'rule' => array('multiple', array( 'min' => 2, 'max' => 4)),
+            'message'  => 'タグを選択してください(2~4個)',
+        ),
+        'thumbnail' => array(
+
+            // ルール：uploadError => errorを検証 (2.2 以降)
+            'upload-file' => array(
+                'rule' => array( 'uploadError'),
+                'message' => array( 'ファイルのアップロードに失敗しました。')
+                // 'required' => false
+            ),
+
+            // ルール：extension => pathinfoを使用して拡張子を検証
+            'extension' => array(
+                'rule' => array( 'extension', array(
+                    'jpeg', 'jpg')  // 拡張子を配列で定義
+                ),
+                'message' => array( 'ファイルの拡張子はjpgとjpegのみ指定可能です。')
+            ),
+
+            // ルール：mimeType =>
+            // finfo_file(もしくは、mime_content_type)でファイルのmimeを検証 (2.2 以降)
+            // 2.5 以降 - MIMEタイプを正規表現(文字列)で設定可能に
+            'mimetype' => array(
+                'rule' => array( 'mimeType', array(
+                    'image/jpeg')  // MIMEタイプを配列で定義
+                ),
+                'message' => array( 'MIME typeはimage/jpegのみ指定可能です。')
+            ),
+
+            // ルール：fileSize => filesizeでファイルサイズを検証(2GBまで設定可能)  (2.3 以降)
+            'size' => array(
+                'maxFileSize' => array(
+                    'rule' => array( 'fileSize', '<=', '10MB'),  // 10M以下
+                    'message' => array( 'ファイルサイズは1~10MBのみ指定可能です。')
+                ),
+                'minFileSize' => array(
+                    'rule' => array( 'fileSize', '>',  0),    // 0バイトより大
+                    'message' => array( 'ファイルサイズは1~10MBのみ指定可能です。')
+                ),
+            ),
+        ),
     );
+
+    function beforeValidate($options = array()) {
+        // $this->log($this->hasAndBelongsToMany);
+        // $this->log('before');
+        // $this->log($this->data);
+        // $this->log($this->alias);
+        foreach($this->hasAndBelongsToMany as $k=>$v) {
+            if(isset($this->data[$k][$k])) {
+                $this->data[$this->alias][$k] = $this->data[$k][$k];
+            }
+        }
+        return true;
+    }
 
     public function isOwnedBy($post, $user) {
       return $this->field('id', array('id' => $post, 'user_id' => $user)) !== false;
@@ -46,7 +95,7 @@
         'Containable'
     );
     public $filterArgs = array(
-        'title' => array('type' => 'like'),
+        array('name' => 'keyword', 'type' => 'like'),
         // 'category_id' => array('type' => 'value'),
         // Tag OR検索
         // array('name' => 'tag_id', 'type' => 'subquery', 'method' => 'searchTagOr', 'field' => 'Post.id'),

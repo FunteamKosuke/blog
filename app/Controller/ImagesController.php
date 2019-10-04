@@ -83,17 +83,17 @@
       }
 
       if ($this->request->is(array('post', 'put'))) {
-        // ただ保存し直すだけだと画像データが残ったままなので、先に削除する。
+        // ただ保存し直すだけだと画像データが残ったままなので、先に削除する。データはsaveする前に取得し、パスを作成しておく。
         $image = $this->Image->findById($id);
         $image_path = 'files/image/image';
         $image_path .= '/' . $image['Image']['image_dir'];
         $image_path .= '/' . $image['Image']['image'];
-        chmod($image_path, 0777); //画像が削除できるようにするために権限を付与する。
-        unlink($image_path);
 
         // 画像を保存する
         $this->Image->id = $id;
         if ($this->Image->save($this->request->data)) {
+            chmod($image_path, 0777); //保存に成功したら前の画像を削除する。
+            unlink($image_path);
             $this->Flash->success(__('画像の差し替えに成功しました。'));
             return $this->redirect(array('controller' => 'posts',
                                           'action' => 'view',

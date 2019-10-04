@@ -111,7 +111,7 @@
                                                           'width'=>'50',
                                                           'height'=>'50',
                                                           'alt'=>'検索フォームのアイコンです。')); ?>
-            <?php echo $this->Form->input('title', array('class' => 'form-control search_toggle',
+            <?php echo $this->Form->input('keyword', array('class' => 'form-control search_toggle',
                                                           'empty' => true,
                                                           'label' => false,
                                                           'placeholder' => '記事のタイトル')); ?>

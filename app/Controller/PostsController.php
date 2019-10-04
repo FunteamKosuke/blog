@@ -26,6 +26,7 @@
     public function find(){
       $this->Post->recursive = 0;
       $this->Prg->commonProcess();
+      $this->log($this->passedArgs);
       $this->paginate = array(
           'conditions' => $this->Post->parseCriteria($this->passedArgs), // 検索する条件を設定する。
           'limit' => 4, // 検索結果を４件ごとに表示する。
@@ -56,8 +57,8 @@
       $this->set('bodys', $post_body);
       // 記事の追加処理
       if ($this->request->is('post')) {
-          $this->Tag->set($this->request->data['Tag']['Tag']);
-          $this->Tag->validates();
+          // $this->Tag->set($this->request->data['Tag']['Tag']);
+          // $this->Tag->validates();
         // アソシエーションの形式で保存するための配列を作成する。
         // 記事の情報を設定する
         $save_data['Post'] = $this->request->data['Post'];
@@ -83,28 +84,33 @@
         //     $tag_id[] = $this->Post->Tag->findByName($tag_name)['Tag']['id'];
         // }
         // $save_data['Tag']['Tag'] = $tag_id;
+        $this->log($this->request->data);
+        $this->log('入ってんなこれは');
         // チェックボックスでタグを設定する。
-        $this->log($this->request->data['Tag']['Tag']);
         $save_data['Tag']['Tag'] = $this->request->data['Tag']['Tag'];
         // 画像を投稿する。
-        if ($this->request->data['Image']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
+        if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
             $save_data['Image'] = array();
-            foreach ($this->request->data['Image']['files'] as $file) {
+            foreach ($this->request->data['PostImage']['files'] as $file) {
                 $image_data['image'] = $file;
                 $save_data['Image'][] = $image_data;
             }
         }
 
         // サムネイルを設定する。
-        if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のimageが作成されるのを防ぐ
-            $save_data['Thumbnail'] = $this->request->data['Thumbnail'];
+        if ($this->request->data['Post']['thumbnail']['name']) { //空のimageが作成されるのを防ぐ
+            $save_data['Thumbnail'] = $this->request->data['Post'];
         }
 
-        $this->log($save_data);
         // 記事をカテゴリとタグに関連づけて保存する。
         if($save_data = $this->Post->saveAll($save_data, array('deep' => true))){
             $this->Flash->success(__('記事を追加することに成功しました。'));
             return $this->redirect(array('action' => 'index'));
+        }
+        //タグのエラーがあったらエラーメッセージを取得する
+        $errors = $this->Post->invalidFields();
+        if(!empty ($errors['Tag'])) {
+            $this->set('tagerror', $errors['Tag']);
         }
       }
     }

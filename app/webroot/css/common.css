@@ -379,7 +379,7 @@ cursor:pointer; /* マウスカーソルの形を指定する */
     background-color: #01DF3A;
     border-radius: 6px;
     padding: 10px;
-    font-size: 2rem;
+    font-size: 1rem;
 }
 
 .error{
@@ -388,9 +388,23 @@ cursor:pointer; /* マウスカーソルの形を指定する */
     background-color: #FE2E2E;
     border-radius: 6px;
     padding: 10px;
-    font-size: 2rem;
+    font-size: 1rem;
 }
 .success,.error{
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
     font-family: arial;
+}
+
+.tag-error{
+    background-color: #FE2E2E;
+    padding: 10px;
+    border-radius: 5px;
+}
+.tag-error-message{
+
+}
+.file-error-message{
+    background-color: #FE2E2E;
+    /* padding: 10px; */
+    border-radius: 5px;
 }

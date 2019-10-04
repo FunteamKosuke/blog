@@ -6,16 +6,24 @@
     public $hasMany = 'Post';
     public $validate = array(
         'username' => array(
-            'required' => array(
+            'rule1' => array(
                 'rule' => 'notBlank',
-                'message' => 'A username is required'
-            )
+                'message' => 'ユーザー名は必ず入力してください。'
+            ),
+            'rule2' => array(
+                'rule' => 'isUnique',
+                'message' => 'そのユーザー名はすでに使われています。'
+            ),
         ),
         'password' => array(
-            'required' => array(
+            'rule1' => array(
                 'rule' => 'notBlank',
                 'message' => 'A password is required'
-            )
+            ),
+            'rule2' => array(
+                'rule' => '/^[A-Z][0-9a-zA-Z]{7}/',
+                'message' => 'パスワードは半角英数字の先頭大文字、最低８文字で設定してください。'
+            ),
         ),
         'zipcode' => array(
             'rule' => '/\d{7}/',

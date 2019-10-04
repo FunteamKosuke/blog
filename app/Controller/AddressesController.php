@@ -16,19 +16,21 @@
                 // バックアップ用
                 // $backup_path = WWW_ROOT
                 // ファイルの保存先パスを作成する
-                $this->log('呼ばれてるんですが？');
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
                     $fp = self::readCsvFile($upload_path);
                     if ($fp == null) {
                         return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
                     }
+
+
                     $save_data = array();
                     //csvデータの読み込みとデータの作成
                     if ($fp !== false) {
                         while (($csv = fgetcsv($fp, 1000, ",")) !== false) {
                                 // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                                 if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN)){
+                                    $this->log('きたよ3');
                                     $save_data[] = self::setCsvData($csv);
                                 }
                         }
@@ -104,7 +106,7 @@
         public function csv_update(){
             if ($this->request->is('ajax')) {
                 $this->autoRender = FALSE; // 設定しないと返却されるデータがhtmlになってしまう。
-                // $time_start = microtime(true);
+                $time_start = microtime(true);
                 $upload_path = WWW_ROOT . 'files/csv/zip.csv';
                 // $address_column = $this->Address->getColumnTypes();
                 // $this->log(count($address_column));
@@ -122,6 +124,7 @@
                             if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN )){
                                 // 郵便番号と町域と市区町村が一致したデータを更新したいデータとする。
                                 // find firstでupdate
+                                $address_data = null;
                                 $address_data = $this->Address->find('first', array(
                                             			    'conditions'=>array(
                                             			         'zipcode' => $csv[2],
@@ -138,14 +141,10 @@
                                 // }
                                 // $this->log($update);
 
-                                // データが見つからなかった場合はidが設定されてない状態でsaveするので、
-                                // 新規追加扱いとする。
-                                // データが見つからなかった場合に、新規追加扱いしないことも考えたが、
-                                // そうなると新しいデータを追加する場合にわざわざ全てのデータが入ったcsvファイルを作成して
-                                // インポートする必要があったので、それはさすがにめんどくさいので却下。
-
-                                $save_data[] = self::setCsvData($csv, $address_data);
-
+                                // 見つかったデータのみ更新する。見つからなかったデータに関しては、新規で追加したりしない。
+                                if ($address_data) {
+                                    $save_data[] = self::setCsvData($csv, $address_data);
+                                }
                                 // find allでupdate
                                 // $update_array = $this->Address->find('all', array(
                                 //             			    'conditions'=>array(
@@ -276,19 +275,20 @@
                                 //     $update['Address']['reason_change'] = $csv[14];
                                 //     $save_data[] = $update;
                                 // }
-                            }
-                        }
+                            } // end if
+                        }// end while
                         fclose($fp);
                         unlink($upload_path);
                         //一括更新する
                         if ($save_data && $this->Address->saveAll($save_data)) {
+                            // 時間計測
+                            $time = microtime(true) - $time_start;
+                            $this->log("{$time} 秒");
                             return json_encode('アップデートに成功しました。');
                         }
                         $this->log('csvファイルの読み込みに失敗しました。');
                         return json_encode('インポートに失敗しました。');
-                        // 時間計測
-                        // $time = microtime(true) - $time_start;
-                        // $this->log("{$time} 秒");
+
                     }
                 }
                 $this->log('ファイルのアップロードに失敗しました。');

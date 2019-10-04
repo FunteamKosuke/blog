@@ -18,7 +18,14 @@
       );
     public $validate = array(
         'name' => array(
-            'rule' => 'notBlank'
+            'rule1' => array(
+                'rule' => 'notBlank',
+                'message' => 'タグ名は必ず入力してください。'
+            ),
+            'rule2' => array(
+                'rule' => 'isUnique',
+                'message' => 'そのタグ名はすでに使用されています。'
+            ),
         ),
         'Tag' => array(
             'rule' => array('multiple', array('min' => 1, 'max' => 3)),
