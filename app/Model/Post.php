@@ -92,7 +92,8 @@
     // Searchプラグインを使用するのに必要な設定
     public $actsAs = array(
         'Search.Searchable',
-        'Containable'
+        'Containable',
+        'SoftDelete'
     );
     public $filterArgs = array(
         array('name' => 'keyword', 'type' => 'like'),

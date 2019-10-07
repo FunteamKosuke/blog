@@ -280,6 +280,7 @@
                         fclose($fp);
                         unlink($upload_path);
                         //一括更新する
+                        set_time_limit(600); //saveallに標準の上限に30秒以上かかってしまうので、変更する。
                         if ($save_data && $this->Address->saveAll($save_data)) {
                             // 時間計測
                             $time = microtime(true) - $time_start;
