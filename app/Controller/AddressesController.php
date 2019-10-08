@@ -20,7 +20,7 @@
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
                     $fp = self::readCsvFile($upload_path);
                     if ($fp == null) {
-                        return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
+                        return json_encode(__('The file does not support character codes. Please convert to SJIS or UTF-8.'));
                     }
 
 
@@ -30,7 +30,6 @@
                         while (($csv = fgetcsv($fp, 1000, ",")) !== false) {
                                 // 終端の空行を除く && csvのカラム数がaddressesのカラム数と同じ場合
                                 if((!is_null($csv[0])) && (count($csv) == self::ADDRESS_COLUMN)){
-                                    $this->log('きたよ3');
                                     $save_data[] = self::setCsvData($csv);
                                 }
                         }
@@ -90,15 +89,15 @@
                         // $this->Address->truncate(); // 新しくインポートする際は入れ替えたいので一度削除する。
                         if ($this->Address->saveAll($save_data)) {
                             // 画面遷移はしないようにする。
-                            return json_encode('インポートに成功しました。');
+                            return json_encode(__('The import was successful.'));
                         }
                     }
-                    $this->log('csvファイルの読み込みに失敗しました。');
-                    return json_encode('インポートに失敗しました。');
+                    $this->log(__('Failed to read csv file.'));
+                    return json_encode(__('Import failed.'));
 
                 }
-                $this->log('ファイルのアップロードに失敗しました。');
-                return json_encode('インポートに失敗しました。');
+                $this->log(__('File upload failed.'));
+                return json_encode(__('Import failed.'));
             }
         }
         // csv更新用
@@ -113,7 +112,7 @@
                 if(move_uploaded_file($this->request->data['Address']['csv_file']['tmp_name'], $upload_path)){
                     $fp = self::readCsvFile($upload_path);
                     if ($fp == null) {
-                        return json_encode('対応していない文字コードのファイルです。SJISかUTF-8に変換してください。');
+                        return json_encode(__('The file does not support character codes. Please convert to SJIS or UTF-8.'));
                     }
                     // 更新用のcsvデータを読み込む
                     $save_data = array();
@@ -285,22 +284,15 @@
                             // 時間計測
                             $time = microtime(true) - $time_start;
                             $this->log("{$time} 秒");
-                            return json_encode('アップデートに成功しました。');
+                            return json_encode(__('The update was successful.'));
                         }
-                        $this->log('csvファイルの読み込みに失敗しました。');
-                        return json_encode('インポートに失敗しました。');
+                        $this->log(__('Failed to read csv file.'));
+                        return json_encode(__('Update failed.'));
 
                     }
                 }
-                $this->log('ファイルのアップロードに失敗しました。');
-                return json_encode('アップデートに失敗しました。');
-            }
-        }
-
-        public function abort(){
-            if ($this->request->is('ajax')) {
-                $this->autoRender = FALSE;
-                $this->log('サーバーをabortしたよ');
+                $this->log(__('File upload failed.'));
+                return json_encode(__('Update failed.'));
             }
         }
 

@@ -4,6 +4,12 @@
     public $hasOne = 'Thumbnail';
     public $belongsTo = array('Category', 'User');
     public $hasMany = 'Image';
+    // 使用するBehaviorの設定。
+    public $actsAs = array(
+        'Search.Searchable',
+        'Containable',
+        'SoftDelete'
+    );
     public $hasAndBelongsToMany = array(
     'Tag' => array(
         'className' => 'Tag',
@@ -90,11 +96,7 @@
     }
 
     // Searchプラグインを使用するのに必要な設定
-    public $actsAs = array(
-        'Search.Searchable',
-        'Containable',
-        'SoftDelete'
-    );
+
     public $filterArgs = array(
         array('name' => 'keyword', 'type' => 'like'),
         // 'category_id' => array('type' => 'value'),

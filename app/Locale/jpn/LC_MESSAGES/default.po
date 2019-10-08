@@ -1,0 +1,246 @@
+############################
+#
+# 国際化対応するためのメッセージ
+#
+############################
+
+
+#########View側のメッセージの翻訳###########
+msgid "Kosuke Blog"
+msgstr "こうすけのブログ"
+
+msgid "Add Post"
+msgstr "記事を追加する"
+
+#View/posts/post_list
+msgid "Read Post"
+msgstr "記事を読む"
+
+msgid "Delete Post"
+msgstr "記事を削除する"
+
+msgid "Post Date"
+msgstr "投稿日時"
+
+msgid "Category"
+msgstr "カテゴリ"
+
+msgid "Category Name"
+msgstr "カテゴリ名"
+
+msgid "Add Category"
+msgstr "カテゴリの追加"
+
+msgid "Tag"
+msgstr "タグ"
+
+msgid "Tag Name"
+msgstr "タグ名"
+
+msgid "Add Tag"
+msgstr "タグの追加"
+
+msgid "Contributor"
+msgstr "投稿者"
+
+msgid "Delete Image"
+msgstr "画像を削除する"
+
+msgid "Edit Image"
+msgstr "画像を編集する"
+
+msgid "Add Image"
+msgstr "画像を追加する"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Body"
+msgstr "内容"
+
+msgid "Add Thumbnail"
+msgstr "サムネイルを追加する"
+
+msgid "Select Image File"
+msgstr "画像ファイルを選択してください"
+
+msgid "Select CSV File"
+msgstr "CSVファイルを選択してください"
+
+msgid "No Select"
+msgstr "未選択"
+
+msgid "Update Address"
+msgstr "住所のアップデート"
+
+msgid "Import Address"
+msgstr "住所のインポート"
+
+msgid "Add"
+msgstr "追加する"
+
+msgid "Edit"
+msgstr "編集する"
+
+msgid "Sign Up"
+msgstr "登録する"
+
+msgid "Replacement"
+msgstr "差し替える"
+
+msgid "Import"
+msgstr "インポートする"
+
+msgid "Cancel"
+msgstr "キャンセルする"
+
+msgid "Importing"
+msgstr "インポート中"
+
+msgid "Multiple Add Possible"
+msgstr "複数追加可"
+
+msgid "Sign Up User"
+msgstr "ユーザーを登録する"
+
+msgid "User Name"
+msgstr "ユーザー名"
+
+msgid "Password"
+msgstr "パスワード"
+
+msgid "Zipcode"
+msgstr "郵便番号"
+
+msgid "Address"
+msgstr "住所"
+
+msgid "Select Address"
+msgstr "選択住所"
+
+msgid "User Authority"
+msgstr "ユーザー権限"
+
+msgid "Replacement Image"
+msgstr "画像を差し替える"
+
+msgid "Login"
+msgstr "ログインする"
+
+msgid "It is automatically entered in the address field by performing a postal code search."
+msgstr "郵便番号検索をすることで住所欄に自動入力されます。"
+
+msgid "Search Post Result"
+msgstr "記事の検索結果"
+
+
+#########コントローラー側のメッセージの翻訳##########
+
+### posts ###
+msgid "Successfully added an article."
+msgstr "記事を追加することに成功しました。"
+
+msgid "Failed to add article."
+msgstr "記事を追加することに失敗しました。"
+
+msgid "Invalid post"
+msgstr "無効な記事です。"
+
+msgid "Your post has been updated."
+msgstr "記事の編集に成功しました。"
+
+msgid "Unable to update your post."
+msgstr "記事の編集に失敗しました。"
+
+msgid "The post with id: %s has been deleted."
+msgstr "id: %sの記事の削除に成功しました。"
+
+msgid "The post with id: %s could not be deleted."
+msgstr "id: %sの記事の削除に失敗しました。"
+
+### images ###
+
+msgid "Invalid image"
+msgstr "無効な画像です。"
+
+msgid "The image was uploaded successfully."
+msgstr "画像のアップロードに成功しました。"
+
+msgid "Image upload failed."
+msgstr "画像のアップロードに失敗しました。"
+
+msgid "The image with id: %s has been deleted."
+msgstr "id: %sの画像の削除に成功しました。"
+
+msgid "The image with id: %s could not be deleted."
+msgstr "id: %sの画像の削除に失敗しました。"
+
+msgid "Successfully replaced the image."
+msgstr "画像の差し替えに成功しました。"
+
+msgid "Failed to replace image."
+msgstr "画像の差し替えに失敗しました。"
+
+### Addresses ###
+
+msgid "The file does not support character codes. Please convert to SJIS or UTF-8."
+msgstr "対応していない文字コードです。UTF-8かSJISに変換してください。"
+
+msgid "The import was successful."
+msgstr "インポートに成功しました"
+
+msgid "Import failed."
+msgstr "インポートに失敗しました。"
+
+msgid "Failed to read csv file."
+msgstr "CSV ファイルの読み込みに失敗しました"
+
+msgid "File upload failed."
+msgstr "CSV ファイルのアップロードに失敗しました。"
+
+msgid "The update was successful."
+msgstr "アップデートに成功しました。"
+
+msgid "Update failed."
+msgstr "アップデートに失敗しました。"
+
+### Tags ###
+msgid "Your Tag has been saved."
+msgstr "タグの追加に成功しました。"
+
+msgid "Unable to add your Tag."
+msgstr "タグの追加に失敗しました。"
+
+### Categories ###
+
+msgid "Your Category has been saved."
+msgstr "カテゴリの追加に成功しました。"
+
+msgid "Unable to add your Category."
+msgstr "カテゴリの追加に失敗しました。"
+
+### Users ###
+
+msgid "Invalid username or password, try again"
+msgstr "カテゴリの追加に失敗しました。"
+
+msgid "Invalid user"
+msgstr "無効なユーザーです。"
+
+msgid "User registration was successful."
+msgstr "ユーザー登録に成功しました。"
+
+msgid "User registration failed."
+msgstr "ユーザー登録に失敗しました。"
+
+msgid "User information has been edited successfully."
+msgstr "ユーザー情報の編集に成功しました。"
+
+msgid "Editing user information failed."
+msgstr "ユーザー情報の編集に失敗しました。"
+
+msgid "User deleted"
+msgstr "ユーザー情報の削除に成功しました。"
+
+msgid "User was not deleted"
+msgstr "ユーザー情報の削除に失敗しました。"

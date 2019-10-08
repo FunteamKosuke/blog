@@ -58,11 +58,11 @@
           if ($this->request->is('post')) {
               $this->User->create();
               if ($this->User->save($this->request->data)) {
-                  $this->Flash->success(__('ユーザー登録に成功しました。'));
+                  $this->Flash->success(__('User registration was successful.'));
                   return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
               }
               $this->Flash->error(
-                  __('ユーザー登録に失敗しました。')
+                  __('User registration failed.')
               );
           }
       }
@@ -93,11 +93,11 @@
           }
           if ($this->request->is('post') || $this->request->is('put')) {
               if ($this->User->save($this->request->data)) {
-                  $this->Flash->success(__('The user has been saved'));
+                  $this->Flash->success(__('User information has been edited successfully.'));
                   return $this->redirect(array('action' => 'index'));
               }
               $this->Flash->error(
-                  __('The user could not be saved. Please, try again.')
+                  __('Editing user information failed.')
               );
           } else {
               $this->request->data = $this->User->findById($id);

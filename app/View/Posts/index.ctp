@@ -1,8 +1,8 @@
 <!-- File: /app/View/Posts/index.ctp -->
 <div id="post__index">
-  <h1>Blog posts</h1>
+  <h1><?php echo __('Kosuke Blog') ?></h1>
   <?php echo $this->Html->link(
-      '記事を追加する',
+      __('Add Post'),
       array('action' => 'add'),
       array('class' => 'btn btn-outline-primary')
   ); ?>

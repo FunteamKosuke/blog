@@ -14,12 +14,12 @@
         }
 
         if($this->Image->saveAll($save_data, array('deep' => true))){
-          $this->Flash->success(__('画像のアップロードに成功しました。'));
+          $this->Flash->success(__('The image was uploaded successfully.'));
           return $this->redirect(array('controller' => 'Posts',
                                         'action' => 'view',
                                         $this->request->data['Post']['post_id']));
         } else {
-          $this->Flash->error(__('画像のアップロードに失敗しました。'));
+          $this->Flash->error(__('Image upload failed.'));
         }
       }
     }
@@ -50,11 +50,11 @@
 
       if ($this->Image->delete($id)) {
           $this->Flash->success(
-              __('image id: %s の削除に成功しました。', h($id))
+              __('The image with id: %s has been deleted.', h($id))
           );
       } else {
           $this->Flash->error(
-              __('image id: %s の削除に失敗しました。', h($id))
+              __('The image with id: %s could not be deleted.', h($id))
           );
       }
       return $this->redirect(array('controller' => 'posts',
@@ -94,13 +94,13 @@
         if ($this->Image->save($this->request->data)) {
             chmod($image_path, 0777); //保存に成功したら前の画像を削除する。
             unlink($image_path);
-            $this->Flash->success(__('画像の差し替えに成功しました。'));
+            $this->Flash->success(__('Successfully replaced the image.'));
             return $this->redirect(array('controller' => 'posts',
                                           'action' => 'view',
                                           Hash::get($this->request->query,
                                           "post_id")));
         }
-        $this->Flash->error(__('画像の差し替えに失敗しました。'));
+        $this->Flash->error(__('Failed to replace image.'));
       }
 
       if (!$this->request->data) {

@@ -145,6 +145,10 @@
   margin-top: 30px;
 }
 
+#post__index .post-delete{
+    margin-top: 2px;
+}
+
 /* post/view */
 #post__view{
     margin-top: 70px;

@@ -19,8 +19,8 @@
             </div>
             <!-- 時間は表示せずに投稿日だけ表示する。 -->
             <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
-            <p class="post-date">post date：<?php echo h($post_date); ?></p>
-            <p class="category">category：<?php echo h($post['Category']['name']); ?></p>
+            <p class="post-date"><?php echo __('Post Date'); ?>：<?php echo h($post_date); ?></p>
+            <p class="category"><?php echo __('Category'); ?>：<?php echo h($post['Category']['name']); ?></p>
             <div class="body">
               <!-- 記事の内容を１００文字まで表示する。 -->
               <?php $body = mb_substr($post['Post']['body'], 0, 100); ?>
@@ -31,11 +31,18 @@
             </div>
             <div class="read-next">
                 <?php echo $this->Html->link(
-                    '記事を読む',
+                    __('Read Post'),
                     array('controller' => 'posts',
                           'action' => 'view',
                           $post['Post']['id']),
                     array('class' => 'btn btn-outline-primary')
+                ); ?>
+            </div>
+            <div class="post-delete">
+                <?php echo $this->Form->postLink(
+                    __('Delete Post'),
+                    array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
+                    array('confirm' => 'Are you sure?','class' => 'btn btn-outline-primary')
                 ); ?>
             </div>
             <hr>

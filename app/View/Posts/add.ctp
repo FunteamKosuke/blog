@@ -1,12 +1,12 @@
 <!-- File: /app/View/Posts/add.ctp -->
-<h1>記事の追加</h1>
+<h1><?php echo __('Add Post'); ?></h1>
 <?php echo $this->Form->create( 'Post', array( 'type'=>'file', 'enctype' => 'multipart/form-data', 'novalidate' => true)); ?>
 <div class="form-group">
-    <h3>タイトル</h3>
+    <h3><?php echo __('Title'); ?></h3>
     <?php echo $this->Form->input('title', array('label' => false, 'class' => 'form-control')); ?>
 </div>
 <div class="form-group">
-    <h3>内容</h3>
+    <h3><?php echo __('Body'); ?></h3>
     <?php echo $this->Form->input('body', array('label' => false, 'rows' => '3', 'class' => 'form-control')); ?>
 </div>
 <!-- <?php echo $this->Form->input( 'body', array(
@@ -14,7 +14,7 @@
     'multiple'=> 'checkbox',
     'options' => $bodys)); ?> -->
 <div class="form-group">
-    <h3>カテゴリー</h3>
+    <h3><?php echo __('Category'); ?></h3>
     <?php echo $this->Form->input('Category.category_id', array('label' => false, 'class' => 'form-control')); // プルダウンメニュー ?>
 </div>
 <!-- <div class="form-group">
@@ -39,10 +39,10 @@ if(!empty ($tagerror)) {
 
 
 <div class="form-group">
-    <h3>画像を投稿する</h3>
-    <small>*複数投稿可</small><br>
+    <h3><?php echo __('Add Image'); ?></h3>
+    <small>*<?php echo __('Multiple Add Possible'); ?></small><br>
     <label class="label-file btn btn-outline-primary" for="label-file-image">
-    ファイルを選択してください
+    <?php echo __('Select Image File'); ?>
     <?php // 画像を投稿する。
     echo $this->Form->input( 'PostImage.files.', array(
                                                     'type' => 'file',
@@ -51,13 +51,13 @@ if(!empty ($tagerror)) {
                                                     'class' => 'form-control-file label-file-name')); ?>
     </label>
     <div class="form-group">
-        <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="未選択">
+        <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo __('No Select'); ?>">
     </div>
 </div>
 <div class="form-group">
-    <h3>サムネイルを設定する</h3>
+    <h3><?php echo __('Add Thumbnail'); ?></h3>
     <label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
-    ファイルを選択してください
+    <?php echo __('Select Image File'); ?>
     <?php /// サムネイルを設定する。
     echo $this->Form->input('thumbnail', array(
                                                         'type' => 'file',
@@ -66,13 +66,13 @@ if(!empty ($tagerror)) {
                                                         'error' => false)); ?>
     </label>
     <div class="form-group">
-        <input type="text" id="file-name-thumbnail" class="form-control file-name-input" readonly="readonly" placeholder="未選択">
+        <input type="text" id="file-name-thumbnail" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo __('No Select'); ?>">
     </div>
 </div>
 <div class="file-error-message">
     <?php echo $this->Form->error('thumbnail'); ?>
 </div>
 <label class='label-submit btn btn-outline-primary btn-block' for="label-submit">
-    記事を投稿する
+    <?php echo __('Add'); ?>
 <?php echo $this->Form->end(array('id' => 'label-submit')); ?>
 </label>

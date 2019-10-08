@@ -4,12 +4,12 @@
   <h1 id='view-title'><?php echo h($post['Post']['title']); ?></h1>
   <!-- 投稿日と投稿者を表示する。 -->
   <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
-  <p><small>Post date: <?php echo h($post_date); ?>
-            投稿者: <?php echo h($post['User']['username']);?></small></p>
+  <p><small><?php echo __('Post Date'); ?>: <?php echo h($post_date); ?>
+            <?php echo __('Contributor'); ?>: <?php echo h($post['User']['username']);?></small></p>
   <!-- カテゴリを表示する -->
-  <p>category: <?php echo h($post['Category']['name']); ?></p>
+  <p><?php echo __('Category'); ?>: <?php echo h($post['Category']['name']); ?></p>
   <!-- タグを表示する -->
-  <p>tag:
+  <p><?php echo __('Tag'); ?>:
     <?php foreach ($post['Tag'] as $tag): ?>
       <?php echo h($tag['name']); ?>
       <?php if ($tag !== end($post['Tag'])) {
@@ -48,7 +48,7 @@
                         <div class="image-delete col-6">
                             <?php
                                 echo $this->Form->postLink(
-                                    'Delete',
+                                    __('Delete Image'),
                                     array('controller' => 'images',
                                           'action' => 'delete',
                                           $image['id'],
@@ -62,7 +62,7 @@
                         <div class="image-edit col-6">
                             <?php // 画像を差し替えるリンク
                             echo $this->Html->link(
-                                'Edit',
+                                __('Edit Image'),
                                 array('controller' => 'images',
                                       'action' => 'edit',
                                       $image['id'],
@@ -88,7 +88,7 @@
 
         </script>
         <!-- 記事に画像を投稿するリンクを作成する。 -->
-        <p><?php echo $this->Html->link('Add Image', ['controller' => 'Images',
+        <p><?php echo $this->Html->link(__('Add Image'), ['controller' => 'Images',
                                                       'action' => 'upload',
                                                       '?' => ['post_id' => $post['Post']['id']]],
                                                   array('class' => 'btn btn-primary btn-block')); ?></p>

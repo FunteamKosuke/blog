@@ -1,9 +1,9 @@
 <?php
 echo $this->Form->create('Image', array('type' => 'file'));
 ?>
-<h3>画像の差し替えをする</h3>
+<h3><?php echo __('Replacement Image'); ?></h3>
 <label class="label-file btn btn-outline-primary" for="label-file-image">
-    ファイルを選択してください
+    <?php echo __('Select Image File'); ?>
     <?php
         echo $this->Form->input( 'image', array(   'type' => 'file',
                                                     'id' => 'label-file-image',
@@ -18,6 +18,6 @@ echo $this->Form->create('Image', array('type' => 'file'));
     <?php echo $this->Form->error('image'); ?>
 </div>
 <label id="image-edit-label" class='label-submit label-file-button btn btn-outline-primary btn-block' for="label-submit">
-    画像を差し替える
+    <?php echo __('Replacement'); ?>
 <?php echo $this->Form->end(array('id' => 'label-submit')); ?>
 </label>

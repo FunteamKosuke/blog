@@ -84,8 +84,6 @@
         //     $tag_id[] = $this->Post->Tag->findByName($tag_name)['Tag']['id'];
         // }
         // $save_data['Tag']['Tag'] = $tag_id;
-        $this->log($this->request->data);
-        $this->log('入ってんなこれは');
         // チェックボックスでタグを設定する。
         $save_data['Tag']['Tag'] = $this->request->data['Tag']['Tag'];
         // 画像を投稿する。
@@ -104,7 +102,7 @@
 
         // 記事をカテゴリとタグに関連づけて保存する。
         if($save_data = $this->Post->saveAll($save_data, array('deep' => true))){
-            $this->Flash->success(__('記事を追加することに成功しました。'));
+            $this->Flash->success(__('Successfully added an article.'));
             return $this->redirect(array('action' => 'index'));
         }
         //タグのエラーがあったらエラーメッセージを取得する
@@ -112,6 +110,7 @@
         if(!empty ($errors['Tag'])) {
             $this->set('tagerror', $errors['Tag']);
         }
+        $this->Flash->error(__('Failed to add article.'));
       }
     }
 
@@ -175,7 +174,6 @@
       if (!$post) {
           throw new NotFoundException(__('Invalid post'));
       }
-
       if ($this->Post->delete($id)) {
           $this->Flash->success(
               __('The post with id: %s has been deleted.', h($id))
