@@ -17,6 +17,8 @@ echo $this->Form->create( 'Image', array( 'type'=>'file', 'enctype' => 'multipar
     </div>
     <!-- 関連づけたい記事のIDを渡す -->
     <?php echo $this->Form->hidden('Post.post_id', array('value' => $post_id)); ?>
+    <!-- アップロード後に推移するViewを渡す -->
+    <?php echo $this->Form->hidden('Post.redirect_view', array('value' => $redirect_view)); ?>
 <label id="image-upload-label" class='label-submit label-file-button btn btn-outline-primary btn-block' for="label-submit">
     <?php echo __('Add'); ?>
 <?php echo $this->Form->end(array('id' => 'label-submit')); ?>

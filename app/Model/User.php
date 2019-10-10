@@ -8,31 +8,31 @@
         'username' => array(
             'rule1' => array(
                 'rule' => 'notBlank',
-                'message' => 'ユーザー名は必ず入力してください。'
+                'message' => 'This is a required input item.'
             ),
             'rule2' => array(
                 'rule' => 'isUnique',
-                'message' => 'そのユーザー名はすでに使われています。'
+                'message' => 'The input value is already in use.'
             ),
         ),
         'password' => array(
             'rule1' => array(
                 'rule' => 'notBlank',
-                'message' => 'A password is required'
+                'message' => 'This is a required input item.'
             ),
             'rule2' => array(
                 'rule' => '/^[A-Z][0-9a-zA-Z]{7}/',
-                'message' => 'パスワードは半角英数字の先頭大文字、最低８文字で設定してください。'
+                'message' => 'Please enter a password with a minimum of 8 alphanumeric characters.'
             ),
         ),
         'zipcode' => array(
             'rule' => '/\d{7}/',
-            'message' => '郵便番号は7桁の数字で入力してください。'
+            'message' => 'Enter the postal code as a 7-digit number.'
         ),
         'address' => array(
             'required' => array(
                 'rule' => 'notBlank',
-                'message' => 'A address is required'
+                'message' => 'This is a required input item.'
             )
         ),
         'role' => array(

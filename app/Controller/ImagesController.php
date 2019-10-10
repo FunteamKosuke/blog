@@ -3,6 +3,8 @@
     public function upload(){
       // 関連づけたい記事のidを渡す。
       $this->set('post_id', Hash::get($this->request->query, "post_id"));
+      // アップロード後に推移したいViewを渡す。
+      $this->set('redirect_view', Hash::get($this->request->query, "redirect_view"));
       if ($this->request->is('post')){
           $this->log($this->request->data);
         $save_data = array();
@@ -16,7 +18,7 @@
         if($this->Image->saveAll($save_data, array('deep' => true))){
           $this->Flash->success(__('The image was uploaded successfully.'));
           return $this->redirect(array('controller' => 'Posts',
-                                        'action' => 'view',
+                                        'action' => $this->request->data['Post']['redirect_view'],
                                         $this->request->data['Post']['post_id']));
         } else {
           $this->Flash->error(__('Image upload failed.'));
@@ -58,7 +60,7 @@
           );
       }
       return $this->redirect(array('controller' => 'posts',
-                                    'action' => 'view',
+                                    'action' => Hash::get($this->request->query, "redirect_view"),
                                     Hash::get($this->request->query, "post_id")));
     }
 
@@ -96,9 +98,8 @@
             unlink($image_path);
             $this->Flash->success(__('Successfully replaced the image.'));
             return $this->redirect(array('controller' => 'posts',
-                                          'action' => 'view',
-                                          Hash::get($this->request->query,
-                                          "post_id")));
+                                          'action' => Hash::get($this->request->query, "redirect_view"),
+                                          Hash::get($this->request->query, "post_id")));
         }
         $this->Flash->error(__('Failed to replace image.'));
       }

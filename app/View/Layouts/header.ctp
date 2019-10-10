@@ -57,6 +57,12 @@
                           'action' => 'add'),
                     array('class' => 'dropdown-item')
                 );
+                echo $this->Html->link(
+                    '下書き一覧',
+                    array('controller' => 'posts',
+                          'action' => 'draftIndex'),
+                    array('class' => 'dropdown-item')
+                );
               ?>
             </div>
           </li>

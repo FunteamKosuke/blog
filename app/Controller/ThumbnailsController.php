@@ -1,5 +1,5 @@
 <?php
-  class ImagesController extends AppController {
+  class ThumbnailsController extends AppController {
   }
 
 ?>

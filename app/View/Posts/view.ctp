@@ -23,8 +23,7 @@
         <p><?php echo h($post['Post']['body']); ?></p>
         <div class="back-curtain"></div><!-- スライドショーの背景の暗幕 -->
         <!-- 関連づいてる画像の数だけ表示する -->
-        <?php
-          foreach ($post['Image'] as $image) { ?>
+        <?php foreach ($post['Image'] as $image) { ?>
             <hr>
             <div class="view-image">
                 <div class="container-fluid">
@@ -52,7 +51,8 @@
                                     array('controller' => 'images',
                                           'action' => 'delete',
                                           $image['id'],
-                                          '?' => ['post_id' => $post['Post']['id']]),
+                                          '?' => array('post_id' => $draft_post['Post']['id'],
+                                                        'redirect_view' => 'view')),
                                     array('confirm' => 'Are you sure?',
                                           'class' => 'btn btn-primary btn-block')
                                 ); ?>
@@ -66,16 +66,15 @@
                                 array('controller' => 'images',
                                       'action' => 'edit',
                                       $image['id'],
-                                      '?' => ['post_id' => $post['Post']['id']]), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
+                                      '?' => array('post_id' => $draft_post['Post']['id'],
+                                                    'redirect_view' => 'view')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
                                 array('class' => 'btn btn-primary btn-block' )
                             ); ?>
                         </div>
                     </div>
                 </div>
           </div>
-        <?php
-        }
-        ?>
+        <?php } ?>
         <div class="slide-operation">
             <div class="next">
                 >
@@ -84,13 +83,11 @@
                 <
             </div>
         </div>
-        <script type="text/javascript">
-
-        </script>
         <!-- 記事に画像を投稿するリンクを作成する。 -->
-        <p><?php echo $this->Html->link(__('Add Image'), ['controller' => 'Images',
+        <p><?php echo $this->Html->link(__('Add Image'), array('controller' => 'Images',
                                                       'action' => 'upload',
-                                                      '?' => ['post_id' => $post['Post']['id']]],
+                                                      '?' => array('post_id' => $post['Post']['id'],
+                                                                    'return_view' => 'view')),
                                                   array('class' => 'btn btn-primary btn-block')); ?></p>
       </div>
       <!-- 記事とサイドバーの間隔を開ける -->

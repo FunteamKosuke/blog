@@ -20,17 +20,13 @@
         'name' => array(
             'rule1' => array(
                 'rule' => 'notBlank',
-                'message' => 'タグ名は必ず入力してください。'
+                'message' => 'This is a required input item.'
             ),
             'rule2' => array(
                 'rule' => 'isUnique',
-                'message' => 'そのタグ名はすでに使用されています。'
+                'message' => 'The input value is already in use.'
             ),
         ),
-        'Tag' => array(
-            'rule' => array('multiple', array('min' => 1, 'max' => 3)),
-            'message'  => '興味のある物を選択してください（1個～3個）',
-        )
     );
   }
 ?>

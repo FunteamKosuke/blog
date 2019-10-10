@@ -5,11 +5,11 @@
         'name' => array(
             'rule1' => array(
                 'rule' => 'notBlank',
-                'message' => 'カテゴリ名は必ず入力してください。'
+                'message' => 'This is a required input item.'
             ),
             'rule2' => array(
                 'rule' => 'isUnique',
-                'message' => 'そのカテゴリ名はすでに使用されています。'
+                'message' => 'The input value is already in use.'
             ),
         )
     );

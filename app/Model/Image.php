@@ -18,7 +18,7 @@
         //     // ルール：uploadError => errorを検証 (2.2 以降)
         //     'upload-file' => array(
         //         'rule' => array( 'uploadError'),
-        //         'message' => array( 'Error uploading file')
+        //         'message' => array( 'File upload failed.')
         //     ),
         //
         //     // ルール：extension => pathinfoを使用して拡張子を検証
@@ -26,7 +26,7 @@
         //         'rule' => array( 'extension', array(
         //             'jpeg', 'jpg')  // 拡張子を配列で定義
         //         ),
-        //         'message' => array( 'file extension error')
+        //         'message' => array( 'Only jpg and jpeg file extensions can be specified.')
         //     ),
         //
         //     // ルール：mimeType =>
@@ -36,18 +36,18 @@
         //         'rule' => array( 'mimeType', array(
         //             'image/jpeg')  // MIMEタイプを配列で定義
         //         ),
-        //         'message' => array( 'MIME type error')
+        //         'message' => array( 'MIME type can be specified only for image / jpeg.')
         //     ),
         //
         //     // ルール：fileSize => filesizeでファイルサイズを検証(2GBまで設定可能)  (2.3 以降)
         //     'size' => array(
         //         'maxFileSize' => array(
         //             'rule' => array( 'fileSize', '<=', '512MB'),  // 10M以下
-        //             'message' => array( 'file size error')
+        //             'message' => array( 'Only 1 ~ 10MB file size can be specified.')
         //         ),
         //         'minFileSize' => array(
         //             'rule' => array( 'fileSize', '>',  0),    // 0バイトより大
-        //             'message' => array( 'file size error')
+        //             'message' => array( 'Only 1 ~ 10MB file size can be specified.')
         //         ),
         //     ),
         // ),
@@ -56,7 +56,7 @@
             // ルール：uploadError => errorを検証 (2.2 以降)
             'upload-file' => array(
                 'rule' => array( 'uploadError'),
-                'message' => array( 'ファイルのアップロードに失敗しました。')
+                'message' => array( 'File upload failed.')
                 // 'required' => false
             ),
 
@@ -65,7 +65,7 @@
                 'rule' => array( 'extension', array(
                     'jpeg', 'jpg')  // 拡張子を配列で定義
                 ),
-                'message' => array( 'ファイルの拡張子はjpgとjpegのみ指定可能です。')
+                'message' => array( 'Only jpg and jpeg file extensions can be specified.')
             ),
 
             // ルール：mimeType =>
@@ -75,18 +75,18 @@
                 'rule' => array( 'mimeType', array(
                     'image/jpeg')  // MIMEタイプを配列で定義
                 ),
-                'message' => array( 'MIME typeはimage/jpegのみ指定可能です。')
+                'message' => array( 'MIME type can be specified only for image / jpeg.')
             ),
 
             // ルール：fileSize => filesizeでファイルサイズを検証(2GBまで設定可能)  (2.3 以降)
             'size' => array(
                 'maxFileSize' => array(
                     'rule' => array( 'fileSize', '<=', '10MB'),  // 10M以下
-                    'message' => array( 'ファイルサイズは1~10MBのみ指定可能です。')
+                    'message' => array( 'Only 1 ~ 10MB file size can be specified.')
                 ),
                 'minFileSize' => array(
                     'rule' => array( 'fileSize', '>',  0),    // 0バイトより大
-                    'message' => array( 'ファイルサイズは1~10MBのみ指定可能です。')
+                    'message' => array( 'Only 1 ~ 10MB file size can be specified.')
                 ),
             ),
         ),

@@ -38,7 +38,7 @@
                     array('class' => 'btn btn-outline-primary')
                 ); ?>
             </div>
-            <div class="post-delete">
+            <div class="delete">
                 <?php echo $this->Form->postLink(
                     __('Delete Post'),
                     array('controller' => 'posts','action' => 'delete', $post['Post']['id']),

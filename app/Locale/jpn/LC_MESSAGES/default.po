@@ -5,7 +5,7 @@
 ############################
 
 
-#########View側のメッセージの翻訳###########
+#########Viewのメッセージの翻訳###########
 msgid "Kosuke Blog"
 msgstr "こうすけのブログ"
 
@@ -77,22 +77,22 @@ msgid "Import Address"
 msgstr "住所のインポート"
 
 msgid "Add"
-msgstr "追加する"
+msgstr "追加"
 
 msgid "Edit"
-msgstr "編集する"
+msgstr "編集"
 
 msgid "Sign Up"
-msgstr "登録する"
+msgstr "登録"
 
 msgid "Replacement"
 msgstr "差し替える"
 
 msgid "Import"
-msgstr "インポートする"
+msgstr "インポート"
 
 msgid "Cancel"
-msgstr "キャンセルする"
+msgstr "キャンセル"
 
 msgid "Importing"
 msgstr "インポート中"
@@ -101,7 +101,7 @@ msgid "Multiple Add Possible"
 msgstr "複数追加可"
 
 msgid "Sign Up User"
-msgstr "ユーザーを登録する"
+msgstr "ユーザーを登録"
 
 msgid "User Name"
 msgstr "ユーザー名"
@@ -133,8 +133,13 @@ msgstr "郵便番号検索をすることで住所欄に自動入力されます
 msgid "Search Post Result"
 msgstr "記事の検索結果"
 
+msgid "Draft Index"
+msgstr "下書き一覧"
 
-#########コントローラー側のメッセージの翻訳##########
+msgid "Draft"
+msgstr "下書き"
+
+#########コントローラーのメッセージの翻訳##########
 
 ### posts ###
 msgid "Successfully added an article."
@@ -244,3 +249,44 @@ msgstr "ユーザー情報の削除に成功しました。"
 
 msgid "User was not deleted"
 msgstr "ユーザー情報の削除に失敗しました。"
+
+########## バリデーションメッセージ ##########
+
+### Post ###
+msgid "Please select a tag (2-4 pieces)"
+msgstr "タグを選択してください(2~4)"
+
+#*以下はimageモデルでも使用します。
+
+msgid "Only jpg and jpeg file extensions can be specified."
+msgstr "ファイルの拡張子はjpgとjpegのみ指定可能です。"
+
+msgid "MIME type can be specified only for image / jpeg."
+msgstr "MIME typeはimage/jpegのみ指定可能です。"
+
+msgid "Only 1 ~ 10MB file size can be specified."
+msgstr "ファイルサイズは1~10MBのみ指定可能です。"
+
+msgid "File upload failed."
+msgstr "ファイルのアップロードに失敗しました。"
+
+
+### Tag ###
+
+### Category ###
+
+### User ###
+
+msgid "Please enter a password with a minimum of 8 alphanumeric characters."
+msgstr "パスワードは先頭大文字の半角英数字、最低８文字を入力してください。"
+
+msgid "Enter the postal code as a 7-digit number."
+msgstr "郵便番号は7桁の数字で入力してください。"
+
+### 共通 ###
+
+msgid "This is a required input item."
+msgstr "必須の入力項目です。"
+
+msgid "The input value is already in use."
+msgstr "その入力値はすでに使用されています。"

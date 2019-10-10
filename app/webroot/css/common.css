@@ -412,3 +412,14 @@ cursor:pointer; /* マウスカーソルの形を指定する */
     /* padding: 10px; */
     border-radius: 5px;
 }
+
+.padi_width_5px{
+    padding: auto 5px;
+}
+
+/* bootstrapのスタイルでbtn-blockの兄弟要素にbtn-blockがいた場合
+marginが入るようになっているので、0に設定する。
+もっと正しいやり方ってあるのかな？*/
+.btn-block+.btn-block{
+    margin: 0;
+}

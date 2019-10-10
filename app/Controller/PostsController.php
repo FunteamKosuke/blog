@@ -1,6 +1,8 @@
 <?php
 
   class PostsController extends AppController {
+    const PUBLISH = 1; //公開を表す
+    const NO_PUBLISH = 0; // 非公開を表す
     // Postモデル以外のモデルを使用できるようにする。
     public $uses = array('Post', 'Category', 'Tag', 'Image', 'Thumbnail');
     public $helpers = array('Html', 'Form');
@@ -8,6 +10,7 @@
     public $presetVars = true;
     // index.ctpの記事一覧表示の際のpaginateの表示設定 find.ctp（検索結果表示）には適用されないので気をつける。
     public $paginate = array(
+        'conditions' => array('publish_flg' => self::PUBLISH), //公開設定になっている記事のみを記事一覧に表示する。
         'limit' => 4
     );
 
@@ -20,18 +23,6 @@
         $this->set(compact('tags'));
         // 一覧表示をpaginate機能で表示させる。
         $this->set('posts', $this->paginate());
-    }
-
-    // 検索結果を表示する。
-    public function find(){
-      $this->Post->recursive = 0;
-      $this->Prg->commonProcess();
-      $this->log($this->passedArgs);
-      $this->paginate = array(
-          'conditions' => $this->Post->parseCriteria($this->passedArgs), // 検索する条件を設定する。
-          'limit' => 4, // 検索結果を４件ごとに表示する。
-      );
-      $this->set('posts', $this->paginate()); // paginate機能を利用して表示する。
     }
 
     public function view($id = null) {
@@ -57,6 +48,7 @@
       $this->set('bodys', $post_body);
       // 記事の追加処理
       if ($this->request->is('post')) {
+          $this->log($this->request->data);
           // $this->Tag->set($this->request->data['Tag']['Tag']);
           // $this->Tag->validates();
         // アソシエーションの形式で保存するための配列を作成する。
@@ -100,6 +92,9 @@
             $save_data['Thumbnail'] = $this->request->data['Post'];
         }
 
+        // 公開か非公開を表すフラグを設定する。1:公開 0:非公開
+        $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];
+
         // 記事をカテゴリとタグに関連づけて保存する。
         if($save_data = $this->Post->saveAll($save_data, array('deep' => true))){
             $this->Flash->success(__('Successfully added an article.'));
@@ -108,7 +103,7 @@
         //タグのエラーがあったらエラーメッセージを取得する
         $errors = $this->Post->invalidFields();
         if(!empty ($errors['Tag'])) {
-            $this->set('tagerror', $errors['Tag']);
+            $this->set('tagerror', $errors['Tag'][0]);
         }
         $this->Flash->error(__('Failed to add article.'));
       }
@@ -186,6 +181,103 @@
 
       return $this->redirect(array('action' => 'index'));
     }
+    /******** 下書き関連 **********/
+
+    // 下書きを公開状態にする。
+
+    public function draftIndex(){
+        $this->paginate = array(
+            'conditions' => array('publish_flg' => self::NO_PUBLISH), // 検索する条件を設定する。
+            'limit' => 4, // 検索結果を４件ごとに表示する。
+        );
+        $this->set('draft_posts', $this->paginate());
+    }
+
+    public function publishDraft($id = null){
+        if ($this->request->is('get')) {
+            throw new MethodNotAllowedException();
+        }
+        // 空ではないか
+        if (!$id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // 数値以外なら
+        if (!is_numeric($id)) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // idで表現できる最大値を超えていないか
+        if (parent::ID_MAX < $id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // 存在するか
+        $draft_post = $this->Post->findById($id);
+        if (!$draft_post) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+        $draft_post['Post']['publish_flg'] = self::PUBLISH;
+        if ($this->Post->save($draft_post)) {
+            $this->Flash->success(__('An article has been published.'));
+            return $this->redirect(array('action' => 'index'));
+        }
+        $this->Flash->error(__('The article could not be published.'));
+    }
+
+    public function editDraft($id = null){
+        if (!$id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // 数値以外なら
+        if (!is_numeric($id)) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // idで表現できる最大値を超えていないか
+        if (parent::ID_MAX < $id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        $draft_post = $this->Post->findById($id);
+        if (!$draft_post) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        $this->set('draft_post', $draft_post);
+
+
+        // 余計なゴミデータが作成されちゃうので、コメントアウト
+        // if ($this->request->is(array('post', 'put'))) {
+        //     $this->Post->id = $id;
+        //     if ($this->Post->save($this->request->data)) {
+        //         $this->Flash->success(__('Your post has been updated.'));
+        //         return $this->redirect(array('action' => 'index'));
+        //     }
+        //     $this->Flash->error(__('Unable to update your post.'));
+        // }
+        //
+        // if (!$this->request->data) {
+        //     $this->request->data = $draft_post;
+        // }
+    }
+
+    /********* 検索関連 ***********/
+
+    // 検索結果を表示する。
+    public function find(){
+      $this->Post->recursive = 0;
+      $this->Prg->commonProcess();
+      $this->log($this->passedArgs);
+      $this->paginate = array(
+          'conditions' => $this->Post->parseCriteria($this->passedArgs), // 検索する条件を設定する。
+          'limit' => 4, // 検索結果を４件ごとに表示する。
+      );
+      $this->set('posts', $this->paginate()); // paginate機能を利用して表示する。
+    }
+
+    /********** 認証関連 **********/
 
     public function isAuthorized($user) {
       // 登録済ユーザーは投稿できる
