@@ -8,19 +8,13 @@
     public $helpers = array('Html', 'Form');
     public $components = array('Search.Prg');
     public $presetVars = true;
-    // index.ctpの記事一覧表示の際のpaginateの表示設定 find.ctp（検索結果表示）には適用されないので気をつける。
-    public $paginate = array(
-        'conditions' => array('publish_flg' => self::PUBLISH), //公開設定になっている記事のみを記事一覧に表示する。
-        'limit' => 4
-    );
 
     public function index() {
-        // 検索フォームのカテゴリのプルダウン用のデータを取得する。
-        $categories = $this->Post->Category->find('list');
-        $this->set(compact('categories'));
-        // 検索フォームのタグのプルダウン用のデータを取得する。
-        $tags = $this->Post->Tag->find('list');
-        $this->set(compact('tags'));
+
+        $this->paginate = array(
+            'conditions' => array('publish_flg' => self::PUBLISH), // 検索する条件を設定する。
+            'limit' => 4, // 検索結果を４件ごとに表示する。
+        );
         // 一覧表示をpaginate機能で表示させる。
         $this->set('posts', $this->paginate());
     }
@@ -95,15 +89,15 @@
         // 公開か非公開を表すフラグを設定する。1:公開 0:非公開
         $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];
 
-        // 記事をカテゴリとタグに関連づけて保存する。
+        // 記事を保存する。
         if($save_data = $this->Post->saveAll($save_data, array('deep' => true))){
             $this->Flash->success(__('Successfully added an article.'));
             return $this->redirect(array('action' => 'index'));
         }
-        //タグのエラーがあったらエラーメッセージを取得する
-        $errors = $this->Post->invalidFields();
+        //タグのエラーがあったらエラーメッセージを取得する。タグは別途取得しないとviewに表示できない。
+        $errors = $this->Post->validationErrors;
         if(!empty ($errors['Tag'])) {
-            $this->set('tagerror', $errors['Tag'][0]);
+            $this->set('tagerror', $errors['Tag']);
         }
         $this->Flash->error(__('Failed to add article.'));
       }
@@ -182,9 +176,7 @@
       return $this->redirect(array('action' => 'index'));
     }
     /******** 下書き関連 **********/
-
-    // 下書きを公開状態にする。
-
+    // 下書きを一覧で表示する。
     public function draftIndex(){
         $this->paginate = array(
             'conditions' => array('publish_flg' => self::NO_PUBLISH), // 検索する条件を設定する。
@@ -193,6 +185,7 @@
         $this->set('draft_posts', $this->paginate());
     }
 
+    // 下書きを公開状態にする。
     public function publishDraft($id = null){
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
@@ -225,6 +218,7 @@
         $this->Flash->error(__('The article could not be published.'));
     }
 
+    // 下書きを編集する。
     public function editDraft($id = null){
         if (!$id) {
             throw new NotFoundException(__('Invalid post'));
@@ -247,6 +241,10 @@
 
         $this->set('draft_post', $draft_post);
 
+        // 編集画面でカテゴリをセレクトボックス で選択できるようにlistでデータを取得する。
+        $this->set( 'select1', $this->Category->find( 'list', array(
+                                                                'fields' => array( 'id', 'name')
+                                                                )));
 
         // 余計なゴミデータが作成されちゃうので、コメントアウト
         // if ($this->request->is(array('post', 'put'))) {

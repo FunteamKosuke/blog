@@ -4,6 +4,29 @@
 
 <!-- サムネイルを編集する。 -->
 <h3><?php echo __('Edit Thumbnail'); ?></h3>
+<div class="thumbnail">
+    <?php
+      // サムネイルが設定されている記事だけ表示する。
+      if ($thumbnail = $draft_post['Thumbnail']) {
+          $thumbnail_path = '../files/thumbnail/thumbnail';
+          $thumbnail_path .= '/' . $thumbnail['thumbnail_dir'];
+          $thumbnail_path .= '/' . $thumbnail['thumbnail'];
+          echo $this->Html->image($thumbnail_path);
+      }
+    ?>
+    <div class="image-edit col-6">
+        <?php // 画像を差し替えるリンク
+        echo $this->Html->link(
+            __('Edit Thumbnail'),
+            array('controller' => 'thumbnails',
+                  'action' => 'edit',
+                  $thumbnail['id'],
+                  '?' => array('post_id' => $draft_post['Post']['id'],
+                                'redirect_view' => 'editDraft')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
+            array('class' => 'btn btn-primary btn-block' )
+        ); ?>
+    </div>
+</div>
 
 <!-- タイトルを編集する -->
 <div class="form-group">
@@ -21,8 +44,14 @@
                                                 'value' => $draft_post['Post']['title'])); ?>
 </div>
 <!-- カテゴリを編集する。 -->
-<h3><?php echo __('Category'); ?></h3>
-
+<div class="form-group">
+    <h3><?php echo __('Category'); ?></h3>
+    <?php echo $this->Form->input( 'Category.category', array(
+                                                            'type' => 'select',
+                                                            'options' => $select1,
+                                                            'label' => false,
+                                                            'class' => 'form-control')); ?>
+</div>
 <!-- タグを編集する。 -->
 <h3><?php echo __('Tag'); ?></h3>
 
@@ -75,6 +104,7 @@
   </div>
 <?php } ?>
 
+<!-- 記事に画像を追加する。 -->
 <p><?php echo $this->Html->link(__('Add Image'), array('controller' => 'Images',
                                               'action' => 'upload',
                                               '?' => array('post_id' => $draft_post['Post']['id'],

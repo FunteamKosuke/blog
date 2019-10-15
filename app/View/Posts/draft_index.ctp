@@ -8,21 +8,29 @@
                 <div class="delete">
                     <?php echo $this->Form->postLink(
                         __('Delete'),
-                        array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
-                        array('confirm' => 'Are you sure?','class' => 'btn btn-outline-primary')
+                        array('controller' => 'posts',
+                              'action' => 'delete',
+                              $post['Post']['id']),
+                        array('confirm' => 'Are you sure?',
+                              'class' => 'btn btn-outline-primary')
                     ); ?>
                 </div>
                 <div class="publish">
                     <?php echo $this->Form->postLink(
                         __('Publish'),
-                        array('controller' => 'posts','action' => 'publishDraft', $post['Post']['id']),
-                        array('confirm' => __('Do you want to release it?'),'class' => 'btn btn-outline-primary')
+                        array('controller' => 'posts',
+                              'action' => 'publishDraft',
+                              $post['Post']['id']),
+                        array('confirm' => __('Do you want to release it?'),
+                              'class' => 'btn btn-outline-primary')
                     ); ?>
                 </div>
                 <div class="edit">
                     <?php echo $this->html->link(
-                        __('edit'),
-                        array('controller' => 'posts','action' => 'editDraft', $post['Post']['id']),
+                        __('Edit'),
+                        array('controller' => 'posts',
+                              'action' => 'editDraft',
+                              $post['Post']['id']),
                         array('class' => 'btn btn-outline-primary')
                     ); ?>
                 </div>

@@ -12,7 +12,6 @@ msgstr "こうすけのブログ"
 msgid "Add Post"
 msgstr "記事を追加する"
 
-#View/posts/post_list
 msgid "Read Post"
 msgstr "記事を読む"
 

@@ -3,7 +3,7 @@
     <?php echo $this->Form->create( 'Post', array( 'type'=>'file', 'enctype' => 'multipart/form-data', 'novalidate' => true)); ?>
     <div class="form-group">
         <h3><?php echo __('Title'); ?></h3>
-        <?php echo $this->Form->input('title', array('label' => false, 'class' => 'form-control')); ?>
+        <?php echo $this->Form->input('title', array('label' => false, 'class' => 'form-control', 're')); ?>
     </div>
     <div class="form-group">
         <h3><?php echo __('Body'); ?></h3>
