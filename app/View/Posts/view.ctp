@@ -51,7 +51,7 @@
                                     array('controller' => 'images',
                                           'action' => 'delete',
                                           $image['id'],
-                                          '?' => array('post_id' => $draft_post['Post']['id'],
+                                          '?' => array('post_id' => $post['Post']['id'],
                                                         'redirect_view' => 'view')),
                                     array('confirm' => 'Are you sure?',
                                           'class' => 'btn btn-primary btn-block')
@@ -66,7 +66,7 @@
                                 array('controller' => 'images',
                                       'action' => 'edit',
                                       $image['id'],
-                                      '?' => array('post_id' => $draft_post['Post']['id'],
+                                      '?' => array('post_id' => $post['Post']['id'],
                                                     'redirect_view' => 'view')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
                                 array('class' => 'btn btn-primary btn-block' )
                             ); ?>
@@ -87,7 +87,7 @@
         <p><?php echo $this->Html->link(__('Add Image'), array('controller' => 'Images',
                                                       'action' => 'upload',
                                                       '?' => array('post_id' => $post['Post']['id'],
-                                                                    'return_view' => 'view')),
+                                                                    'redirect_view' => 'view')),
                                                   array('class' => 'btn btn-primary btn-block')); ?></p>
       </div>
       <!-- 記事とサイドバーの間隔を開ける -->

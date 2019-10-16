@@ -1,32 +1,5 @@
-<?php $this->log($draft_post); $this->log('ちゃんt'); ?>
 <h3>Edit Draft</h3>
 <?php echo $this->Form->create('Post'); ?>
-
-<!-- サムネイルを編集する。 -->
-<h3><?php echo __('Edit Thumbnail'); ?></h3>
-<div class="thumbnail">
-    <?php
-      // サムネイルが設定されている記事だけ表示する。
-      if ($thumbnail = $draft_post['Thumbnail']) {
-          $thumbnail_path = '../files/thumbnail/thumbnail';
-          $thumbnail_path .= '/' . $thumbnail['thumbnail_dir'];
-          $thumbnail_path .= '/' . $thumbnail['thumbnail'];
-          echo $this->Html->image($thumbnail_path);
-      }
-    ?>
-    <div class="image-edit col-6">
-        <?php // 画像を差し替えるリンク
-        echo $this->Html->link(
-            __('Edit Thumbnail'),
-            array('controller' => 'thumbnails',
-                  'action' => 'edit',
-                  $thumbnail['id'],
-                  '?' => array('post_id' => $draft_post['Post']['id'],
-                                'redirect_view' => 'editDraft')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
-            array('class' => 'btn btn-primary btn-block' )
-        ); ?>
-    </div>
-</div>
 
 <!-- タイトルを編集する -->
 <div class="form-group">
@@ -41,20 +14,77 @@
     <?php echo $this->Form->input('body', array('label' => false,
                                                 'rows' => '6',
                                                 'class' => 'form-control',
-                                                'value' => $draft_post['Post']['title'])); ?>
+                                                'value' => $draft_post['Post']['body'])); ?>
 </div>
 <!-- カテゴリを編集する。 -->
 <div class="form-group">
     <h3><?php echo __('Category'); ?></h3>
     <?php echo $this->Form->input( 'Category.category', array(
                                                             'type' => 'select',
-                                                            'options' => $select1,
+                                                            'options' => $categories,
                                                             'label' => false,
                                                             'class' => 'form-control')); ?>
 </div>
 <!-- タグを編集する。 -->
 <h3><?php echo __('Tag'); ?></h3>
+<?php
+    $default_tags = array();
+    foreach ($draft_post['Tag'] as $tag) {
+        $default_tags[] = $tag['id'];
+    }
+?>
+<?php echo $this->Form->input( 'Tag.Tag', array(
+    'type' => 'select',
+    'multiple'=> 'checkbox',
+    'options' => $tags,
+    'selected' => $default_tags)); ?>
 
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 記事を追加するか下書き保存するか分ける。 -->
+            <div id="add" class="col-6 padi_width_5px">
+                <?php echo $this->Form->button(__('Publish'), array(
+                    'div' => false,
+                    'class' => 'btn btn-primary btn-block',
+                    'name' => 'publish_flg',
+                    'value' => '1')); ?>
+            </div>
+            <div id="draft" class="col-6 padi_width_5px">
+                <?php echo $this->Form->button(__('Draft'), array(
+                    'div' => false,
+                    'class' => 'btn btn-secondary btn-block',
+                    'name' => 'publish_flg',
+                    'value' => '0')); ?>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->Form->end(); ?>
+
+    <!-- サムネイルを編集する。 -->
+    <h3><?php echo __('Edit Thumbnail'); ?></h3>
+    <div class="thumbnail">
+        <?php
+          // サムネイルが設定されている記事だけ表示する。
+          if ($thumbnail = $draft_post['Thumbnail']) {
+              $thumbnail_path = '../files/thumbnail/thumbnail';
+              $thumbnail_path .= '/' . $thumbnail['thumbnail_dir'];
+              $thumbnail_path .= '/' . $thumbnail['thumbnail'];
+              echo $this->Html->image($thumbnail_path);
+          }
+        ?>
+        <div class="image-edit">
+            <?php // 画像を差し替えるリンク
+            echo $this->Html->link(
+                __('Edit Thumbnail'),
+                array('controller' => 'thumbnails',
+                      'action' => 'edit',
+                      $thumbnail['id'],
+                      '?' => array('post_id' => $draft_post['Post']['id'],
+                                    'redirect_view' => 'editDraft')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
+                array('class' => 'btn btn-primary btn-block' )
+            ); ?>
+        </div>
+    </div>
 <!-- 投稿された画像を編集する。 -->
 <h3><?php echo __('Edit Image'); ?></h3>
 <?php foreach ($draft_post['Image'] as $image) { ?>

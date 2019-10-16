@@ -34,18 +34,11 @@
     public function add(){
       // Viewでカテゴリをプルダウンメニューで表示するためにタグのデータを全て取得する。
       $this->set('categories',$this->Category->find('list', array('fields'=>array('id','name'))));
-      // ViewでタグをSELECTボックスで表示するためにタグのデータを全て取得する。
-      $this->set( 'tags', $this->Tag->find( 'list', array(
-                                              'fields' => array( 'id', 'name'))));
+      // Viewでタグをチェックボックスで表示するためにタグのデータをリストで全て取得する。
+      $this->set( 'tags', $this->Tag->find( 'list', array('fields' => array( 'id', 'name'))));
 
-      $post_body = array('yuou' => 'djghdjgfhkfgk', 'dhgjfg' => 'dghjghjkgfh', 'ghjf' => 'dtyjdykdg');
-      $this->set('bodys', $post_body);
       // 記事の追加処理
       if ($this->request->is('post')) {
-          $this->log($this->request->data);
-          // $this->Tag->set($this->request->data['Tag']['Tag']);
-          // $this->Tag->validates();
-        // アソシエーションの形式で保存するための配列を作成する。
         // 記事の情報を設定する
         $save_data['Post'] = $this->request->data['Post'];
         // 記事の投稿者を設定する
@@ -71,7 +64,7 @@
         // }
         // $save_data['Tag']['Tag'] = $tag_id;
         // チェックボックスでタグを設定する。
-        $save_data['Tag']['Tag'] = $this->request->data['Tag']['Tag'];
+        $save_data['Tag'] = $this->request->data['Tag'];
         // 画像を投稿する。
         if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
             $save_data['Image'] = array();
@@ -90,7 +83,7 @@
         $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];
 
         // 記事を保存する。
-        if($save_data = $this->Post->saveAll($save_data, array('deep' => true))){
+        if($save_data && $this->Post->saveAll($save_data, array('deep' => true))){
             $this->Flash->success(__('Successfully added an article.'));
             return $this->redirect(array('action' => 'index'));
         }
@@ -179,7 +172,7 @@
     // 下書きを一覧で表示する。
     public function draftIndex(){
         $this->paginate = array(
-            'conditions' => array('publish_flg' => self::NO_PUBLISH), // 検索する条件を設定する。
+            'conditions' => array('publish_flg' => self::NO_PUBLISH), // 非公開のもののみ取得する。
             'limit' => 4, // 検索結果を４件ごとに表示する。
         );
         $this->set('draft_posts', $this->paginate());
@@ -211,7 +204,7 @@
             throw new NotFoundException(__('Invalid post'));
         }
         $draft_post['Post']['publish_flg'] = self::PUBLISH;
-        if ($this->Post->save($draft_post)) {
+        if ($draft_post && $this->Post->save($draft_post)) {
             $this->Flash->success(__('An article has been published.'));
             return $this->redirect(array('action' => 'index'));
         }
@@ -242,23 +235,35 @@
         $this->set('draft_post', $draft_post);
 
         // 編集画面でカテゴリをセレクトボックス で選択できるようにlistでデータを取得する。
-        $this->set( 'select1', $this->Category->find( 'list', array(
+        $this->set( 'categories', $this->Category->find( 'list', array(
                                                                 'fields' => array( 'id', 'name')
                                                                 )));
 
-        // 余計なゴミデータが作成されちゃうので、コメントアウト
-        // if ($this->request->is(array('post', 'put'))) {
-        //     $this->Post->id = $id;
-        //     if ($this->Post->save($this->request->data)) {
-        //         $this->Flash->success(__('Your post has been updated.'));
-        //         return $this->redirect(array('action' => 'index'));
-        //     }
-        //     $this->Flash->error(__('Unable to update your post.'));
-        // }
-        //
-        // if (!$this->request->data) {
-        //     $this->request->data = $draft_post;
-        // }
+        // 編集画面でタグを一覧で表示するためにlistでデータを取得する。
+        $this->set( 'tags', $this->Tag->find( 'list',
+                                                array(
+                                                    'fields' => array(
+                                                                    'id',
+                                                                    'name')
+                                                    )
+                                            )
+                );
+
+        if ($this->request->is(array('post', 'put'))) {
+            $save_data = $this->request->data;
+            // publish_flgは['Post']['publish_flg']の形で受け取れなかったので、別途格納する。
+            $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];
+            $this->Post->id = $id;
+            if ($save_data && $this->Post->save($save_data)) {
+                $this->Flash->success(__('Your post has been updated.'));
+                return $this->redirect(array('action' => 'draftIndex'));
+            }
+            $this->Flash->error(__('Unable to update your post.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $draft_post;
+        }
     }
 
     /********* 検索関連 ***********/
@@ -267,7 +272,6 @@
     public function find(){
       $this->Post->recursive = 0;
       $this->Prg->commonProcess();
-      $this->log($this->passedArgs);
       $this->paginate = array(
           'conditions' => $this->Post->parseCriteria($this->passedArgs), // 検索する条件を設定する。
           'limit' => 4, // 検索結果を４件ごとに表示する。
