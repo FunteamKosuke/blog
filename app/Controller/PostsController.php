@@ -255,10 +255,10 @@
             $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];
             $this->Post->id = $id;
             if ($save_data && $this->Post->save($save_data)) {
-                $this->Flash->success(__('Your post has been updated.'));
+                $this->Flash->success(__('Updated the article.'));
                 return $this->redirect(array('action' => 'draftIndex'));
             }
-            $this->Flash->error(__('Unable to update your post.'));
+            $this->Flash->error(__('The article could not be updated.'));
         }
 
         if (!$this->request->data) {

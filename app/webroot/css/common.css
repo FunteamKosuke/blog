@@ -260,6 +260,31 @@ position:relative;
     width: 50%;
     padding: 2px 5px;
 }
+
+#posts__edit-draft #edit-thumbnail{
+    margin-bottom: 30px;
+}
+
+#posts__edit-draft #edit-thumbnail img{
+    width: 100%;
+    max-height: 300px;
+    background-color: #F2F2F2;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+#posts__edit-draft #edit-image{
+    margin-bottom: 30px;
+}
+
+#posts__edit-draft #edit-image img{
+    width: 100%;
+    height: 100px;
+    background-color: #F2F2F2;
+    object-fit: contain;
+    margin-top: 20px;
+}
+
 /* images/upload */
 
 /* addresses/csv_import */
