@@ -114,6 +114,18 @@ msgstr "郵便番号"
 msgid "Address"
 msgstr "住所"
 
+msgid "Delete"
+msgstr "削除"
+
+msgid "Publish"
+msgstr "公開"
+
+msgid "Edit Draft"
+msgstr "下書き編集"
+
+msgid "Edit Thumbnail"
+msgstr "サムネイル編集"
+
 msgid "Select Address"
 msgstr "選択住所"
 
@@ -161,6 +173,18 @@ msgstr "id: %sの記事の削除に成功しました。"
 
 msgid "The post with id: %s could not be deleted."
 msgstr "id: %sの記事の削除に失敗しました。"
+
+msgid "An article has been published."
+msgstr "記事を公開しました。"
+
+msgid "The article could not be published."
+msgstr "記事の公開できませんでした。"
+
+msgid "Updated the article."
+msgstr "記事を更新しました。"
+
+msgid "The article could not be updated."
+msgstr "記事を更新できませんでした。"
 
 ### images ###
 
