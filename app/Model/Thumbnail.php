@@ -13,7 +13,7 @@
         )
     );
     public $validate = array(
-        'csv_file' => array(
+        'thumbnail' => array(
 
             // ルール：uploadError => errorを検証 (2.2 以降)
             'upload-file' => array(

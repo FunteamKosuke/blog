@@ -2,7 +2,7 @@
 echo $this->Form->create('Thumbnail', array('type' => 'file'));
 ?>
 <h3><?php echo __('Replacement Thumbnail'); ?></h3>
-<label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
+<label class="label-file btn btn-outline-primary" for="label-file-image">
     <?php echo __('Select Image File'); ?>
     <?php
         echo $this->Form->input( 'thumbnail', array(   'type' => 'file',
