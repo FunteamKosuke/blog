@@ -65,5 +65,7 @@ class AppController extends Controller {
 
     public function beforeFilter() {
       $this->Auth->allow('index', 'view');
+      // 記事一覧の追加と削除の操作の有無をユーザー情報によって判断するためにセットする。
+      $this->set('user', $this->Auth->user('id'));
     }
 }

@@ -17,8 +17,7 @@
                   }
                 ?>
             </div>
-            <!-- 時間は表示せずに投稿日だけ表示する。 -->
-            <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
+            <?php $post_date = $post['Post']['created']; ?>
             <p class="post-date"><?php echo __('Post Date'); ?>：<?php echo h($post_date); ?></p>
             <p class="category"><?php echo __('Category'); ?>：<?php echo h($post['Category']['name']); ?></p>
             <div class="body">
@@ -38,13 +37,15 @@
                     array('class' => 'btn btn-outline-primary')
                 ); ?>
             </div>
-            <div class="delete">
-                <?php echo $this->Form->postLink(
-                    __('Delete Post'),
-                    array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
-                    array('confirm' => 'Are you sure?','class' => 'btn btn-outline-primary')
-                ); ?>
-            </div>
+            <?php if ($post['Post']['user_id'] == $user) {?>
+                <div class="delete">
+                    <?php echo $this->Form->postLink(
+                        __('Delete Post'),
+                        array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
+                        array('confirm' => 'Are you sure?','class' => 'btn btn-outline-danger')
+                    ); ?>
+                </div>
+            <?php } ?>
             <hr>
           <?php endforeach; ?>
           <div class="paginate">
