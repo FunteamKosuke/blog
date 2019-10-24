@@ -58,7 +58,7 @@
         <!-- 下書き一覧とサイドバーの間を開ける -->
         <div class="col-1">
         </div>
-        <?php include('side-bar.ctp') ?>
+        <?php echo $this->element('side-bar'); ?>
     </div><!-- row -->
     </div><!-- contener -->
 </div>

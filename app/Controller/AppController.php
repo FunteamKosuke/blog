@@ -32,6 +32,8 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
     const ID_MAX = 2147483647;
+    const POST_LIST_LIMIT = 4;
+    const RELATED_POST_LIST_LIMIT = 3;
     public $components = array(
       'Flash',
       'Auth' => array(

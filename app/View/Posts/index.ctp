@@ -10,5 +10,5 @@
 );
   } ?>
   <!-- 記事一覧を表示するページを読み込む -->
-  <?php include('post-list.ctp') ?>
+  <?php echo $this->element('post-list'); ?>
 </div><!-- post-index -->

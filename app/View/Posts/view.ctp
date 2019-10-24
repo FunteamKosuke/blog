@@ -7,11 +7,25 @@
   <p><small><?php echo __('Post Date'); ?>: <?php echo h($post_date); ?>
             <?php echo __('Contributor'); ?>: <?php echo h($post['User']['username']);?></small></p>
   <!-- カテゴリを表示する -->
-  <p><?php echo __('Category'); ?>: <?php echo h($post['Category']['name']); ?></p>
+  <p><?php echo __('Category'); ?>:
+      <?php // カテゴリに関連する記事を一覧で表示できる様にする。
+      echo $this->Html->link(
+          $post['Category']['name'],
+          array('controller' => 'categories',
+                'action' => 'related_post_index',
+                $post['Category']['id']
+      )); ?>
+　</p>
   <!-- タグを表示する -->
   <p><?php echo __('Tag'); ?>:
     <?php foreach ($post['Tag'] as $tag): ?>
-      <?php echo h($tag['name']); ?>
+        <?php // タグに関連する記事を一覧で表示できる様にする。
+        echo $this->Html->link(
+            $tag['name'],
+            array('controller' => 'tags',
+                  'action' => 'related_post_index',
+                  $tag['id']
+        )); ?>
       <?php if ($tag !== end($post['Tag'])) {
         echo ",";
       } ?>
@@ -89,12 +103,48 @@
                                                       '?' => array('post_id' => $post['Post']['id'],
                                                                     'redirect_view' => 'view')),
                                                   array('class' => 'btn btn-primary btn-block')); ?></p>
+
+        <!-- 関連記事を表示する。 -->
+        <div id="related_post">
+            <h3><?php echo __('Related Post'); ?></h3>
+            <hr>
+            <?php foreach ($related_post as $rltpost) { ?>
+            <!-- タイトルを表示する -->
+            <h3> <?php echo h($rltpost['Post']['title']); ?></h3>
+            <?php
+                // サムネイルが設定されている記事だけ表示する。
+                if ($thumbnail = $rltpost['Thumbnail']) {
+                    $thumbnail_path = '../files/thumbnail/thumbnail';
+                    $thumbnail_path .= '/' . $thumbnail['thumbnail_dir'];
+                    $thumbnail_path .= '/' . $thumbnail['thumbnail'];
+                    echo $this->Html->image($thumbnail_path, array('div' => false));
+                }
+                // 文章を表示する。
+                $body = mb_substr($rltpost['Post']['body'], 0, 100);
+                if (mb_strlen($rltpost['Post']['body']) > 100) {
+                  $body .= '...';
+                }
+                ?>
+                <p><?php echo h($body); ?></p>
+                <!-- 記事を読むボタン -->
+                <div class="read-next">
+                    <?php echo $this->Html->link(
+                        __('Read Post'),
+                        array('controller' => 'posts',
+                              'action' => 'view',
+                              $post['Post']['id']),
+                        array('class' => 'btn btn-outline-primary')
+                    ); ?>
+                </div>
+                <hr>
+            <?php } ?>
+        </div>
       </div>
       <!-- 記事とサイドバーの間隔を開ける -->
       <div class="col-1">
       </div>
       <!-- サイドバーを表示する -->
-      <?php include('side-bar.ctp'); ?>
+      <?php echo $this->element('side-bar'); ?>
     </div>
   </div>
 </div>

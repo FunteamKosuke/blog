@@ -209,6 +209,9 @@ msgstr "画像の差し替えに成功しました。"
 msgid "Failed to replace image."
 msgstr "画像の差し替えに失敗しました。"
 
+msgid "Related Post"
+msgstr "関連記事"
+
 ### Addresses ###
 
 msgid "The file does not support character codes. Please convert to SJIS or UTF-8."

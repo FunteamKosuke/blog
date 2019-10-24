@@ -13,7 +13,7 @@
 
         $this->paginate = array(
             'conditions' => array('publish_flg' => self::PUBLISH), // 検索する条件を設定する。
-            'limit' => 4, // 検索結果を４件ごとに表示する。
+            'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
         );
         // 一覧表示をpaginate機能で表示させる。
         $this->set('posts', $this->paginate());
@@ -29,6 +29,12 @@
           throw new NotFoundException(__('Invalid post'));
       }
       $this->set('post', $post);
+
+      // 関連記事として表示するための記事を取得する。
+      $this->set('related_post', $this->Post->find('all', array(
+          'conditions' => array('category_id' => $post['Post']['category_id']), // 検索する条件を設定する。
+          'limit' => parent::RELATED_POST_LIST_LIMIT,
+      )));
     }
 
     public function add(){
@@ -173,11 +179,10 @@
     public function draftIndex(){
         $this->paginate = array(
             'conditions' => array('publish_flg' => self::NO_PUBLISH), // 非公開のもののみ取得する。
-            'limit' => 4, // 検索結果を４件ごとに表示する。
+            'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
         );
         $this->set('draft_posts', $this->paginate());
     }
-
     // 下書きを公開状態にする。
     public function publishDraft($id = null){
         if ($this->request->is('get')) {
@@ -274,7 +279,7 @@
       $this->Prg->commonProcess();
       $this->paginate = array(
           'conditions' => $this->Post->parseCriteria($this->passedArgs), // 検索する条件を設定する。
-          'limit' => 4, // 検索結果を４件ごとに表示する。
+          'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
       );
       $this->set('posts', $this->paginate()); // paginate機能を利用して表示する。
     }
