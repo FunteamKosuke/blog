@@ -34,6 +34,8 @@ class AppController extends Controller {
     const ID_MAX = 2147483647;
     const POST_LIST_LIMIT = 4;
     const RELATED_POST_LIST_LIMIT = 3;
+    const PUBLISH = 1; //公開を表す
+    const NO_PUBLISH = 0; // 非公開を表す
     public $components = array(
       'Flash',
       'Auth' => array(
@@ -68,6 +70,6 @@ class AppController extends Controller {
     public function beforeFilter() {
       $this->Auth->allow('index', 'view');
       // 記事一覧の追加と削除の操作の有無をユーザー情報によって判断するためにセットする。
-      $this->set('user', $this->Auth->user('id'));
+      $this->set('login_user', $this->Auth->user());
     }
 }

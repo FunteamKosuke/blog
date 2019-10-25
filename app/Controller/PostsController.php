@@ -1,8 +1,6 @@
 <?php
 
   class PostsController extends AppController {
-    const PUBLISH = 1; //公開を表す
-    const NO_PUBLISH = 0; // 非公開を表す
     // Postモデル以外のモデルを使用できるようにする。
     public $uses = array('Post', 'Category', 'Tag', 'Image', 'Thumbnail');
     public $helpers = array('Html', 'Form');
@@ -12,7 +10,7 @@
     public function index() {
 
         $this->paginate = array(
-            'conditions' => array('publish_flg' => self::PUBLISH), // 検索する条件を設定する。
+            'conditions' => array('publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
             'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
         );
         // 一覧表示をpaginate機能で表示させる。
@@ -178,7 +176,7 @@
     // 下書きを一覧で表示する。
     public function draftIndex(){
         $this->paginate = array(
-            'conditions' => array('publish_flg' => self::NO_PUBLISH), // 非公開のもののみ取得する。
+            'conditions' => array('publish_flg' => parent::NO_PUBLISH), // 非公開のもののみ取得する。
             'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
         );
         $this->set('draft_posts', $this->paginate());
@@ -208,7 +206,7 @@
         if (!$draft_post) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $draft_post['Post']['publish_flg'] = self::PUBLISH;
+        $draft_post['Post']['publish_flg'] = parent::PUBLISH;
         if ($draft_post && $this->Post->save($draft_post)) {
             $this->Flash->success(__('An article has been published.'));
             return $this->redirect(array('action' => 'index'));

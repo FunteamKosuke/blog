@@ -4,6 +4,19 @@
 
   class User extends AppModel {
     public $hasMany = 'Post';
+
+    public $actsAs = array(
+        'Upload.Upload' => array(
+            'profile_image' => array(
+                'fields' => array(
+                    'dir' => 'profile_image_dir'
+                ),
+                'path' => '{ROOT}webroot{DS}files{DS}{model}{DS}{field}{DS}',
+                'mode' => 0777,
+            )
+        )
+    );
+
     public $validate = array(
         'username' => array(
             'rule1' => array(

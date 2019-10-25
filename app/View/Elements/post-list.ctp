@@ -36,7 +36,7 @@
                     array('class' => 'btn btn-outline-primary')
                 ); ?>
             </div>
-            <?php if ($post['Post']['user_id'] == $user) {?>
+            <?php if ($post['Post']['user_id'] == $login_user['id']) {?>
                 <div class="delete">
                     <?php echo $this->Form->postLink(
                         __('Delete Post'),

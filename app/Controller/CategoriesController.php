@@ -32,13 +32,12 @@
             throw new NotFoundException(__('Invalid tag'));
         }
         $this->paginate = array( 'Post' => array(
-            'conditions' => array('category_id' => $id), // 検索する条件を設定する。
+            'conditions' => array('category_id' => $id,
+                                    'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
             'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
         ));
         // 一覧表示をpaginate機能で表示させる。
         $this->set('posts', $this->paginate());
-        if ($this->request->is(array('post', 'put'))) {
-        }
     }
   }
 ?>

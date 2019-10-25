@@ -13,21 +13,13 @@
           $this->set('users', $this->paginate());
       }
 
-      public function login() {
-        if ($this->request->is('post')) {
-            if ($this->Auth->login()) {
-                $this->redirect($this->Auth->redirect());
-            } else {
-                $this->Flash->error(__('Invalid username or password, try again'));
-            }
-        }
+      public function myPage(){
+          $user = $this->User->findById($this->Auth->user('id'));
+          $this->set('user', $user);
       }
 
-      public function logout() {
-        $this->redirect($this->Auth->logout());
-      }
-
-      public function view($id = null) {
+      // ユーザーが投稿した記事を一覧で表示する。
+      public function postIndex($id = null){
           if (!$id) {
               throw new NotFoundException(__('Invalid user'));
           }
@@ -38,7 +30,7 @@
           }
 
           // idで表現できる最大値を超えていないか
-          if (ID_MAX < $id) {
+          if (parent::ID_MAX < $id) {
               throw new NotFoundException(__('Invalid user'));
           }
 
@@ -51,7 +43,32 @@
           if (!$this->User->exists()) {
               throw new NotFoundException(__('Invalid user'));
           }
-          $this->set('user', $this->User->findById($id));
+
+          $user_id = $id;
+          $this->paginate = array( 'Post' => array(
+              'conditions' => array('user_id' => $user_id,
+                                    'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
+              'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
+          ));
+          // 一覧表示をpaginate機能で表示させる。
+          $this->set('posts', $this->paginate('Post'));
+
+          // 一覧ページのタイトルに使用する。
+          $this->set('username', $this->Auth->user('username'));
+      }
+
+      public function login() {
+        if ($this->request->is('post')) {
+            if ($this->Auth->login()) {
+                $this->redirect($this->Auth->redirect());
+            } else {
+                $this->Flash->error(__('Invalid username or password, try again'));
+            }
+        }
+      }
+
+      public function logout() {
+        $this->redirect($this->Auth->logout());
       }
 
       public function add() {

@@ -1,7 +1,7 @@
 <nav id="header" class='navbar navbar-expand-sm navbar-info bg-info sticky-top'>
   <div class="container-fluid">
-    <div class="row blog-middle">
-      <div id="menu" class="col-7">
+    <div class="row">
+      <div id="menu" class="col-5">
         <ul class="navbar-nav">
           <li class="nav-item"><?php echo $this->Html->link('Home', array('controller' => 'posts',
                                                         'action' => 'index',
@@ -101,7 +101,7 @@
           </li>
         </ul>
     </div><!-- menu -->
-      <div id="search" class="col-5">
+      <div id="search" class="col-4">
         <?php echo $this->Form->create('Post', array(
         'url' => array_merge(
             array(
@@ -126,6 +126,31 @@
           <?php echo $this->Form->end(array('id' => 'label-search-submit')); ?>
           </label>
       </div><!-- search -->
+      <div id='login-user' class="col-3">
+          <div class="container-fluid">
+              <div class="row">
+                  <div id="username" class="col-8">
+                      user：<?php echo h($login_user['username']); ?>
+                  </div>
+                  <div id="profile-icon" class="col-4">
+                      <a href="/users/myPage">
+                      <?php if ($profile_image = $login_user['profile_image']) {
+                          $profile_image_path = '../files/user/profile_image';
+                          $profile_image_path .= '/' . $login_user['profile_image_dir'];
+                          $profile_image_path .= '/' . $login_user['profile_image'];
+                          echo $this->Html->image($profile_image_path, array(
+                                                                          'width'=>'60',
+                                                                          'height'=>'60',
+                                                                          'alt'=>'検索フォームのアイコンです。'));
+                      } else {
+                          echo __('My Page');
+                      } ?>
+                      </a>
+                  </div>
+              </div>
+          </div>
+
+      </div>
     </div><!-- .row -->
   </div><!-- contener -->
 </nav>

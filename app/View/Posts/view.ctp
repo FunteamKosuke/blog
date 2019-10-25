@@ -5,7 +5,13 @@
   <!-- 投稿日と投稿者を表示する。 -->
   <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
   <p><small><?php echo __('Post Date'); ?>: <?php echo h($post_date); ?>
-            <?php echo __('Contributor'); ?>: <?php echo h($post['User']['username']);?></small></p>
+            <?php echo __('Contributor'); ?>:
+            <?php echo $this->Html->link(
+                        h($post['User']['username']),
+                        array('controller' => 'users',
+                            'action' => 'postIndex',
+                                $post['User']['id']));
+            ?></small></p>
   <!-- カテゴリを表示する -->
   <p><?php echo __('Category'); ?>:
       <?php // カテゴリに関連する記事を一覧で表示できる様にする。
@@ -68,7 +74,7 @@
                                           '?' => array('post_id' => $post['Post']['id'],
                                                         'redirect_view' => 'view')),
                                     array('confirm' => 'Are you sure?',
-                                          'class' => 'btn btn-primary btn-block')
+                                          'class' => 'btn emphasis-color-low btn-block')
                                 ); ?>
                         </div>
 
@@ -82,7 +88,7 @@
                                       $image['id'],
                                       '?' => array('post_id' => $post['Post']['id'],
                                                     'redirect_view' => 'view')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
-                                array('class' => 'btn btn-primary btn-block' )
+                                array('class' => 'btn emphasis-color-normal btn-block' )
                             ); ?>
                         </div>
                     </div>
@@ -102,7 +108,7 @@
                                                       'action' => 'upload',
                                                       '?' => array('post_id' => $post['Post']['id'],
                                                                     'redirect_view' => 'view')),
-                                                  array('class' => 'btn btn-primary btn-block')); ?></p>
+                                                  array('class' => 'btn emphasis-color-high font-white btn-block')); ?></p>
 
         <!-- 関連記事を表示する。 -->
         <div id="related_post">

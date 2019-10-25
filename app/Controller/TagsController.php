@@ -44,7 +44,8 @@
             // // postのidをpaginateの検索条件とする。
             $tagId = $id;
             $this->paginate = array(
-                'conditions' => array('PostsTag.tag_id' => $tagId),
+                'conditions' => array('PostsTag.tag_id' => $tagId,
+                                        'Post.publish_flg' => parent::PUBLISH),
                 'limit' => parent::POST_LIST_LIMIT,
                 'joins' => array(
                     array(
@@ -67,8 +68,6 @@
 
             //タイトルに使用するタグ名を設定する。
             $this->set('tag_name', $tag_post[0]['Tag']['name']);
-            if ($this->request->is(array('post', 'put'))) {
-            }
         }
     }
 ?>

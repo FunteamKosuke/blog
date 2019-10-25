@@ -55,7 +55,7 @@
                                           '?' => array('post_id' => $draft_post['Post']['id'],
                                                         'redirect_view' => 'editDraft')),
                                     array('confirm' => 'Are you sure?',
-                                          'class' => 'btn btn-primary btn-block')
+                                          'class' => 'btn emphasis-color-low btn-block')
                                 ); ?>
                         </div>
                         <!-- 画像を編集する。 -->
@@ -68,7 +68,7 @@
                                       $image['id'],
                                       '?' => array('post_id' => $draft_post['Post']['id'],
                                                     'redirect_view' => 'editDraft')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
-                                array('class' => 'btn btn-primary btn-block' )
+                                array('class' => 'btn emphasis-color-normal btn-block' )
                             ); ?>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                                               'action' => 'upload',
                                               '?' => array('post_id' => $draft_post['Post']['id'],
                                                             'redirect_view' => 'editDraft')),
-                                          array('class' => 'btn btn-primary btn-block')); ?></p>
+                                          array('class' => 'btn emphasis-color-high font-white btn-block')); ?></p>
 
     <?php echo $this->Form->create('Post'); ?>
     <!-- タイトルを編集する -->
