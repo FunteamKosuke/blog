@@ -13,6 +13,32 @@
           $this->set('users', $this->paginate());
       }
 
+      public function msgSend($id = null){
+          if (!$id) {
+              throw new NotFoundException(__('Invalid user'));
+          }
+
+          // 数値以外なら
+          if (!is_numeric($id)) {
+              throw new NotFoundException(__('Invalid user'));
+          }
+
+          // idで表現できる最大値を超えていないか
+          if (parent::ID_MAX < $id) {
+              throw new NotFoundException(__('Invalid user'));
+          }
+
+          $user = $this->User->findById($id);
+          if (!$user) {
+              throw new NotFoundException(__('Invalid user'));
+          }
+
+          $this->User->id = $id;
+          if (!$this->User->exists()) {
+              throw new NotFoundException(__('Invalid user'));
+          }
+      }
+
       public function myPage(){
           $user = $this->User->findById($this->Auth->user('id'));
           $this->set('user', $user);

@@ -253,7 +253,7 @@ msgstr "カテゴリの追加に失敗しました。"
 ### Users ###
 
 msgid "Invalid username or password, try again"
-msgstr "カテゴリの追加に失敗しました。"
+msgstr "ログインに失敗しました。"
 
 msgid "Invalid user"
 msgstr "無効なユーザーです。"

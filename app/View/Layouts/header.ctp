@@ -30,6 +30,12 @@
                           'action' => 'logout'),
                     array('class' => 'dropdown-item')
                 );
+                echo $this->Html->link(
+                    __('User Index'),
+                    array('controller' => 'users',
+                          'action' => 'index'),
+                    array('class' => 'dropdown-item')
+                );
               ?>
             </div>
           </li>
@@ -127,29 +133,30 @@
           </label>
       </div><!-- search -->
       <div id='login-user' class="col-3">
-          <div class="container-fluid">
-              <div class="row">
-                  <div id="username" class="col-8">
-                      user：<?php echo h($login_user['username']); ?>
-                  </div>
-                  <div id="profile-icon" class="col-4">
-                      <a href="/users/myPage">
-                      <?php if ($profile_image = $login_user['profile_image']) {
-                          $profile_image_path = '../files/user/profile_image';
-                          $profile_image_path .= '/' . $login_user['profile_image_dir'];
-                          $profile_image_path .= '/' . $login_user['profile_image'];
-                          echo $this->Html->image($profile_image_path, array(
-                                                                          'width'=>'60',
-                                                                          'height'=>'60',
-                                                                          'alt'=>'検索フォームのアイコンです。'));
-                      } else {
-                          echo __('My Page');
-                      } ?>
-                      </a>
+          <?php if ($login_user) { ?>
+              <div class="container-fluid">
+                  <div class="row">
+                      <div id="username" class="col-8">
+                          user：<?php echo h($login_user['username']); ?>
+                      </div>
+                      <div id="profile-icon" class="col-4">
+                          <a href="/users/myPage">
+                          <?php if ($profile_image = $login_user['profile_image']) {
+                              $profile_image_path = '../files/user/profile_image';
+                              $profile_image_path .= '/' . $login_user['profile_image_dir'];
+                              $profile_image_path .= '/' . $login_user['profile_image'];
+                              echo $this->Html->image($profile_image_path, array(
+                                                                              'width'=>'60',
+                                                                              'height'=>'60',
+                                                                              'alt'=>'検索フォームのアイコンです。'));
+                          } else {
+                              echo __('My Page');
+                          } ?>
+                          </a>
+                      </div>
                   </div>
               </div>
-          </div>
-
+         <?php } ?>
       </div>
     </div><!-- .row -->
   </div><!-- contener -->
