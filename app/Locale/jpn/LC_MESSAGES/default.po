@@ -150,6 +150,15 @@ msgstr "下書き一覧"
 msgid "Draft"
 msgstr "下書き"
 
+msgid "User Index"
+msgstr "ユーザー一覧"
+
+msgid "Send Message"
+msgstr "メッセージを送る"
+
+msgid "Send"
+msgstr "送る"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -275,6 +284,12 @@ msgstr "ユーザー情報の削除に成功しました。"
 
 msgid "User was not deleted"
 msgstr "ユーザー情報の削除に失敗しました。"
+
+msgid "A message has been sent."
+msgstr "メッセージを送信しました。"
+
+msgid "The message could not be sent."
+msgstr "メッセージを送信できませんでした。"
 
 ########## バリデーションメッセージ ##########
 

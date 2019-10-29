@@ -18,14 +18,9 @@
     }
 
     public function view($id = null) {
-      if (!$id) {
-          throw new NotFoundException(__('Invalid post'));
-      }
+      self::checkId($id);
 
       $post = $this->Post->findById($id);
-      if (!$post) {
-          throw new NotFoundException(__('Invalid post'));
-      }
       $this->set('post', $post);
 
       // 関連記事として表示するための記事を取得する。
@@ -102,24 +97,7 @@
 
     // 記事を編集する。
     public function edit($id = null) {
-      if (!$id) {
-          throw new NotFoundException(__('Invalid post'));
-      }
-
-      // 数値以外なら
-      if (!is_numeric($id)) {
-          throw new NotFoundException(__('Invalid post'));
-      }
-
-      // idで表現できる最大値を超えていないか
-      if (parent::ID_MAX < $id) {
-          throw new NotFoundException(__('Invalid post'));
-      }
-
-      $post = $this->Post->findById($id);
-      if (!$post) {
-          throw new NotFoundException(__('Invalid post'));
-      }
+      self::checkId($id);
 
       if ($this->request->is(array('post', 'put'))) {
           $this->Post->id = $id;
@@ -136,30 +114,13 @@
     }
 
     // 記事を削除する。
-    public function delete($id) {
+    public function delete($id = null) {
       if ($this->request->is('get')) {
           throw new MethodNotAllowedException();
       }
-      // 空ではないか
-      if (!$id) {
-          throw new NotFoundException(__('Invalid post'));
-      }
 
-      // 数値以外なら
-      if (!is_numeric($id)) {
-          throw new NotFoundException(__('Invalid post'));
-      }
+      self::checkId($id);
 
-      // idで表現できる最大値を超えていないか
-      if (parent::ID_MAX < $id) {
-          throw new NotFoundException(__('Invalid post'));
-      }
-
-      // 存在するか
-      $post = $this->Post->findById($id);
-      if (!$post) {
-          throw new NotFoundException(__('Invalid post'));
-      }
       if ($this->Post->delete($id)) {
           $this->Flash->success(
               __('The post with id: %s has been deleted.', h($id))
@@ -186,26 +147,9 @@
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
-        // 空ではないか
-        if (!$id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
+        self::checkId($id);
 
-        // 数値以外なら
-        if (!is_numeric($id)) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        // idで表現できる最大値を超えていないか
-        if (parent::ID_MAX < $id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        // 存在するか
         $draft_post = $this->Post->findById($id);
-        if (!$draft_post) {
-            throw new NotFoundException(__('Invalid post'));
-        }
         $draft_post['Post']['publish_flg'] = parent::PUBLISH;
         if ($draft_post && $this->Post->save($draft_post)) {
             $this->Flash->success(__('An article has been published.'));
@@ -216,24 +160,9 @@
 
     // 下書きを編集する。
     public function editDraft($id = null){
-        if (!$id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        // 数値以外なら
-        if (!is_numeric($id)) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        // idで表現できる最大値を超えていないか
-        if (parent::ID_MAX < $id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
+        self::checkId($id);
 
         $draft_post = $this->Post->findById($id);
-        if (!$draft_post) {
-            throw new NotFoundException(__('Invalid post'));
-        }
 
         $this->set('draft_post', $draft_post);
 
@@ -299,6 +228,27 @@
       }
 
       return parent::isAuthorized($user);
+    }
+
+    private function checkId($id){
+        if (!$id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // 数値以外なら
+        if (!is_numeric($id)) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        // idで表現できる最大値を超えていないか
+        if (parent::ID_MAX < $id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        $post = $this->Post->findById($id);
+        if (!$post) {
+            throw new NotFoundException(__('Invalid post'));
+        }
     }
   }
 ?>

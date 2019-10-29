@@ -2,23 +2,8 @@
   class ThumbnailsController extends AppController {
       // 画像を差し替える。
       public function edit($id = null){
-        if (!$id) {
-            throw new NotFoundException(__('Invalid thumbnail'));
-        }
-        // 数値以外なら
-        if (!is_numeric($id)) {
-            throw new NotFoundException(__('Invalid thumbnail'));
-        }
 
-        // idで表現できる最大値を超えていないか
-        if (parent::ID_MAX < $id) {
-            throw new NotFoundException(__('Invalid thumbnail'));
-        }
-
-        $thumbnail = $this->Thumbnail->findById($id);
-        if (!$thumbnail) {
-            throw new NotFoundException(__('Invalid thumbnail'));
-        }
+        self::checkId($id);
 
         if ($this->request->is(array('post', 'put'))) {
           // ただ保存し直すだけだと画像データが残ったままなので、先に削除する。データはsaveする前に取得し、パスを作成しておく。
@@ -43,6 +28,26 @@
         if (!$this->request->data) {
             $this->request->data = $thumbnail;
         }
+      }
+
+      private function checkId($id){
+          if (!$id) {
+              throw new NotFoundException(__('Invalid thumbnail'));
+          }
+          // 数値以外なら
+          if (!is_numeric($id)) {
+              throw new NotFoundException(__('Invalid thumbnail'));
+          }
+
+          // idで表現できる最大値を超えていないか
+          if (parent::ID_MAX < $id) {
+              throw new NotFoundException(__('Invalid thumbnail'));
+          }
+
+          $thumbnail = $this->Thumbnail->findById($id);
+          if (!$thumbnail) {
+              throw new NotFoundException(__('Invalid thumbnail'));
+          }
       }
   }
 

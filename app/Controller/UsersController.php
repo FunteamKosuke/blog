@@ -2,40 +2,39 @@
   App::uses('AppController', 'Controller');
 
   class UsersController extends AppController {
+      const USER_LIMIT = 5;
+      public $uses = array('User', 'Message');
 
       public function beforeFilter() {
           parent::beforeFilter();
-          $this->Auth->allow('add', 'logout');
+          $this->Auth->allow('add', 'logout', 'sendMsg');
       }
 
       public function index() {
           $this->User->recursive = 0;
+          $this->paginate = array(
+              'limit' => self::USER_LIMIT, // 検索結果を４件ごとに表示する。
+          );
           $this->set('users', $this->paginate());
       }
 
-      public function msgSend($id = null){
-          if (!$id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
+      // ユーザーにメッセージを送信する。
+      public function sendMsg($id = null){
+          self::checkId($id);
 
-          // 数値以外なら
-          if (!is_numeric($id)) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          // idで表現できる最大値を超えていないか
-          if (parent::ID_MAX < $id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $user = $this->User->findById($id);
-          if (!$user) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $this->User->id = $id;
-          if (!$this->User->exists()) {
-              throw new NotFoundException(__('Invalid user'));
+          if ($this->request->is(array('post'))) {
+              $save_data = $this->request->data;
+              $user_id = $id;
+              $save_data['Message']['user_id'] = $user_id;
+              if ($save_data && $this->User->Message->saveAll($save_data, array('deep' => true))) {
+                  $this->Flash->success(
+                      __('A message has been sent.')
+                  );
+                  return $this->redirect(array('action' => 'index'));
+              }
+              $this->Flash->error(
+                  __('The message could not be sent.')
+              );
           }
       }
 
@@ -46,29 +45,7 @@
 
       // ユーザーが投稿した記事を一覧で表示する。
       public function postIndex($id = null){
-          if (!$id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          // 数値以外なら
-          if (!is_numeric($id)) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          // idで表現できる最大値を超えていないか
-          if (parent::ID_MAX < $id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $user = $this->User->findById($id);
-          if (!$user) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $this->User->id = $id;
-          if (!$this->User->exists()) {
-              throw new NotFoundException(__('Invalid user'));
-          }
+          self::checkId($id);
 
           $user_id = $id;
           $this->paginate = array( 'Post' => array(
@@ -111,29 +88,8 @@
       }
 
       public function edit($id = null) {
-          if (!$id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
+          self::checkId($id);
 
-          // 数値以外なら
-          if (!is_numeric($id)) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          // idで表現できる最大値を超えていないか
-          if (ID_MAX < $id) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $user = $this->User->findById($id);
-          if (!$user) {
-              throw new NotFoundException(__('Invalid user'));
-          }
-
-          $this->User->id = $id;
-          if (!$this->User->exists()) {
-              throw new NotFoundException(__('Invalid user'));
-          }
           if ($this->request->is('post') || $this->request->is('put')) {
               if ($this->User->save($this->request->data)) {
                   $this->Flash->success(__('User information has been edited successfully.'));
@@ -149,9 +105,19 @@
       }
 
       public function delete($id = null) {
-          // Prior to 2.5 use
-          // $this->request->onlyAllow('post');
+          self::checkId($id);
 
+          $this->request->allowMethod('post');
+
+          if ($this->User->delete()) {
+              $this->Flash->success(__('User deleted'));
+              return $this->redirect(array('action' => 'index'));
+          }
+          $this->Flash->error(__('User was not deleted'));
+          return $this->redirect(array('action' => 'index'));
+      }
+
+      private function checkId($id){
           if (!$id) {
               throw new NotFoundException(__('Invalid user'));
           }
@@ -162,7 +128,7 @@
           }
 
           // idで表現できる最大値を超えていないか
-          if (ID_MAX < $id) {
+          if (parent::ID_MAX < $id) {
               throw new NotFoundException(__('Invalid user'));
           }
 
@@ -171,18 +137,10 @@
               throw new NotFoundException(__('Invalid user'));
           }
 
-          $this->request->allowMethod('post');
-
           $this->User->id = $id;
           if (!$this->User->exists()) {
               throw new NotFoundException(__('Invalid user'));
           }
-          if ($this->User->delete()) {
-              $this->Flash->success(__('User deleted'));
-              return $this->redirect(array('action' => 'index'));
-          }
-          $this->Flash->error(__('User was not deleted'));
-          return $this->redirect(array('action' => 'index'));
       }
 
   }

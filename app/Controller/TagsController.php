@@ -12,24 +12,7 @@
         }
 
         public function related_post_index($id = null){
-            if (!$id) {
-                throw new NotFoundException(__('Invalid tag'));
-            }
-
-            // 数値以外なら
-            if (!is_numeric($id)) {
-                throw new NotFoundException(__('Invalid tag'));
-            }
-
-            // idで表現できる最大値を超えていないか
-            if (parent::ID_MAX < $id) {
-                throw new NotFoundException(__('Invalid tag'));
-            }
-
-            $tag = $this->Tag->findById($id);
-            if (!$tag) {
-                throw new NotFoundException(__('Invalid tag'));
-            }
+            self::checkId($id);
 
             // タグに関連づいてる記事を取得する。
             $tag_post = $this->Tag->find('all',array(
@@ -68,6 +51,27 @@
 
             //タイトルに使用するタグ名を設定する。
             $this->set('tag_name', $tag_post[0]['Tag']['name']);
+        }
+
+        private function checkId($id){
+            if (!$id) {
+                throw new NotFoundException(__('Invalid tag'));
+            }
+
+            // 数値以外なら
+            if (!is_numeric($id)) {
+                throw new NotFoundException(__('Invalid tag'));
+            }
+
+            // idで表現できる最大値を超えていないか
+            if (parent::ID_MAX < $id) {
+                throw new NotFoundException(__('Invalid tag'));
+            }
+
+            $tag = $this->Tag->findById($id);
+            if (!$tag) {
+                throw new NotFoundException(__('Invalid tag'));
+            }
         }
     }
 ?>

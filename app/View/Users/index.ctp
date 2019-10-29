@@ -21,11 +21,13 @@
                         <td><?php echo $user['User']['username']; ?></td>
                         <td>
                             <div class="msg-send">
-                                <a href="https://getbootstrap.com/docs/3.4/examples/blog/" class="msg-modal"><?php echo __('Message Send'); ?></a>
+                                <?php $sendMsgUrl = '/users/sendMsg/' . $user['User']['id']; ?>
+                                <a href=<?php echo $sendMsgUrl; ?> class="msg-modal btn btn-outline-primary"><?php echo __('Send Message'); ?></a>
                                 <!-- <?php echo $this->Html->link(
                                     __('Message Send'),
                                     array('controller' => 'users',
-                                          'action' => 'msgSend'),
+                                          'action' => 'msgSend',
+                                            $user['User']['id']),
                                     array('class' => 'btn btn-outline-primary')
                                 ); ?> -->
                             </div>

@@ -509,6 +509,13 @@ $(function(){
     function displayModal(sign) {
     	if (sign) {
     		$("div#msg-modal").fadeIn(500);
+            // モーダルダイアログに不必要な要素を非表示にする。
+            $("#msg-modal #header").hide();
+            $("#msg-modal #footer").hide();
+            $("#msg-modal .cake-sql-log").hide();
+            // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
+            $("#msg-modal #content").css({width: "100%"});
+
     	} else {
     		$("div#msg-modal").fadeOut(250);
     	}

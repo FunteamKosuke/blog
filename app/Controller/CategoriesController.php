@@ -13,6 +13,17 @@
     }
 
     public function related_post_index($id = null){
+        self::checkId($id);
+
+        $this->paginate = array( 'Post' => array(
+            'conditions' => array('category_id' => $id,
+                                    'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
+            'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
+        ));
+        // 一覧表示をpaginate機能で表示させる。
+        $this->set('posts', $this->paginate());
+    }
+    private function checkId($id){
         if (!$id) {
             throw new NotFoundException(__('Invalid tag'));
         }
@@ -31,13 +42,6 @@
         if (!$category) {
             throw new NotFoundException(__('Invalid tag'));
         }
-        $this->paginate = array( 'Post' => array(
-            'conditions' => array('category_id' => $id,
-                                    'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
-            'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
-        ));
-        // 一覧表示をpaginate機能で表示させる。
-        $this->set('posts', $this->paginate());
     }
   }
 ?>

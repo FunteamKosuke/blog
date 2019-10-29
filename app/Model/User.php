@@ -3,7 +3,7 @@
   App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
   class User extends AppModel {
-    public $hasMany = 'Post';
+    public $hasMany = array('Post', 'Message');
 
     public $actsAs = array(
         'Upload.Upload' => array(

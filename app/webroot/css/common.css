@@ -143,7 +143,6 @@ body{
 
 /* コンテンツ部分のスタイルを適用する */
 #content{
-
 }
 
 /* フッターのスタイルを定義する。 */
@@ -368,8 +367,11 @@ position:relative;
 div#msg-modal {
 	display: none;
 	position: fixed;
+    z-index: 9999;
 	width: 100%;
 	height: 100%;
+    top: 0;
+    left: 0;
 }
 div#msg-modal div.background {
 	position: fixed;
@@ -387,6 +389,7 @@ div#msg-modal div.container {
 	width: 500px;
 	height: 500px;
 	background-color: #ffffff;
+    overflow: scroll;
 }
 
 /* 記事を一覧で表示する部分のスタイル */
