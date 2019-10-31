@@ -1,13 +1,25 @@
 <?php
   App::uses('AppController', 'Controller');
+  App::uses( 'CakeEmail', 'Network/Email');
 
   class UsersController extends AppController {
       const USER_LIMIT = 5;
       public $uses = array('User', 'Message');
 
+        var $components = array(
+            'Auth' => array(
+                'authenticate' => array(
+                    'Form' => array(
+                        // 認証されるには、「Userのstatusが0である必要がある」を追加する
+                        'scope' => array( 'User.status' => 1)
+                    )
+                )
+            ),
+        );
+
       public function beforeFilter() {
           parent::beforeFilter();
-          $this->Auth->allow('add', 'logout', 'sendMsg');
+          $this->Auth->allow('add', 'logout', 'sendMsg', 'activate');
       }
 
       public function index() {
@@ -74,11 +86,26 @@
         $this->redirect($this->Auth->logout());
       }
 
+      // 仮登録処理を実施する。
       public function add() {
           if ($this->request->is('post')) {
               $this->User->create();
               if ($this->User->save($this->request->data)) {
-                  $this->Flash->success(__('User registration was successful.'));
+                  $url =
+                        DS . strtolower($this->name) .          // コントローラ
+                        DS . 'activate' .                       // アクション
+                        DS . $this->User->id .                  // ユーザID
+                        DS . $this->User->getActivationHash();  // ハッシュ値
+                    $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
+
+                    // メールを送信する。
+                    $email = new CakeEmail( 'gmail');                        // インスタンス化
+                    $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
+                    $email->to( $this->request->data['User']['username']);                    // 送信先
+                    $email->subject( '本登録用メール');                      // メールタイトル
+
+                    $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
+                  $this->Flash->success(__('Temporary registration success. Email sent.'));
                   return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
               }
               $this->Flash->error(
@@ -87,12 +114,39 @@
           }
       }
 
+      // 本登録処理を実施する。
+      public function activate($user_id = null, $in_hash = null){
+          // UserモデルにIDをセット
+        $this->User->id = $user_id;
+        if ($this->User->exists() && $in_hash == $this->User->getActivationHash()) {
+        // 本登録に有効なURL
+            // statusフィールドを1に更新
+            $this->User->saveField( 'status', 1);
+            $this->Flash->success( 'Your account has been activated.');
+        }else{
+        // 本登録に無効なURL
+            $this->Flash->error( 'Invalid activation URL');
+        }
+      }
+
       public function edit($id = null) {
           self::checkId($id);
 
           if ($this->request->is('post') || $this->request->is('put')) {
               if ($this->User->save($this->request->data)) {
-                  $this->Flash->success(__('User information has been edited successfully.'));
+                  $url =
+                        DS . strtolower($this->name) .          // コントローラ
+                        DS . 'activate' .                       // アクション
+                        DS . $this->User->id .                  // ユーザID
+                        DS . $this->User->getActivationHash();  // ハッシュ値
+                    $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
+                    $email = new CakeEmail( 'gmail');                        // インスタンス化
+                    $email->from( array( 'sender@domain.com' => 'Sender'));  // 送信元
+                    $email->to( 'reciever@domain.com');                      // 送信先
+                    $email->subject( 'メールタイトル');                      // メールタイトル
+
+                    $email->send( 'メール本文');                             // メール送信
+                  $this->Flash->success(__('Temporary registration success. Email sent.'));
                   return $this->redirect(array('action' => 'index'));
               }
               $this->Flash->error(

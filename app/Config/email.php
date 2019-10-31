@@ -88,4 +88,12 @@ class EmailConfig {
 		//'headerCharset' => 'utf-8',
 	);
 
+	public $gmail = array(
+        'host' => 'ssl://smtp.gmail.com',
+        'port' => 465,
+        'username' => 'kosukefunteam@gmail.com', // ユーザ名
+        'password' => 'Clover01',           // パスワード
+        'transport' => 'Smtp'
+    );
+
 }

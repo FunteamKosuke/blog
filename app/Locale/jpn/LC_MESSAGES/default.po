@@ -324,6 +324,10 @@ msgstr "パスワードは先頭大文字の半角英数字、最低８文字を
 msgid "Enter the postal code as a 7-digit number."
 msgstr "郵便番号は7桁の数字で入力してください。"
 
+msgid "Please enter your e-mail address"
+msgstr "メールアドレスを入力してください。"
+
+
 ### 共通 ###
 
 msgid "This is a required input item."

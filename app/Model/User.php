@@ -27,6 +27,8 @@
                 'rule' => 'isUnique',
                 'message' => 'The input value is already in use.'
             ),
+            // メールアドレスであること。
+            'validEmail' => array( 'rule' => array( 'email', true), 'message' => 'Please enter your e-mail address'),
         ),
         'password' => array(
             'rule1' => array(
@@ -65,6 +67,15 @@
           );
       }
       return true;
+    }
+
+    public function getActivationHash() {
+        // ユーザIDの有無確認
+        if (!isset($this->id)) {
+            return false;
+        }
+        // 更新日時をハッシュ化
+        return Security::hash( $this->field('modified'), 'md5', true);
     }
   }
 ?>
