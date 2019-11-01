@@ -4,7 +4,13 @@
   <h1 id='view-title'><?php echo h($post['Post']['title']); ?></h1>
   <!-- 投稿日と投稿者を表示する。 -->
   <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
-  <p><small><?php echo __('Post Date'); ?>: <?php echo h($post_date); ?>
+  <p><small><?php echo __('Post Date'); ?>:
+            <?php echo $this->Html->link(
+                      h($post_date),
+                      array('controller' => 'posts',
+                          'action' => 'postDateRelatedPost',
+                              $post['Post']['id']));
+            ?>
             <?php echo __('Contributor'); ?>:
             <?php echo $this->Html->link(
                         h($post['User']['username']),

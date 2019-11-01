@@ -159,6 +159,9 @@ msgstr "メッセージを送る"
 msgid "Send"
 msgstr "送る"
 
+msgid "To login screen"
+msgstr "ログイン画面へ"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -290,6 +293,15 @@ msgstr "メッセージを送信しました。"
 
 msgid "The message could not be sent."
 msgstr "メッセージを送信できませんでした。"
+
+msgid "Temporary registration success. Email sent."
+msgstr "仮登録しました。本登録するためにメールを送信しました。"
+
+msgid "Your account has been activated."
+msgstr "アカウントを本登録しました。"
+
+msgid "Invalid activation URL"
+msgstr "本登録するために無効なURLです。"
 
 ########## バリデーションメッセージ ##########
 

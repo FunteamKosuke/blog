@@ -1,3 +1,3 @@
 <?php
-    echo $this->Html->link( 'ログイン画面へ', '/users/login');
+    echo $this->Html->link( __('To login screen'), '/users/login');
 ?>

@@ -7,6 +7,11 @@
     public $components = array('Search.Prg');
     public $presetVars = true;
 
+    public function beforeFilter(){
+        parent::beforeFilter();
+        $this->Auth->allow('view', 'index', 'postDateRelatedPost');
+    }
+
     public function index() {
 
         $this->paginate = array(
@@ -21,6 +26,10 @@
       self::checkId($id);
 
       $post = $this->Post->findById($id);
+      // 記事のアクセス数をカウントする。
+      ++$post['Post']['access'];
+      $this->Post->save($post);
+
       $this->set('post', $post);
 
       // 関連記事として表示するための記事を取得する。
@@ -132,6 +141,24 @@
       }
 
       return $this->redirect(array('action' => 'index'));
+    }
+
+    public function postDateRelatedPost($post_id = null){
+        self::checkId($post_id);
+        $post = $this->Post->findById($post_id);
+        $post_date = explode(" ", $post['Post']['created'])[0];
+
+        // タイトルに使用する。
+        $this->set('post_date', $post_date);
+
+        // 記事の取得条件を設定する。
+        $this->paginate = array(
+            'conditions' => array('Post.created LIKE' => '%'.$post_date.'%',
+                                    'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
+            'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
+        );
+        // 一覧表示をpaginate機能で表示させる。
+        $this->set('posts', $this->paginate());
     }
     /******** 下書き関連 **********/
     // 下書きを一覧で表示する。

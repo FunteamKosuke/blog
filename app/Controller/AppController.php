@@ -34,8 +34,12 @@ class AppController extends Controller {
     const ID_MAX = 2147483647;
     const POST_LIST_LIMIT = 4;
     const RELATED_POST_LIST_LIMIT = 3;
+    const POPULAR_POST_LIMIT = 5;
     const PUBLISH = 1; //公開を表す
     const NO_PUBLISH = 0; // 非公開を表す
+
+    public $uses = array('Post');
+
     public $components = array(
       'Flash',
       'Auth' => array(
@@ -68,8 +72,14 @@ class AppController extends Controller {
     }
 
     public function beforeFilter() {
-      $this->Auth->allow('index', 'view');
       // 記事一覧の追加と削除の操作の有無をユーザー情報によって判断するためにセットする。
       $this->set('login_user', $this->Auth->user());
+
+      // サイドバーに表示する人気記事を取得する。
+      $popular_posts = $this->Post->find('all', array(
+                                                    'conditions' => array('publish_flg' => self::PUBLISH),
+                                                    'limit' => self::POPULAR_POST_LIMIT,
+                                                    'order' => array('Post.access DESC')));
+      $this->set('popular_posts', $popular_posts);
     }
 }

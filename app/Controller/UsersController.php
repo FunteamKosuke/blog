@@ -129,35 +129,6 @@
         }
       }
 
-      public function edit($id = null) {
-          self::checkId($id);
-
-          if ($this->request->is('post') || $this->request->is('put')) {
-              if ($this->User->save($this->request->data)) {
-                  $url =
-                        DS . strtolower($this->name) .          // コントローラ
-                        DS . 'activate' .                       // アクション
-                        DS . $this->User->id .                  // ユーザID
-                        DS . $this->User->getActivationHash();  // ハッシュ値
-                    $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
-                    $email = new CakeEmail( 'gmail');                        // インスタンス化
-                    $email->from( array( 'sender@domain.com' => 'Sender'));  // 送信元
-                    $email->to( 'reciever@domain.com');                      // 送信先
-                    $email->subject( 'メールタイトル');                      // メールタイトル
-
-                    $email->send( 'メール本文');                             // メール送信
-                  $this->Flash->success(__('Temporary registration success. Email sent.'));
-                  return $this->redirect(array('action' => 'index'));
-              }
-              $this->Flash->error(
-                  __('Editing user information failed.')
-              );
-          } else {
-              $this->request->data = $this->User->findById($id);
-              unset($this->request->data['User']['password']);
-          }
-      }
-
       public function delete($id = null) {
           self::checkId($id);
 
