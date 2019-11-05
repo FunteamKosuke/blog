@@ -27,3 +27,11 @@
                     $user['User']['id']),
             array('class' => 'btn btn-outline-primary'));
 ?>
+
+<!-- ユーザーに送信されたメッセージを一覧で表示するページ -->
+<?php echo $this->Html->link(
+            __('Message Index'),
+            array('action' => 'messageIndex',
+                    $user['User']['id']),
+            array('class' => 'btn btn-outline-primary'));
+?>

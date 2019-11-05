@@ -74,8 +74,8 @@
         if (!isset($this->id)) {
             return false;
         }
-        // 更新日時をハッシュ化
-        return Security::hash( $this->field('modified'), 'md5', true);
+        // ユーザーネーム（メールアドレス）をハッシュ化
+        return crypt( $this->field('username'), 'mb5');
     }
   }
 ?>

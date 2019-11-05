@@ -4,7 +4,10 @@
 
   class UsersController extends AppController {
       const USER_LIMIT = 5;
-      public $uses = array('User', 'Message');
+      const HASH_USER_ID = 546745867;
+      const MESSAGE_LIST_LIMIT = 5;
+
+      public $uses = array('User', 'Message', 'Post');
 
         var $components = array(
             'Auth' => array(
@@ -91,10 +94,12 @@
           if ($this->request->is('post')) {
               $this->User->create();
               if ($this->User->save($this->request->data)) {
+                  // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
+                  $hash_user_id = $this->User->id + self::HASH_USER_ID;
                   $url =
                         DS . strtolower($this->name) .          // コントローラ
                         DS . 'activate' .                       // アクション
-                        DS . $this->User->id .                  // ユーザID
+                        DS . $hash_user_id .                  // ユーザID
                         DS . $this->User->getActivationHash();  // ハッシュ値
                     $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
 
@@ -116,8 +121,8 @@
 
       // 本登録処理を実施する。
       public function activate($user_id = null, $in_hash = null){
-          // UserモデルにIDをセット
-        $this->User->id = $user_id;
+          // UserモデルにIDをセット 別の数値にしたuser_idを元に戻す。
+        $this->User->id = $user_id - self::HASH_USER_ID;
         if ($this->User->exists() && $in_hash == $this->User->getActivationHash()) {
         // 本登録に有効なURL
             // statusフィールドを1に更新
@@ -140,6 +145,19 @@
           }
           $this->Flash->error(__('User was not deleted'));
           return $this->redirect(array('action' => 'index'));
+      }
+
+      // ユーザーに送信されたメッセージを一覧で表示する。
+      public function messageIndex($user_id = null){
+          self::checkId($user_id);
+
+          $this->paginate = array( 'Message' => array(
+              'conditions' => array('user_id' => $user_id),
+              'limit' => self::MESSAGE_LIST_LIMIT,
+          ));
+
+          // 一覧表示をpaginate機能で表示させる。
+          $this->set('messages', $this->paginate('Message'));
       }
 
       private function checkId($id){
