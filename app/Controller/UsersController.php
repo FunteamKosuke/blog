@@ -22,7 +22,7 @@
 
       public function beforeFilter() {
           parent::beforeFilter();
-          $this->Auth->allow('add', 'logout', 'sendMsg', 'activate');
+          $this->Auth->allow('add', 'logout', 'sendMsg', 'activate', 'postIndex', 'index');
       }
 
       public function index() {
@@ -34,22 +34,23 @@
       }
 
       // ユーザーにメッセージを送信する。
-      public function sendMsg($id = null){
-          self::checkId($id);
+      public function sendMsg($user_id = null){
+          self::checkId($user_id);
+          // ajaxに渡すために必要
+          $this->set('user_id', $user_id);
+      }
 
-          if ($this->request->is(array('post'))) {
+      public function sendMsgAjax($user_id = null){
+          if ($this->request->is(array('ajax'))) {
+              $this->autoRender = FALSE; // 設定しないと返却されるデータがhtmlになってしまう。
               $save_data = $this->request->data;
-              $user_id = $id;
-              $save_data['Message']['user_id'] = $user_id;
+              $msg = '';
               if ($save_data && $this->User->Message->saveAll($save_data, array('deep' => true))) {
-                  $this->Flash->success(
-                      __('A message has been sent.')
-                  );
-                  return $this->redirect(array('action' => 'index'));
+                  $msg = __('A message has been sent.');
+              } else {
+                  $msg = __('The message could not be sent.');
               }
-              $this->Flash->error(
-                  __('The message could not be sent.')
-              );
+              return json_encode($msg);
           }
       }
 
@@ -59,10 +60,9 @@
       }
 
       // ユーザーが投稿した記事を一覧で表示する。
-      public function postIndex($id = null){
-          self::checkId($id);
+      public function postIndex($user_id = null){
+          self::checkId($user_id);
 
-          $user_id = $id;
           $this->paginate = array( 'Post' => array(
               'conditions' => array('user_id' => $user_id,
                                     'publish_flg' => parent::PUBLISH), // 検索する条件を設定する。
@@ -72,7 +72,9 @@
           $this->set('posts', $this->paginate('Post'));
 
           // 一覧ページのタイトルに使用する。
-          $this->set('username', $this->Auth->user('username'));
+          $username = $this->User->find('first', array('conditions' => array('id'=> $user_id),
+                                                        'fields' => array('User.username')));
+          $this->set('username', $username['User']['username']);
       }
 
       public function login() {
@@ -120,10 +122,56 @@
       }
 
       // 本登録処理を実施する。
-      public function activate($user_id = null, $in_hash = null){
-          // UserモデルにIDをセット 別の数値にしたuser_idを元に戻す。
-        $this->User->id = $user_id - self::HASH_USER_ID;
-        if ($this->User->exists() && $in_hash == $this->User->getActivationHash()) {
+      public function activate($user_id_hash = null, $in_hash = null){
+        // UserモデルにIDをセット 別の数値にしたuser_idを元に戻す。
+        $user_id = $user_id_hash - self::HASH_USER_ID;
+        $this->User->id = $user_id;
+        // URLの期限が有効かを判定する。
+        // 仮登録日時から１日を期限とする。
+        $deadline_flg = true;
+        // cratedを取得する。
+        $kari_date = $this->User->find('first', array('conditions' => array('id' => $user_id),
+                                        'fields' => 'User.modified'))['User']['modified'];
+        $kari_date_ymd = explode(' ', $kari_date)[0];
+        $kari_date_his = explode(' ', $kari_date)[1];
+        // 現在日時を取得する。
+        $date = date("Y-m-d H:i:s");
+        $date_ymd = explode(' ', $date)[0];
+        $date_his = explode(' ', $date)[1];
+        // 年月日を比較する。
+        if (!($kari_date_ymd === $date_ymd)) {
+            $kari_y = intval(explode('-', $kari_date_ymd)[0]);
+            $kari_m = intval(explode('-', $kari_date_ymd)[1]);
+            $kari_d = intval(explode('-', $kari_date_ymd)[2]);
+
+            $y = intval(explode('-', $date_ymd)[0]);
+            $m = intval(explode('-', $date_ymd)[1]);
+            $d = intval(explode('-', $date_ymd)[2]);
+            $kari_ymd_num = $kari_y + $kari_m + $kari_d;
+            $ymd_num = $y + $m + $d;
+            // 日にちが１日後だった場合は、時間を計算して、24時間経っているか計算する。
+            if (($ymd_num - $kari_ymd_num) == 1) {
+                $kari_h = intval(explode(':', $kari_date_his)[0]);
+                $kari_i = intval(explode(':', $kari_date_his)[1]);
+                $kari_s = intval(explode(':', $kari_date_his)[2]);
+
+                $h = intval(explode(':', $date_his)[0]);
+                $i = intval(explode(':', $date_his)[1]);
+                $s = intval(explode(':', $date_his)[2]);
+
+                // 経過時間を秒にしてから算出する。
+                $kari_time = ($kari_h * 3600) + ($kari_i * 60) + $kari_s;
+                $prog_time = (86400 - $kari_time) + ($h * 3600) + ($i * 60) + $s;
+
+                if ($prog_time > (86400-1)) {
+                    $deadline_flg = false;
+                }
+            } else {
+                $deadline_flg = false;
+            }
+        }
+
+        if ($this->User->exists() && $in_hash == $this->User->getActivationHash() && $deadline_flg) {
         // 本登録に有効なURL
             // statusフィールドを1に更新
             $this->User->saveField( 'status', 1);

@@ -191,7 +191,9 @@ $(function(){
 
     /*** users/index ***/
     setModal();
-    // alert('tete');
+
+    /*** users/send_msg ***/
+    sendMsg();
     /*** posts/view ***/
     //現在表示している画像が何枚目かを表す
     var page = 0;
@@ -485,7 +487,7 @@ $(function(){
         // });
 
         //背景がクリックされた時にモーダルウィンドウを閉じる
-        $("div#msg-modal div.background").click(function() {
+        $("div#msg-modal div.background, #close-window").click(function() {
         	displayModal(false);
         });
 
@@ -498,10 +500,6 @@ $(function(){
         //コンテンツの読み込み完了時にモーダルウィンドウを開く
         function onComplete() {
         	displayModal(true);
-        	$("div#msg-modal div.container a.close").click(function() {
-        		displayModal(false);
-        		return false;
-        	});
         }
     }
 
@@ -509,6 +507,7 @@ $(function(){
     function displayModal(sign) {
     	if (sign) {
     		$("div#msg-modal").fadeIn(500);
+            $("#msg-modal #close-window").show();
             // モーダルダイアログに不必要な要素を非表示にする。
             $("#msg-modal #header").hide();
             $("#msg-modal #footer").hide();
@@ -518,6 +517,7 @@ $(function(){
 
     	} else {
     		$("div#msg-modal").fadeOut(250);
+            $("#msg-modal #close-window").hide();
     	}
     }
 
@@ -526,5 +526,30 @@ $(function(){
     	var margin_top = ($(window).height()-$(target).height())/2;
     	var margin_left = ($(window).width()-$(target).width())/2;
     	$(target).css({top:margin_top+"px", left:margin_left+"px"});
+    }
+
+    function sendMsg(){
+        $('#send-msg-form').submit(function(){
+            var formdata = new FormData($("#send-msg-form")[0]);
+            $.ajax({
+                type: "POST",
+                url: "../users/sendMsgAjax",
+                dataType: 'text',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(json_msg){
+                    msg = $.parseJSON(json_msg);
+                    $('#ajax-message').text(msg)
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert('通信に失敗しました。');
+                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                    console.log("textStatus     : " + textStatus);
+                    console.log("errorThrown    : " + errorThrown.message);
+                }
+            });
+        return false;
+        });
     }
 });
