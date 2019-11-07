@@ -105,6 +105,26 @@
               ?>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+              お問合せ関連
+            </a>
+            <div class="dropdown-menu">
+              <?php
+                echo $this->Html->link(
+                  'お問い合わせ',
+                  array('controller' => 'contacts',
+                        'action' => 'add')
+                );
+                echo $this->Html->link(
+                    'お問い合わせ一覧',
+                    array('controller' => 'contacts',
+                          'action' => 'index'),
+                    array('class' => 'dropdown-item')
+                );
+              ?>
+            </div>
+          </li>
         </ul>
     </div><!-- menu -->
       <div id="search" class="col-4">
@@ -126,7 +146,7 @@
             <?php echo $this->Form->input('keyword', array('class' => 'form-control search_toggle',
                                                           'empty' => true,
                                                           'label' => false,
-                                                          'placeholder' => '記事のタイトル')); ?>
+                                                          'placeholder' => 'タグ検索')); ?>
           <label class='label-submit btn btn-primary search_toggle' for="label-search-submit">
               検索
           <?php echo $this->Form->end(array('id' => 'label-search-submit')); ?>

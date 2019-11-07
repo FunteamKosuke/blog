@@ -162,6 +162,23 @@ msgstr "送る"
 msgid "To login screen"
 msgstr "ログイン画面へ"
 
+msgid "Add Profile Image"
+msgstr "プロフィール画像の追加"
+
+msgid "My Page"
+msgstr "マイページ"
+
+msgid "Profile Image"
+msgstr "プロフィール画像"
+
+msgid "Post Index"
+msgstr "投稿一覧"
+
+msgid "Message Index"
+msgstr "メッセージ一覧"
+
+msgid "Close Window"
+msgstr "ウィンドウを閉じる"
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -302,6 +319,15 @@ msgstr "アカウントを本登録しました。"
 
 msgid "Invalid activation URL"
 msgstr "本登録するために無効なURLです。"
+
+*** Contacts ***
+
+msgid "Your inquiry has been sent."
+msgstr "お問い合わせ内容を送信しました。"
+
+msgid "Failed to send inquiry details."
+msgstr "お問い合わせ内容の送信に失敗しました。"
+
 
 ########## バリデーションメッセージ ##########
 

@@ -100,24 +100,55 @@
     // Searchプラグインを使用するのに必要な設定
 
     public $filterArgs = array(
-        array('name' => 'keyword', 'type' => 'like'),
+        array('name' => 'keyword', 'type' => 'subquery', 'method' => 'searchTagOr', 'field' => 'Post.id'),
         // 'category_id' => array('type' => 'value'),
         // Tag OR検索
         // array('name' => 'tag_id', 'type' => 'subquery', 'method' => 'searchTagOr', 'field' => 'Post.id'),
         // Tag AND検索
         // array('name' => 'tag_id', 'type' => 'subquery', 'method' => 'searchTagAnd', 'field' => 'Post.id'),
     );
+    function search($data = array()){
+        $this->Behaviors->attach('Containable', array('autoFields' => false));
+        $this->Behaviors->attach('Search.Searchable');
+
+        $this->PostsTag->Behaviors->attach('Containable', array('autoFields' => false));
+        $this->PostsTag->Behaviors->attach('Search.Searchable');
+
+        $this->log($data['keyword']);
+
+        $query = $this->getQuery('all', array(
+  			'conditions' => array(
+  				'title' => $data['keyword']
+  			)
+  		));
+
+        $this->log($this->find('all', array(
+  			'conditions' => array(
+  				'title' => $data['keyword']
+  			)
+  		)));
+        $this->log($query);
+        return $query;
+    }
 
     // タグのOR検索するメソッド
     function searchTagOr($data = array()) {
 
       $this->PostsTag->Behaviors->attach('Containable', array('autoFields' => false));
-      // $this->PostsTag->Behaviors->attach('Search.Searchable');
+      $this->PostsTag->Behaviors->attach('Search.Searchable');
+      $this->log('呼ばれてるよ');
+
+      // タグのIDを取得する。
+      $tags = $this->Tag->find('all', array('conditions' => array('name' => $data['keyword'])));
+      $tag_ids = array();
+      foreach ($tags as $tag) {
+          $tag_ids[] = $tag['Tag']['id'];
+      }
 
       // getQueryを使用してsql文を作成する。
       $query = $this->PostsTag->getQuery('all', array(
 			'conditions' => array(
-				'tag_id' => $data['tag_id']
+				'tag_id' => $tag_ids
 			),
 			'fields' => array(
 				'post_id'
@@ -126,6 +157,10 @@
 				'Tag'
 			)
 		));
+
+        $this->log($query);
+
+
 
     	/*  タグをOR検索するためのqueryを作成する */
     	// $query = "SELECT PostsTag.post_id FROM cakephp_blog.posts_tags AS PostsTag LEFT JOIN cakephp_blog.tags AS Tag ON (PostsTag.tag_id = Tag.id)  WHERE ";

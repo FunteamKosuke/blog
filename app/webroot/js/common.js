@@ -411,6 +411,9 @@ $(function(){
 
     /*** address/apdate ***/
 
+    /*** contacts/sendContact ***/
+    sendContact();
+
     /***** 共通で使用する *****/
     // 選択したファイルのファイル名をinputタグに入力する。
     $('.label-file-name').on('change',function(){
@@ -534,6 +537,31 @@ $(function(){
             $.ajax({
                 type: "POST",
                 url: "../users/sendMsgAjax",
+                dataType: 'text',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(json_msg){
+                    msg = $.parseJSON(json_msg);
+                    $('#ajax-message').text(msg)
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert('通信に失敗しました。');
+                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+                    console.log("textStatus     : " + textStatus);
+                    console.log("errorThrown    : " + errorThrown.message);
+                }
+            });
+        return false;
+        });
+    }
+
+    function sendContact(){
+        $('#send-contact-form').submit(function(){
+            var formdata = new FormData($("#send-contact-form")[0]);
+            $.ajax({
+                type: "POST",
+                url: "../contacts/sendContactAjax",
                 dataType: 'text',
                 data: formdata,
                 processData: false,

@@ -15,7 +15,7 @@
                     'Form' => array(
                         // 認証されるには、「Userのstatusが0である必要がある」を追加する
                         'scope' => array( 'User.status' => 1)
-                    )
+                    )  
                 )
             ),
         );
@@ -175,10 +175,10 @@
         // 本登録に有効なURL
             // statusフィールドを1に更新
             $this->User->saveField( 'status', 1);
-            $this->Flash->success( 'Your account has been activated.');
+            $this->Flash->success(__('Your account has been activated.'));
         }else{
         // 本登録に無効なURL
-            $this->Flash->error( 'Invalid activation URL');
+            $this->Flash->error( __('Invalid activation URL'));
         }
       }
 
