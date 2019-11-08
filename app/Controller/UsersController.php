@@ -15,14 +15,14 @@
                     'Form' => array(
                         // 認証されるには、「Userのstatusが0である必要がある」を追加する
                         'scope' => array( 'User.status' => 1)
-                    )  
+                    )
                 )
             ),
         );
 
       public function beforeFilter() {
           parent::beforeFilter();
-          $this->Auth->allow('add', 'logout', 'sendMsg', 'activate', 'postIndex', 'index');
+          $this->Auth->allow('add', 'logout', 'sendMsg', 'activate', 'postIndex', 'index', 'retransmission');
       }
 
       public function index() {
@@ -96,13 +96,18 @@
           if ($this->request->is('post')) {
               $this->User->create();
               if ($this->User->save($this->request->data)) {
-                  // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
-                  $hash_user_id = $this->User->id + self::HASH_USER_ID;
-                  $url =
+                    // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
+                    $hash_user_id = $this->User->id + self::HASH_USER_ID;
+                    $token = $this->User->getActivationToken();
+
+                    // トークンを保存する。
+                    $this->User->saveField('token', $token);
+
+                    $url =
                         DS . strtolower($this->name) .          // コントローラ
                         DS . 'activate' .                       // アクション
                         DS . $hash_user_id .                  // ユーザID
-                        DS . $this->User->getActivationHash();  // ハッシュ値
+                        DS . $token;  // token
                     $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
 
                     // メールを送信する。
@@ -112,8 +117,8 @@
                     $email->subject( '本登録用メール');                      // メールタイトル
 
                     $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
-                  $this->Flash->success(__('Temporary registration success. Email sent.'));
-                  return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+                    $this->Flash->success(__('Temporary registration success. Email sent.'));
+                    return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
               }
               $this->Flash->error(
                   __('User registration failed.')
@@ -171,7 +176,11 @@
             }
         }
 
-        if ($this->User->exists() && $in_hash == $this->User->getActivationHash() && $deadline_flg) {
+        // トークンを取得する。
+        $token = $this->User->field('token');
+
+        $retransmission_flg = false; //本登録用のメールを再送信するか？
+        if ($this->User->exists() && $in_hash == $token && $deadline_flg) {
         // 本登録に有効なURL
             // statusフィールドを1に更新
             $this->User->saveField( 'status', 1);
@@ -179,7 +188,42 @@
         }else{
         // 本登録に無効なURL
             $this->Flash->error( __('Invalid activation URL'));
+            $retransmission_flg = true;
+            // 本登録のメールを送る際に、ハッシュ化したユーザーIDが必要。
+            $this->set('user_id_hash', $user_id_hash);
         }
+        $this->set('retransmission_flg', $retransmission_flg);
+      }
+
+      // 本登録用のメールを再送信する。
+      public function retransmission($hash_user_id = null){
+          $user_id = $hash_user_id - self::HASH_USER_ID;
+          $this->User->id = $user_id;
+
+          $token = $this->User->getActivationToken();
+
+          // トークンを保存する。
+          $this->User->saveField('token', $token);
+
+          $url =
+              DS . strtolower($this->name) .          // コントローラ
+              DS . 'activate' .                       // アクション
+              DS . $hash_user_id .                  // ハッシュ化したユーザID
+              DS . $token;  // token
+          $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
+
+          // メールアドレスを取得する。
+          $email_address = $this->User->field('username');
+          $this->log($email);
+          // メールを送信する。
+          $email = new CakeEmail( 'gmail');                        // インスタンス化
+          $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
+          $email->to($email_address);
+          $email->subject( '本登録用メールの再送信');                      // メールタイトル
+
+          $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
+          $this->Flash->success(__('We have resent the registration email.'));
+          return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
       }
 
       public function delete($id = null) {

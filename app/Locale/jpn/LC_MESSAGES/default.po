@@ -179,6 +179,16 @@ msgstr "メッセージ一覧"
 
 msgid "Close Window"
 msgstr "ウィンドウを閉じる"
+
+msgid "Resend this registration email"
+msgstr "本登録用のメールを再送信する。"
+
+msgid "Replying"
+msgstr "返信中"
+
+msgid "Updating"
+msgstr "アップデート中"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -328,6 +338,8 @@ msgstr "お問い合わせ内容を送信しました。"
 msgid "Failed to send inquiry details."
 msgstr "お問い合わせ内容の送信に失敗しました。"
 
+msgid "We have resent the registration email."
+msgstr "本登録用のメールを再送信しました。"
 
 ########## バリデーションメッセージ ##########
 

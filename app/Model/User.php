@@ -69,13 +69,14 @@
       return true;
     }
 
-    public function getActivationHash() {
+    public function getActivationToken() {
         // ユーザIDの有無確認
         if (!isset($this->id)) {
             return false;
         }
         // ユーザーネーム（メールアドレス）をハッシュ化
-        return crypt( $this->field('username'), 'mb5');
+        // return crypt( $this->field('username'), 'mb5');
+        return crypt( $this->field('username'), $this->field('modified'));
     }
   }
 ?>

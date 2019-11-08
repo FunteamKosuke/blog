@@ -17,4 +17,9 @@
     </label>
     <!-- ajaxの実行結果を表示する。 -->
     <div id="ajax-message"></div>
+    <div class="loading">
+        <div class="dot-spin">
+        </div>
+        <p><?php echo __('Replying'); ?></p>
+    </div>
 </div>

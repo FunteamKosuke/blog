@@ -23,6 +23,16 @@
                         <?php $sendContactUrl = '/Contacts/sendContact/' . $contact['Contact']['id']; ?>
                         <a href=<?php echo $sendContactUrl; ?> class="msg-modal btn btn-outline-primary"><?php echo __('Send Contact'); ?></a>
                     </div>
+                    <div class="delete">
+                        <?php echo $this->Form->postLink(
+                            __('Delete'),
+                            array('controller' => 'contacts',
+                                  'action' => 'delete',
+                                  $contact['Contact']['id']),
+                            array('confirm' => 'Are you sure?',
+                                  'class' => 'btn btn-outline-danger')
+                        ); ?>
+                    </div>
                 </td>
             </tr>
         <?php endforeach; ?>

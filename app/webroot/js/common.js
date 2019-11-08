@@ -567,16 +567,19 @@ $(function(){
                 processData: false,
                 contentType: false,
                 success: function(json_msg){
+                    $('#contacts__send-contact .loading').hide();
                     msg = $.parseJSON(json_msg);
                     $('#ajax-message').text(msg)
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown){
+                    $('#contacts__send-contact .loading').hide();
                     alert('通信に失敗しました。');
                     console.log("XMLHttpRequest : " + XMLHttpRequest.status);
                     console.log("textStatus     : " + textStatus);
                     console.log("errorThrown    : " + errorThrown.message);
                 }
             });
+        $('#contacts__send-contact .loading').show();
         return false;
         });
     }

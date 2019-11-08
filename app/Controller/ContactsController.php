@@ -48,9 +48,30 @@
                             $this->request->data['Contact']['body'];
 
                 $email->send($send_msg);
+
                 $msg = __('Your inquiry has been replied.');
                 return json_encode($msg);
             }
+        }
+
+        public function delete($contact_id = null){
+            if ($this->request->is('get')) {
+                throw new MethodNotAllowedException();
+            }
+
+            self::checkId($contac_id);
+
+            if ($this->Contact->delete($contact_id)) {
+                $this->Flash->success(
+                    __('The Contact with id: %s has been deleted.', h($contact_id))
+                );
+            } else {
+                $this->Flash->error(
+                    __('The Contact with id: %s could not be deleted.', h($contact_id))
+                );
+            }
+
+            return $this->redirect(array('action' => 'index'));
         }
 
         private function checkId($id){
@@ -68,7 +89,7 @@
                 throw new NotFoundException(__('Invalid contact'));
             }
 
-            $user = $this->User->findById($id);
+            $user = $this->Contact->findById($id);
             if (!$user) {
                 throw new NotFoundException(__('Invalid contact'));
             }

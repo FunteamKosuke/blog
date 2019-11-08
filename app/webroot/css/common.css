@@ -363,6 +363,10 @@ position:relative;
 #addresses__csv_update #csv-update-label, #addresses__csv_update #cancel{
     margin: 0;
 }
+/* contacts/index */
+#contacts__index .delete{
+    margin-top: 10px;
+}
 
 /****** 全てのページに適用するスタイルを以下に定義する。 ******/
 
@@ -475,6 +479,13 @@ cursor:pointer; /* マウスカーソルの形を指定する */
     position: absolute;
     top: 0;
     left: 47%;
+}
+
+/* お問い合わせ返信画面のスピナーが少し重なってしまうため、位置を調整する。 */
+#contacts__send-contact .loading .dot-spin{
+    position: absolute;
+    top: 0;
+    left: 44%;
 }
 
 .loading p{

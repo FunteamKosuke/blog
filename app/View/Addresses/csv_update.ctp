@@ -31,7 +31,7 @@
     <div class="loading">
         <div class="dot-spin">
         </div>
-        <p>アップデート中</p>
+        <p><?php echo __('Updating'); ?></p>
     </div>
     <div id="result_msg">
     </div>
