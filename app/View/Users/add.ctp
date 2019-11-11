@@ -28,6 +28,12 @@
             <?php echo $this->Form->input('password', array('label' => false,
                                                             'class' => 'form-control')); ?>
         </div>
+        <div class="form-group">
+             <h5><?php echo __('Password Confirm'); ?></h5>
+            <?php echo $this->Form->input('password_confirm', array('label' => false,
+                                                                    'type' => 'password',
+                                                            'class' => 'form-control')); ?>
+        </div>
         <h5><?php echo __('Zipcode'); ?></h5>
         <small>*<?php echo __('It is automatically entered in the address field by performing a postal code search.'); ?></small>
         <div class="form-group">

@@ -189,6 +189,27 @@ msgstr "返信中"
 msgid "Updating"
 msgstr "アップデート中"
 
+msgid "Updating"
+msgstr "アップデート中"
+
+msgid "Contact Us"
+msgstr "お問い合わせ"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "E-Mail"
+msgstr "メールアドレス"
+
+msgid "Contact Index"
+msgstr "お問い合わせ一覧"
+
+msgid "Send Contact"
+msgstr "お問い合わせに返信する"
+
+msgid "Action"
+msgstr "アクション"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -376,6 +397,12 @@ msgstr "郵便番号は7桁の数字で入力してください。"
 
 msgid "Please enter your e-mail address"
 msgstr "メールアドレスを入力してください。"
+
+msgid "Please enter your e-mail address"
+msgstr "メールアドレスを入力してください。"
+
+msgid "It does not match the confirmation password."
+msgstr "確認用のパスワードと一致していません。"
 
 
 ### 共通 ###

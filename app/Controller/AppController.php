@@ -35,6 +35,7 @@ class AppController extends Controller {
     const POST_LIST_LIMIT = 4;
     const RELATED_POST_LIST_LIMIT = 3;
     const POPULAR_POST_LIMIT = 5;
+    const NEW_POST_LIMIT = 5;
     const PUBLISH = 1; //公開を表す
     const NO_PUBLISH = 0; // 非公開を表す
 
@@ -81,5 +82,12 @@ class AppController extends Controller {
                                                     'limit' => self::POPULAR_POST_LIMIT,
                                                     'order' => array('Post.access DESC')));
       $this->set('popular_posts', $popular_posts);
+
+      // サイドバーに表示する新着記事を取得する。
+      $new_posts = $this->Post->find('all', array(
+                                                    'conditions' => array('publish_flg' => self::PUBLISH),
+                                                    'limit' => self::NEW_POST_LIMIT,
+                                                    'order' => array('Post.id DESC')));
+      $this->set('new_posts', $new_posts);
     }
 }

@@ -39,6 +39,16 @@
                 'rule' => '/^[A-Z][0-9a-zA-Z]{7}/',
                 'message' => 'Please enter a password with a minimum of 8 alphanumeric characters.'
             ),
+            'rule3' => array(
+                'rule' => 'passwordConfirm',
+                'message' => 'It does not match the confirmation password.'
+            ),
+        ),
+        'password_confirm' => array(
+            array(
+                'rule' => 'notBlank',
+                'message' => 'This is a required input item.'
+            ),
         ),
         'zipcode' => array(
             'rule' => '/\d{7}/',
@@ -69,14 +79,23 @@
       return true;
     }
 
+    public function passwordConfirm($check){
+        //２つのパスワードフィールドが一致する事を確認する
+        if($this->data['User']['password'] === $this->data['User']['password_confirm']){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function getActivationToken() {
         // ユーザIDの有無確認
         if (!isset($this->id)) {
             return false;
         }
         // ユーザーネーム（メールアドレス）をハッシュ化
-        // return crypt( $this->field('username'), 'mb5');
-        return crypt( $this->field('username'), $this->field('modified'));
+        $hash = $this->field('username').date("YmdHis");
+        return $hash;
     }
   }
 ?>

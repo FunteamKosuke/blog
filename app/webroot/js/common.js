@@ -506,24 +506,6 @@ $(function(){
         }
     }
 
-    //モーダルウィンドウを開く
-    function displayModal(sign) {
-    	if (sign) {
-    		$("div#msg-modal").fadeIn(500);
-            $("#msg-modal #close-window").show();
-            // モーダルダイアログに不必要な要素を非表示にする。
-            $("#msg-modal #header").hide();
-            $("#msg-modal #footer").hide();
-            $("#msg-modal .cake-sql-log").hide();
-            // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
-            $("#msg-modal #content").css({width: "100%"});
-
-    	} else {
-    		$("div#msg-modal").fadeOut(250);
-            $("#msg-modal #close-window").hide();
-    	}
-    }
-
     //ウィンドウの位置をセンターに調整
     function adjustCenter(target) {
     	var margin_top = ($(window).height()-$(target).height())/2;
@@ -543,7 +525,9 @@ $(function(){
                 contentType: false,
                 success: function(json_msg){
                     msg = $.parseJSON(json_msg);
-                    $('#ajax-message').text(msg)
+                    // $('#ajax-message').text(msg);
+                    alert(msg);
+                    displayModal(false);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown){
                     alert('通信に失敗しました。');
@@ -554,6 +538,24 @@ $(function(){
             });
         return false;
         });
+    }
+
+    //モーダルウィンドウを開く
+    function displayModal(sign) {
+    	if (sign) {
+    		$("div#msg-modal").fadeIn(500);
+            $("#msg-modal #close-window").show();
+            // モーダルダイアログに不必要な要素を非表示にする。
+            $("#msg-modal #header").hide();
+            $("#msg-modal #footer").hide();
+            $("#msg-modal .cake-sql-log").hide();
+            // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
+            $("#msg-modal #content").css({width: "100%"});
+
+    	} else {
+    		$("div#msg-modal").fadeOut(250);
+            $("#msg-modal #close-window").hide();
+    	}
     }
 
     function sendContact(){

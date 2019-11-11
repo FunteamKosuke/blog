@@ -1,3 +1,4 @@
+<!-- モーダルダイアログを表示する為に必要。 -->
 <div id="msg-modal">
 <div class="background"></div>
 <div class="container"></div>
