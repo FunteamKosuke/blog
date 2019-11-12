@@ -36,6 +36,12 @@
                           'action' => 'index'),
                     array('class' => 'dropdown-item')
                 );
+                echo $this->Html->link(
+                    __('Login Twitter'),
+                    array('controller' => 'users',
+                          'action' => 'loginTwitter'),
+                    array('class' => 'dropdown-item')
+                );
               ?>
             </div>
           </li>

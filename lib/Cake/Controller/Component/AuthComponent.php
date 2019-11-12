@@ -607,9 +607,10 @@ class AuthComponent extends Component {
  */
 	public function login($user = null) {
 		$this->_setDefaults();
-
+		// $this->log($this->request);
 		if (empty($user)) {
 			$user = $this->identify($this->request, $this->response);
+			$this->log($this->request);
 		}
 		if ($user) {
 			if (static::$sessionKey) {

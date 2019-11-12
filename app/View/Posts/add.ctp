@@ -59,7 +59,7 @@
         <label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
         <?php echo __('Select Image File'); ?>
         <?php /// サムネイルを設定する。
-        echo $this->Form->input('thumbnail', array(
+        echo $this->Form->input('Thumbnail.thumbnail', array(
                                                             'type' => 'file',
                                                             'id' => 'label-file-thumbnail',
                                                             'class' => 'form-control-file label-file-name',

@@ -7,8 +7,8 @@
                 'fields' => array(
                     'dir' => 'thumbnail_dir'
                 ),
-                'path' => '{ROOT}webroot{DS}files{DS}{model}{DS}{field}{DS}',
-                'mode' => 0777,
+                // 'path' => '{ROOT}webroot{DS}files{DS}{model}{DS}{field}{DS}',
+                // 'mode' => 0777,
             )
         )
     );

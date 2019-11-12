@@ -1,8 +1,9 @@
 <?php
 
   class PostsController extends AppController {
+
     // Postモデル以外のモデルを使用できるようにする。
-    public $uses = array('Post', 'Category', 'Tag', 'Image', 'Thumbnail');
+    public $uses = array('Post', 'Category', 'Tag','Image', 'Thumbnail');
     public $helpers = array('Html', 'Form');
     public $components = array('Search.Prg');
     public $presetVars = true;
@@ -74,18 +75,28 @@
         // チェックボックスでタグを設定する。
         $save_data['Tag'] = $this->request->data['Tag'];
         // 画像を投稿する。
+        // if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
+        //     $save_data['Image'] = array();
+        //     foreach ($this->request->data['PostImage']['files'] as $file) {
+        //         $image_data['image'] = $file;
+        //         $save_data['Image'][] = $image_data;
+        //     }
+        // }
+
         if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
             $save_data['Image'] = array();
             foreach ($this->request->data['PostImage']['files'] as $file) {
-                $image_data['image'] = $file;
+                $image_data['attachment'] = $file;
+                $image_data['model'] = 'Post';
                 $save_data['Image'][] = $image_data;
             }
         }
 
         // サムネイルを設定する。
-        if ($this->request->data['Post']['thumbnail']['name']) { //空のimageが作成されるのを防ぐ
-            $save_data['Thumbnail'] = $this->request->data['Post'];
+        if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のimageが作成されるのを防ぐ
+            $save_data['Thumbnail']['thumbnail'] = $this->request->data['Thumbnail']['thumbnail'];
         }
+        $this->log($save_data);
 
         // 公開か非公開を表すフラグを設定する。1:公開 0:非公開
         $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];

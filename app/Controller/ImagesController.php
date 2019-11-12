@@ -14,7 +14,7 @@
           $data['Image']['image'] = $file;
           $save_data[] = $data;
         }
-        $this->log($this->request->data['Post']['redirect_view']);
+        $this->log($save_data);
         if($this->Image->saveAll($save_data, array('deep' => true))){
           $this->Flash->success(__('The image was uploaded successfully.'));
           return $this->redirect(array('controller' => 'Posts',

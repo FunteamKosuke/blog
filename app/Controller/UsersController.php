@@ -1,11 +1,21 @@
 <?php
     App::uses('AppController', 'Controller');
     App::uses( 'CakeEmail', 'Network/Email');
+    //twitter opauth を使う
+    App::import('Vendor','autoload');
+    use Abraham\TwitterOAuth\TwitterOAuth;
 
     class UsersController extends AppController {
         const USER_LIMIT = 5;
         const HASH_USER_ID = 546745867;
         const MESSAGE_LIST_LIMIT = 5;
+
+        // twitter認証に必要な情報
+        const APIKEY = "uQz4NIazyWdbKTQzyg0hYQm7g";
+        const APISECRET = "D9PiJ2KJkVb9EqkED5nqFYBLe8EtrqY6lw5NzR00hvzEyul6uG";
+        const TOKEN = "991963579107524609-vaAbRM1owuJ1Yv3kEXkLU6XLSo8GOdD";
+        const TOKENSECRET = "XIqftbMkSqbYUC6Qi6qEXgpDmV6ra8WDoljpqhUEMxcPH";
+        const CALLBACK = 'http://blog.dv/users/callbackTwitter';
 
         public $uses = array('User', 'Message', 'Post');
 
@@ -22,7 +32,7 @@
 
         public function beforeFilter() {
             parent::beforeFilter();
-            $this->Auth->allow('add', 'logout', 'sendMsg','sendMsgAjax', 'activate', 'postIndex', 'index', 'retransmission');
+            $this->Auth->allow('add', 'logout', 'sendMsg','sendMsgAjax', 'activate', 'postIndex', 'index', 'retransmission', 'loginTwitter', 'callbackTwitter');
         }
 
         public function index() {
@@ -258,6 +268,68 @@
             // 一覧表示をpaginate機能で表示させる。
             $this->set('messages', $this->paginate('Message'));
         }
+
+        /***** twitter認証関連 *****/
+
+        public function loginTwitter(){
+
+            $twitter = new TwitterOAuth ( self::APIKEY, self::APISECRET);
+
+            $request_token = $twitter->oauth(
+                'oauth/request_token',
+                [
+                    'oauth_callback' => self::CALLBACK
+                ]
+            );
+
+            $url = $twitter->url('oauth/authorize', ['oauth_token' => $request_token['oauth_token']]);
+            $this->redirect($url);
+
+            $this->autoRender = false;
+            $this->autoLayout = false;
+
+
+        }
+
+        public function callbackTwitter(){
+            $this->log('twitter認証に成功したっすね。');
+            $twitter_connect = new TwitterOAuth(self::APIKEY, self::APISECRET, self::TOKEN, self::TOKENSECRET);
+            $access_token = $twitter_connect->oauth('oauth/access_token', array('oauth_verifier' => $_GET['oauth_verifier'], 'oauth_token'=> $_GET['oauth_token']));
+            $twitter = new TwitterOAuth(
+                self::APIKEY,
+                self::APISECRET,
+                $access_token['oauth_token'],
+                $access_token['oauth_token_secret']
+            );
+             // $this->log($twitter->get('account/verify_credentials'));
+             // ユーザー登録に必要な情報を設定する。
+             $user_info = $twitter->get('account/verify_credentials');
+             $user = $this->User->find('first', array('conditions' => array('username' => $user_info->screen_name,
+                                                                            'status' => 1)));
+             // データが存在しなければ、保存する。
+             if (!$user) {
+                 $save_data['User']['username'] = $user_info->screen_name;
+                 $save_data['User']['password'] = $user_info->id_str;
+                 $save_data['User']['role'] = 'admin';
+                 $save_data['User']['zipcode'] = '1111111';
+                 $save_data['User']['address'] = $user_info->location;
+                 $save_data['User']['sl_address'] = $user_info->location;
+                 $save_data['User']['status'] = 1;
+                 // twitterの情報を保存する。
+                 $this->User->create();
+                 if($this->User->save($save_data)){
+                     $this->log('成功しました');
+                 } else {
+                     $this->log('失敗しました。');
+                 }
+             }
+             // ログインするための情報を設定する。
+             $this->request->data['User']['username'] = $user_info->screen_name;
+             $this->request->data['User']['password'] = $user_info->id_str;
+             // ログインする。
+             $this->Auth->login();
+        }
+
 
         private function checkId($id){
             if (!$id) {
