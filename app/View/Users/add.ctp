@@ -24,6 +24,11 @@
                                                             'class' => 'form-control')); ?>
         </div>
         <div class="form-group">
+            <h5><?php echo __('E-Mail'); ?></h5>
+            <?php echo $this->Form->input('email', array('label' => false,
+                                                            'class' => 'form-control')); ?>
+        </div>
+        <div class="form-group">
              <h5><?php echo __('Password'); ?></h5>
             <?php echo $this->Form->input('password', array('label' => false,
                                                             'class' => 'form-control')); ?>

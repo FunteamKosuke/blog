@@ -19,17 +19,6 @@
 
         public $uses = array('User', 'Message', 'Post');
 
-        var $components = array(
-            'Auth' => array(
-                'authenticate' => array(
-                    'Form' => array(
-                        // 認証されるには、「Userのstatusが0である必要がある」を追加する
-                        'scope' => array( 'User.status' => 1)
-                    )
-                )
-            ),
-        );
-
         public function beforeFilter() {
             parent::beforeFilter();
             $this->Auth->allow('add', 'logout', 'sendMsg','sendMsgAjax', 'activate', 'postIndex', 'index', 'retransmission', 'loginTwitter', 'callbackTwitter');
@@ -89,6 +78,17 @@
 
         public function login() {
             if ($this->request->is('post')) {
+                // ログインする条件を設定する。
+                $components = array(
+                    'Auth' => array(
+                        'authenticate' => array(
+                            'Form' => array(
+                                // 認証されるには、「Userのstatusが0である必要がある」を追加する
+                                'scope' => array( 'User.status' => 1)
+                            )
+                        )
+                    ),
+                );
                 if ($this->Auth->login()) {
                     $this->redirect($this->Auth->redirect());
                 } else {
@@ -105,6 +105,9 @@
         public function add() {
             if ($this->request->is('post')) {
               $this->User->create();
+              $this->request->data['User']['provider'] = 'normal';
+              // 自作バリデーションでアクションを判定させるために必要。
+              $this->request->data['User']['action'] = $this->action;
               if ($this->User->save($this->request->data)) {
                     // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
                     $hash_user_id = $this->User->id + self::HASH_USER_ID;
@@ -123,10 +126,13 @@
                         DS . $token;  // token
                     $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
 
+                    // メールアドレスを取得する。
+                    $email_address = $this->request->data['User']['email'];
+
                     // メールを送信する。
                     $email = new CakeEmail( 'gmail');                        // インスタンス化
                     $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
-                    $email->to( $this->request->data['User']['username']);                    // 送信先
+                    $email->to( $email_address);                    // 送信先
                     $email->subject( '本登録用メール');                      // メールタイトル
                     $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
                     $this->Flash->success(__('Temporary registration success. Email sent.'));
@@ -154,7 +160,7 @@
 
             // 現在日時を取得する。
             $date = date('Y-m-d H:i:s');
-            // $date = '2019-11-13 03:56:05';
+            // $date = '2019-11-13 08:28:44';
             $date_ymd = explode(' ', $date)[0];
             $date_his = explode(' ', $date)[1];
             // 年月日を比較する。
@@ -166,8 +172,12 @@
                 $y = intval(explode('-', $date_ymd)[0]);
                 $m = intval(explode('-', $date_ymd)[1]);
                 $d = intval(explode('-', $date_ymd)[2]);
-                $kari_ymd_num = $kari_y + $kari_m + $kari_d;
-                $ymd_num = $y + $m + $d;
+
+                // 例えば1131と1201を計算する際に、月の計算値が固定値であると正しく計算ができないので、仮登録月の最終日を月に乗算する計算値とする。
+                $last_day = date("t", mktime(0, 0, 0, $kari_m, $kari_y));
+                // 日数に変換して計算し直す。
+                $kari_ymd_num = ($kari_y * 365) + ($kari_m * $last_day) + $kari_d;
+                $ymd_num = ($y * 365) + ($m * $last_day) + $d;
                 // 日にちが１日後だった場合は、時間を計算して、24時間経っているか計算する。
                 if (($ymd_num - $kari_ymd_num) == 1) {
                     $kari_h = intval(explode(':', $kari_date_his)[0]);
@@ -230,7 +240,7 @@
             $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
 
             // メールアドレスを取得する。
-            $email_address = $this->User->field('username');
+            $email_address = $this->User->field('email');
 
             // メールを送信する。
             $email = new CakeEmail( 'gmail');
@@ -303,17 +313,26 @@
             );
              // $this->log($twitter->get('account/verify_credentials'));
              // ユーザー登録に必要な情報を設定する。
-             $user_info = $twitter->get('account/verify_credentials');
-             $user = $this->User->find('first', array('conditions' => array('username' => $user_info->screen_name,
+             $user_info = $twitter->get('account/verify_credentials', ['include_email'=> true]);
+             $this->log($user_info);
+             $user = $this->User->find('first', array('conditions' => array('username' => $user_info->name,
+                                                                            'provider_id' => $user_info->id_str,
                                                                             'status' => 1)));
              // データが存在しなければ、保存する。
              if (!$user) {
-                 $save_data['User']['username'] = $user_info->screen_name;
-                 $save_data['User']['password'] = $user_info->id_str;
+                 $save_data['User']['provider'] = 'twitter'; //twitterでユーザー登録されていることを表す。
+                 $save_data['User']['username'] = $user_info->name;
+                 $save_data['User']['provider_id'] = $user_info->id_str;
+                 // メールアドレスはNULLにできないので、現在日時を利用して、ユニークなメールアドレスを作成して、設定する。
+                 $save_data['User']['email'] = date("mYdiHs").date("mYdiHs").'@example.com';
+                 $save_data['User']['password'] = 'HFfkhj567GHdf';
+                 $save_data['User']['password_confirm'] = 'HFfkhj567GHdf';
                  $save_data['User']['role'] = 'admin';
-                 $save_data['User']['zipcode'] = '1111111';
                  $save_data['User']['address'] = $user_info->location;
                  $save_data['User']['sl_address'] = $user_info->location;
+                 // そのままだと画像が小さいので大きいサイズの画像を取得する。画像名から_normalを削除すると大きいサイズが取得できる。
+                 $image = str_replace('_normal', '', $user_info->profile_image_url_https);
+                 $save_data['User']['profile_image'] = $image;
                  $save_data['User']['status'] = 1;
                  // twitterの情報を保存する。
                  $this->User->create();
@@ -324,8 +343,21 @@
                  }
              }
              // ログインするための情報を設定する。
-             $this->request->data['User']['username'] = $user_info->screen_name;
-             $this->request->data['User']['password'] = $user_info->id_str;
+             $this->request->data['User']['username'] = $user_info->name;
+             $this->request->data['User']['password'] = 'HFfkhj567GHdf';
+             // ログインする条件を設定する。
+             $components = array(
+                 'Auth' => array(
+                     'authenticate' => array(
+                         'Form' => array(
+                             // 認証されるには、「Userのstatusが0である必要がある」を追加する
+                             'scope' => array( 'User.status' => 1,
+                                               'User.provider' => 'twitter',
+                                               'User.provider_id' => $user_info->id_str)
+                         )
+                     )
+                 ),
+             );
              // ログインする。
              $this->Auth->login();
         }
