@@ -210,6 +210,21 @@ msgstr "お問い合わせに返信する"
 msgid "Action"
 msgstr "アクション"
 
+msgid "Back to top"
+msgstr "Topへ戻る"
+
+msgid "Thank you for your inquiry."
+msgstr "お問い合わせありがとうございました。"
+
+msgid "An article has been added."
+msgstr "記事の追加が完了しました。"
+
+msgid "Temporary registration is complete. An e-mail for registration has been sent."
+msgstr "仮登録が完了しました。本登録するためのメールを送信しましたので、ご確認ください。"
+
+msgid "Twitter authentication is complete."
+msgstr "Twitter認証が完了しました。"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###

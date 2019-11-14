@@ -83,8 +83,12 @@
             )); ?>
         </div>
     </fieldset>
-    <label class='label-submit btn btn-outline-primary btn-block' for="label-submit">
-        <?php echo __('Add'); ?>
-    <?php echo $this->Form->end(array('id' => 'label-submit')); ?>
-    </label>
+    <div class="form-group">
+        <?php echo $this->Form->button(__('Confirm'), array(
+            'type' => 'submit',
+            'name' => 'mode',
+            'value' => 'confirm',
+            'class' => 'btn btn-outline-primary btn-block'
+        )); ?>
+    </div>
 </div>

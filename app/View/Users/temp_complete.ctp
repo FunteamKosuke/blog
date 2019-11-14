@@ -1,4 +1,4 @@
-<h1><?php echo __('Twitter authentication is complete.'); ?></h1>
+<h1><?php echo __('Temporary registration is complete. An e-mail for registration has been sent.'); ?></h1>
 <?php echo $this->Html->link(
     __('Back to top'),
     array('controller' => 'posts',

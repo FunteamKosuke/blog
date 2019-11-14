@@ -104,44 +104,59 @@
         // 仮登録処理を実施する。
         public function add() {
             if ($this->request->is('post')) {
-              $this->User->create();
-              $this->request->data['User']['provider'] = 'normal';
-              // 自作バリデーションでアクションを判定させるために必要。
-              $this->request->data['User']['action'] = $this->action;
-              if ($this->User->save($this->request->data)) {
-                    // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
-                    $hash_user_id = $this->User->id + self::HASH_USER_ID;
-                    $token = $this->User->getActivationToken();
+                // 自作バリデーションでアクションを判定させるために必要。
+                $this->request->data['User']['action'] = $this->action;
+                if ($this->request->data['mode'] === 'confirm') {
+                    // 確認画面へ行く前にバリデーションチェックをする。
+                    $this->User->set($this->request->data);
+                    if (!$this->User->validates()) {
+                        $this->Session->error('入力内容に不備があります。');
+                        return;
+                    }
+                    $this->set('data', $this->request->data['User']);
+                    $this->render('confirm');
+                } else {
+                    $this->log($this->request->data['User']);
+                    $this->User->create();
+                    $this->request->data['User']['provider'] = 'normal';
+                    if ($this->User->save($this->request->data)) {
+                        // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
+                        $hash_user_id = $this->User->id + self::HASH_USER_ID;
+                        $token = $this->User->getActivationToken();
 
-                    // トークンを保存する。
-                    $this->User->saveField('token', $token);
-                    // トークンの期限を設定する。
-                    $token_deadline = date('Y-m-d H:i:s');
-                    $this->User->saveField('token_deadline', $token_deadline);
+                        // トークンを保存する。
+                        $this->User->saveField('token', $token);
+                        // トークンの期限を設定する。
+                        $token_deadline = date('Y-m-d H:i:s');
+                        $this->User->saveField('token_deadline', $token_deadline);
 
-                    $url =
-                        DS . strtolower($this->name) .          // コントローラ
-                        DS . 'activate' .                       // アクション
-                        DS . $hash_user_id .                  // ユーザID
-                        DS . $token;  // token
-                    $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
+                        $url =
+                            DS . strtolower($this->name) .          // コントローラ
+                            DS . 'activate' .                       // アクション
+                            DS . $hash_user_id .                  // ユーザID
+                            DS . $token;  // token
+                        $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
 
-                    // メールアドレスを取得する。
-                    $email_address = $this->request->data['User']['email'];
+                        // メールアドレスを取得する。
+                        $email_address = $this->request->data['User']['email'];
 
-                    // メールを送信する。
-                    $email = new CakeEmail( 'gmail');                        // インスタンス化
-                    $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
-                    $email->to( $email_address);                    // 送信先
-                    $email->subject( '本登録用メール');                      // メールタイトル
-                    $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
-                    $this->Flash->success(__('Temporary registration success. Email sent.'));
-                    return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
-              }
-              $this->Flash->error(
-                  __('User registration failed.')
-              );
+                        // メールを送信する。
+                        $email = new CakeEmail( 'gmail');                        // インスタンス化
+                        $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
+                        $email->to( $email_address);                    // 送信先
+                        $email->subject( '本登録用メール');                      // メールタイトル
+                        $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
+                        return $this->redirect(array('action' => 'temp_complete'));
+                    }
+                    $this->Flash->error(
+                      __('User registration failed.')
+                    );
+                }
             }
+        }
+        // 仮登録完了画面
+        public function temp_complete(){
+
         }
 
         // 本登録処理を実施する。

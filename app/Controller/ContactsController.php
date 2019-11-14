@@ -6,25 +6,40 @@
 
         public function beforeFilter(){
             parent::beforeFilter();
-            $this->Auth->allow('add');
+            $this->Auth->allow('add', 'complete');
         }
 
         public function add(){
             if ($this->request->is('post')) {
-                if ($this->Contact->save($this->request->data)) {
-                    $this->Flash->success(__('Your inquiry has been sent.'));
-                    return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+                if ($this->request->data['mode'] === 'confirm') {
+                    // 確認画面へ行く前にバリデーションチェックをする。
+                    $this->Contact->set($this->request->data);
+                    if (!$this->Contact->validates()) {
+                        $this->Session->error('入力内容に不備があります。');
+                        return;
+                    }
+                    $this->set('data', $this->request->data['Contact']);
+                    $this->render('confirm');
+                } else {
+                    if ($this->Contact->save($this->request->data)) {
+                        $this->Flash->success(__('Your inquiry has been sent.'));
+                        return $this->redirect(array('action' => 'thanks'));
+                    }
+                    $this->Flash->error(__('Failed to send inquiry details.'));
                 }
-                $this->Flash->error(__('Failed to send inquiry details.'));
             }
         }
 
         public function index(){
             $this->paginate = array(
-                'limit' => self::CONTACT_LIST_LIMIT, // 検索結果を４件ごとに表示する。
+                'limit' => self::CONTACT_LIST_LIMIT,
             );
             // 一覧表示をpaginate機能で表示させる。
             $this->set('contacts', $this->paginate());
+        }
+
+        public function thanks(){
+
         }
 
         public function sendContact($contact_id = null){

@@ -104,7 +104,7 @@
         // 記事を保存する。
         if($save_data && $this->Post->saveAll($save_data, array('deep' => true))){
             $this->Flash->success(__('Successfully added an article.'));
-            return $this->redirect(array('action' => 'index'));
+            return $this->redirect(array('action' => 'complete'));
         }
         //タグのエラーがあったらエラーメッセージを取得する。タグは別途取得しないとviewに表示できない。
         $errors = $this->Post->validationErrors;
@@ -113,6 +113,10 @@
         }
         $this->Flash->error(__('Failed to add article.'));
       }
+    }
+
+    public function complete(){
+        
     }
 
     // 記事を編集する。

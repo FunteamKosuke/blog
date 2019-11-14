@@ -12,7 +12,12 @@
     <h3><?php echo __('Body'); ?></h3>
     <?php echo $this->Form->input('body', array('label' => false, 'class' => 'form-control')); ?>
 </div>
-<label class='label-submit btn btn-outline-primary btn-block' for="label-submit">
-    <?php echo __('Send'); ?>
-<?php echo $this->Form->end(array('id' => 'label-submit')); ?>
-</label>
+<div class="form-group">
+    <?php echo $this->Form->button(__('Confirm'), array(
+        'type' => 'submit',
+        'name' => 'mode',
+        'value' => 'confirm',
+        'class' => 'btn btn-outline-primary btn-block'
+    )); ?>
+</div>
+<?php echo $this->Form->end(); ?>
