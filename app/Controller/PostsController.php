@@ -10,7 +10,7 @@
 
     public function beforeFilter(){
         parent::beforeFilter();
-        $this->Auth->allow('view', 'index', 'postDateRelatedPost');
+        $this->Auth->allow('view', 'index', 'postDateRelatedPost', 'find');
     }
 
     public function index() {
@@ -33,11 +33,26 @@
 
       $this->set('post', $post);
 
+      // 記事の最大数を取得する。
+      $posts_max = $this->Post->find('count', array('conditions' => array('publish_flg' => parent::PUBLISH)));
+
+      // 次の記事のidを設定する。
+      if ($posts_max > $id) {
+          $this->set('prev_id', $id+1);
+      }
+
+      // 前の記事のidを設定する。
+      if ($id > 1) {
+          $this->set('next_id', $id-1);
+      }
+
       // 関連記事として表示するための記事を取得する。
       $this->set('related_post', $this->Post->find('all', array(
           'conditions' => array('category_id' => $post['Post']['category_id']), // 検索する条件を設定する。
           'limit' => parent::RELATED_POST_LIST_LIMIT,
       )));
+
+
     }
 
     public function add(){
@@ -75,25 +90,25 @@
         // チェックボックスでタグを設定する。
         $save_data['Tag'] = $this->request->data['Tag'];
         // 画像を投稿する。
-        // if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
-        //     $save_data['Image'] = array();
-        //     foreach ($this->request->data['PostImage']['files'] as $file) {
-        //         $image_data['image'] = $file;
-        //         $save_data['Image'][] = $image_data;
-        //     }
-        // }
-
-        if ($this->request->data['PostImage']['files'][0]['name']) { //空のthumbnailが作成されるのを防ぐ
+        if ($this->request->data['PostImage']['files'][0]['name']) { //空のimageが作成されるのを防ぐ
             $save_data['Image'] = array();
             foreach ($this->request->data['PostImage']['files'] as $file) {
-                $image_data['attachment'] = $file;
-                $image_data['model'] = 'Post';
+                $image_data['image'] = $file;
                 $save_data['Image'][] = $image_data;
             }
         }
 
+        // if ($this->request->data['PostImage']['files'][0]['name']) { //空のimageが作成されるのを防ぐ
+        //     $save_data['Image'] = array();
+        //     foreach ($this->request->data['PostImage']['files'] as $file) {
+        //         $image_data['attachment'] = $file;
+        //         $image_data['model'] = 'Post';
+        //         $save_data['Image'][] = $image_data;
+        //     }
+        // }
+
         // サムネイルを設定する。
-        if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のimageが作成されるのを防ぐ
+        if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のthmbnailが作成されるのを防ぐ
             $save_data['Thumbnail']['thumbnail'] = $this->request->data['Thumbnail']['thumbnail'];
         }
         $this->log($save_data);
@@ -116,7 +131,7 @@
     }
 
     public function complete(){
-        
+
     }
 
     // 記事を編集する。

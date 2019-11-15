@@ -21,7 +21,17 @@
 
         public function beforeFilter() {
             parent::beforeFilter();
-            $this->Auth->allow('add', 'logout', 'sendMsg','sendMsgAjax', 'activate', 'postIndex', 'index', 'retransmission', 'loginTwitter', 'callbackTwitter');
+            $this->Auth->allow( 'add',
+                                'logout',
+                                'sendMsg',
+                                'sendMsgAjax',
+                                'activate',
+                                'postIndex',
+                                'index',
+                                'retransmission',
+                                'loginTwitter',
+                                'callbackTwitter',
+                                'temp_complete');
         }
 
         public function index() {
@@ -317,7 +327,11 @@
         }
 
         public function callbackTwitter(){
-            $this->log('twitter認証に成功したっすね。');
+            // トークンが取得できなかったら(twitter認証キャンセル等)何もせず記事一覧画面に戻る。
+            if (!(isset($_GET['oauth_verifier']) && isset($_GET['oauth_token']))) {
+                $this->Flash->error(__('Twitter authentication failed.'));
+                return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+            }
             $twitter_connect = new TwitterOAuth(self::APIKEY, self::APISECRET, self::TOKEN, self::TOKENSECRET);
             $access_token = $twitter_connect->oauth('oauth/access_token', array('oauth_verifier' => $_GET['oauth_verifier'], 'oauth_token'=> $_GET['oauth_token']));
             $twitter = new TwitterOAuth(

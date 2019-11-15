@@ -6,7 +6,7 @@
 
         public function beforeFilter(){
             parent::beforeFilter();
-            $this->Auth->allow('add', 'complete');
+            $this->Auth->allow('add', 'thanks');
         }
 
         public function add(){
@@ -38,6 +38,7 @@
             $this->set('contacts', $this->paginate());
         }
 
+        // お問い合わせありがとうページ
         public function thanks(){
 
         }

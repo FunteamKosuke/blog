@@ -3,16 +3,16 @@
     public $order = array('Post.id DESC');
     public $hasOne = 'Thumbnail';
     public $belongsTo = array('Category', 'User');
-    // public $hasMany = 'Image';
-    public $hasMany = array(
-    'Image' => array(
-      'className' => 'Attachment',
-      'foreignKey' => 'foreign_key',
-      'conditions' => array(
-        'Image.model' => 'Post',
-      ),
-    ),
-  );
+    public $hasMany = 'Image';
+    // public $hasMany = array(
+    // 'Image' => array(
+    //   'className' => 'Attachment',
+    //   'foreignKey' => 'foreign_key',
+    //   'conditions' => array(
+    //     'Image.model' => 'Post',
+    //   ),
+    // ),
+  // );
     // 使用するBehaviorの設定。
     public $actsAs = array(
         'Search.Searchable',

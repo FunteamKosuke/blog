@@ -36,6 +36,7 @@ class AppController extends Controller {
     const RELATED_POST_LIST_LIMIT = 3;
     const POPULAR_POST_LIMIT = 5;
     const NEW_POST_LIMIT = 5;
+    const ATTENTION_POST_LIMIT = 5;
     const PUBLISH = 1; //公開を表す
     const NO_PUBLISH = 0; // 非公開を表す
 
@@ -77,17 +78,48 @@ class AppController extends Controller {
       $this->set('login_user', $this->Auth->user());
 
       // サイドバーに表示する人気記事を取得する。
-      $popular_posts = $this->Post->find('all', array(
+      $side_popular_posts = $this->Post->find('all', array(
                                                     'conditions' => array('publish_flg' => self::PUBLISH),
                                                     'limit' => self::POPULAR_POST_LIMIT,
                                                     'order' => array('Post.access DESC')));
-      $this->set('popular_posts', $popular_posts);
+      $this->set('side_popular_posts', $side_popular_posts);
 
       // サイドバーに表示する新着記事を取得する。
-      $new_posts = $this->Post->find('all', array(
+      $side_new_posts = $this->Post->find('all', array(
                                                     'conditions' => array('publish_flg' => self::PUBLISH),
                                                     'limit' => self::NEW_POST_LIMIT,
                                                     'order' => array('Post.id DESC')));
-      $this->set('new_posts', $new_posts);
+      $this->set('side_new_posts', $side_new_posts);
+
+      // 注目記事を取得する。
+      // 注目記事は新着記事順に大きい数字を表し、その数字をアクセス数に乗算して、数値を出し、その数値が大きい順に注目記事とする。
+      $posts = $this->Post->find('all', array('conditions' => array('publish_flg' => self::PUBLISH)));
+
+      // 注目を表す数値を計算する。
+      $posts_count = count($posts);
+      $posts_attention_number = array();
+      foreach ($posts as $key => $post) {
+          $posts_attention_number[$key] = ($posts_count - $key) * $post['Post']['access'];
+      }
+
+      // valueの大きい順に並び替える
+      arsort($posts_attention_number);
+
+      $count = 0;
+      $count_max = self::ATTENTION_POST_LIMIT;
+      // 記事の数がATTENTION_POST_LIMITなら取得できた件数を表示する数とする。
+      if($posts_count < self::ATTENTION_POST_LIMIT){
+          $count_max = $posts_count;
+      }
+      // 並び替えた先頭の記事から指定した数だけ取得する。
+      $side_attention_posts = array();
+      foreach ($posts_attention_number as $key => $value) {
+          $side_attention_posts[] = $posts[$key];
+          if (++$count === $count_max) {
+              break;
+          }
+      }
+
+      $this->set('side_attention_posts', $side_attention_posts);
     }
 }
