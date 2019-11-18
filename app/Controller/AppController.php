@@ -43,6 +43,7 @@ class AppController extends Controller {
     public $uses = array('Post');
 
     public $components = array(
+      'Session',
       'Flash',
       'Auth' => array(
           'loginRedirect' => array(

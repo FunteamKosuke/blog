@@ -11,21 +11,29 @@
 
         public function add(){
             if ($this->request->is('post')) {
-                if ($this->request->data['mode'] === 'confirm') {
-                    // 確認画面へ行く前にバリデーションチェックをする。
-                    $this->Contact->set($this->request->data);
-                    if (!$this->Contact->validates()) {
-                        $this->Session->error('入力内容に不備があります。');
-                        return;
-                    }
-                    $this->set('data', $this->request->data['Contact']);
-                    $this->render('confirm');
-                } else {
-                    if ($this->Contact->save($this->request->data)) {
-                        $this->Flash->success(__('Your inquiry has been sent.'));
-                        return $this->redirect(array('action' => 'thanks'));
-                    }
-                    $this->Flash->error(__('Failed to send inquiry details.'));
+                $mode = $this->request->data['mode'];
+                switch ($mode) {
+                    case 'confirm':
+                        // 確認画面へ行く前にバリデーションチェックをする。
+                        $this->Contact->set($this->request->data);
+                        if (!$this->Contact->validates()) {
+                            $this->Session->error('入力内容に不備があります。');
+                            return;
+                        }
+                        $this->Session->write('Contact', $this->request->data['Contact']);
+                        $this->render('confirm');
+                        break;
+                    case 'correct':
+                        $this->render('add');
+                        break;
+                    case 'exec':
+                        // 保存すると同時にセッション情報を削除する。
+                        if ($this->Contact->save($this->Session->consume('Contact'))) {
+                            $this->Flash->success(__('Your inquiry has been sent.'));
+                            return $this->redirect(array('action' => 'thanks'));
+                        }
+                        $this->Flash->error(__('Failed to send inquiry details.'));
+                        break;
                 }
             }
         }
