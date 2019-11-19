@@ -2,19 +2,38 @@
 <div id="users__add" class="users form">
 <?php echo $this->Form->create('User', array('url' => 'add', 'type'=>'file')); ?>
     <fieldset>
-        <legend><?php echo __('Sign Up User'); ?></legend>
+        <h1><?php echo __('Sign Up User'); ?></h1>
         <?php
         $user = $this->Session->read('User');
-        if (isset($user)) {
-            $image_name
-            $username = $user['User']['username'];
-        } else {
-
+        if (isset($validate)) { //バリデーションエラーがあった場合
+            $image_name = '未選択'; //画像の名前を渡しても実データはformに渡ってないので、未選択とする。
+            $username   = $validate['User']['username'] ? $validate['User']['username'] : '';
+            $email      = $validate['User']['email'] ? $validate['User']['email'] : '';
+            $zipcode    = $validate['User']['zipcode'] ? $validate['User']['zipcode'] : '';
+            $address    = $validate['User']['address'] ? $validate['User']['address'] : '';
+            $sl_address = $validate['User']['sl_address'] ? $validate['User']['sl_address'] : '';
+            $role       = $validate['User']['role'] ? $validate['User']['role'] : '';
+        } elseif (isset($user)) { //セッションデータがある場合。(確認から修正した場合)
+            $image_name = $user['User']['profile_image']['name'] ? $user['User']['profile_image']['name'] : '未選択';
+            $username   = $user['User']['username'] ? $user['User']['username'] : '';
+            $email      = $user['User']['email'] ? $user['User']['email'] : '';
+            $zipcode    = $user['User']['zipcode'] ? $user['User']['zipcode'] : '';
+            $address    = $user['User']['address'] ? $user['User']['address'] : '';
+            $sl_address = $user['User']['sl_address'] ? $user['User']['sl_address'] : '';
+            $role       = $user['User']['role'] ? $user['User']['role'] : '';
+        } else { //そのほか
+            $image_name = '未選択';
+            $username   = '';
+            $email      = '';
+            $zipcode    = '';
+            $address    = '';
+            $sl_address = '';
+            $role       = '';
         }
 
         ?>
         <div class="form-group">
-            <h3><?php echo __('Add Profile Image'); ?></h3>
+            <h5><?php echo __('Add Profile Image'); ?></h5>
             <label class="label-file btn btn-outline-primary" for="label-file-profile-image">
             <?php echo __('Select Image File'); ?>
             <?php /// サムネイルを設定する。
@@ -24,31 +43,66 @@
                                                                 'class' => 'form-control-file label-file-name',
                                                                 'error' => false)); ?>
             </label>
-            <?php
-            if (isset($user)) {
-                $image_name = $user['User']['profile_image']['name'];
-                $placeholder = $image_name ? $image_name : __('No Select');
-            } ?>
             <div class="form-group">
-                <input type="text" id="file-name-profile-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo $placeholder; ?>">
+                <input type="text" id="file-name-profile-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo $image_name; ?>">
+            </div>
+        </div>
+        <div class="form-group">
+            <h5><?php echo __('Huri Hira'); ?></h5>
+            <div class="form-group form-inline">
+                性
+                <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
+                名
+                <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <h5><?php echo __('Huri Kata'); ?></h5>
+            <div class="form-group form-inline">
+                性
+                <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
+                名
+                <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <h5><?php echo __('Name'); ?></h5>
+            <div class="form-group form-inline">
+                性
+                <?php echo $this->Form->input('huri_kanzi_sei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
+                名
+                <?php echo $this->Form->input('huri_kanzi_mei', array('label' => false,
+                                                                'class' => 'form-control',
+                                                                'size'  =>  19,
+                                                                'value' => $username)); ?>
             </div>
         </div>
         <div class="form-group">
             <h5><?php echo __('User Name'); ?></h5>
-            <?php
-            if (isset($user)) {
-                $username = $user['User']['username'];
-                $value = $username ? $username : '';
-            } ?>
             <?php echo $this->Form->input('username', array('label' => false,
                                                             'class' => 'form-control',
-                                                            'value' => $user['username'])); ?>
+                                                            'value' => $username)); ?>
         </div>
         <div class="form-group">
             <h5><?php echo __('E-Mail'); ?></h5>
             <?php echo $this->Form->input('email', array('label' => false,
                                                         'class' => 'form-control',
-                                                        'value' => $user['email'])); ?>
+                                                        'value' => $email)); ?>
         </div>
         <div class="form-group">
              <h5><?php echo __('Password'); ?></h5>
@@ -67,7 +121,7 @@
             <?php echo $this->Form->input('zipcode', array('label' => false,
                                                             'id' => 'zipcode',
                                                             'class' => 'form-control',
-                                                            'value' => $user['zipcode'])); // プルダウンメニュー ?>
+                                                            'value' => $zipcode)); // プルダウンメニュー ?>
         </div>
         <!-- 郵便番号に複数の町域が含まれていた時に使用する。 -->
         <small id="address_msg"></small>
@@ -79,7 +133,7 @@
             <?php echo $this->Form->input('address', array('label' => false,
                                                             'id' => 'address',
                                                             'class' => 'form-control',
-                                                            'value' => $user['address'])); ?>
+                                                            'value' => $address)); ?>
         </div>
         <div class="container-fluid">
             <div class="form-group row">
@@ -103,7 +157,7 @@
             <?php echo $this->Form->input('sl_address', array('label' => false,
                                                                 'id' => 'select-address',
                                                                 'class' => 'form-control',
-                                                                'value' => $user['sl_address'])); ?>
+                                                                'value' => $sl_address)); ?>
         </div>
         <div class="form-group">
             <h5><?php echo __('User Authority'); ?></h5>
@@ -111,7 +165,7 @@
                 'label' => false,
                 'options' => array('admin' => 'Admin', 'author' => 'Author'),
                 'class' => 'form-control',
-                'value' => $user['role']
+                'value' => $role
             )); ?>
         </div>
     </fieldset>

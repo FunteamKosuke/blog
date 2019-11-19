@@ -7,6 +7,8 @@
         public function beforeFilter(){
             parent::beforeFilter();
             $this->Auth->allow('add', 'thanks');
+            $this->Security->unlockedActions = array(
+                                                'sendContactAjax');
         }
 
         public function add(){

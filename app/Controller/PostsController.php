@@ -111,7 +111,7 @@
         if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のthmbnailが作成されるのを防ぐ
             $save_data['Thumbnail']['thumbnail'] = $this->request->data['Thumbnail']['thumbnail'];
         }
-        $this->log($save_data);
+        $this->log($this->request->data);
 
         // 公開か非公開を表すフラグを設定する。1:公開 0:非公開
         $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];

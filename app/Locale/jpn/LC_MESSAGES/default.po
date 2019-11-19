@@ -225,6 +225,43 @@ msgstr "仮登録が完了しました。本登録するためのメールを送
 msgid "Twitter authentication is complete."
 msgstr "Twitter認証が完了しました。"
 
+msgid "Confirm"
+msgstr "確認"
+
+msgid "Correct"
+msgstr "修正"
+
+msgid "Password Confirm"
+msgstr "パスワード(確認)"
+
+msgid "Regist"
+msgstr "登録"
+
+msgid "Popular Post"
+msgstr "人気記事"
+
+msgid "New Post"
+msgstr "新着記事"
+
+msgid "Attention Post"
+msgstr "注目記事"
+
+msgid "Huri Kata"
+msgstr "フリガナ"
+
+msgid "Huri Hira"
+msgstr "ふりがな"
+
+msgid "Please enter your hiragana"
+msgstr "ひらがなを入力してください。"
+
+msgid "Please enter your katakana"
+msgstr "カタカナを入力してください。"
+
+msgid "Please enter your kanzi"
+msgstr "漢字を入力してください。"
+
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###

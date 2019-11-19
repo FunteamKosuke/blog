@@ -40,11 +40,14 @@ class AppController extends Controller {
     const PUBLISH = 1; //公開を表す
     const NO_PUBLISH = 0; // 非公開を表す
 
-    public $uses = array('Post');
+    public $uses = array('Post', 'Category', 'Tag');
 
     public $components = array(
       'Session',
       'Flash',
+      // 'Security' => array(
+      //               'csrfExpires' => '+1 hour'
+      //               ),
       'Auth' => array(
           'loginRedirect' => array(
               'controller' => 'posts',
@@ -65,62 +68,71 @@ class AppController extends Controller {
     );
 
     public function isAuthorized($user) {
-    // Admin can access every action
-    if (isset($user['role']) && $user['role'] === 'admin') {
-        return true;
-    }
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
 
-    // デフォルトは拒否
-    return false;
+        // デフォルトは拒否
+        return false;
     }
 
     public function beforeFilter() {
-      // 記事一覧の追加と削除の操作の有無をユーザー情報によって判断するためにセットする。
-      $this->set('login_user', $this->Auth->user());
+        // 記事一覧の追加と削除の操作の有無をユーザー情報によって判断するためにセットする。
+        $this->set('login_user', $this->Auth->user());
 
-      // サイドバーに表示する人気記事を取得する。
-      $side_popular_posts = $this->Post->find('all', array(
+        // サイドバーに表示する人気記事を取得する。
+        $side_popular_posts = $this->Post->find('all', array(
                                                     'conditions' => array('publish_flg' => self::PUBLISH),
                                                     'limit' => self::POPULAR_POST_LIMIT,
                                                     'order' => array('Post.access DESC')));
-      $this->set('side_popular_posts', $side_popular_posts);
+        $this->set('side_popular_posts', $side_popular_posts);
 
-      // サイドバーに表示する新着記事を取得する。
-      $side_new_posts = $this->Post->find('all', array(
+        // サイドバーに表示する新着記事を取得する。
+        $side_new_posts = $this->Post->find('all', array(
                                                     'conditions' => array('publish_flg' => self::PUBLISH),
                                                     'limit' => self::NEW_POST_LIMIT,
                                                     'order' => array('Post.id DESC')));
-      $this->set('side_new_posts', $side_new_posts);
+        $this->set('side_new_posts', $side_new_posts);
 
-      // 注目記事を取得する。
-      // 注目記事は新着記事順に大きい数字を表し、その数字をアクセス数に乗算して、数値を出し、その数値が大きい順に注目記事とする。
-      $posts = $this->Post->find('all', array('conditions' => array('publish_flg' => self::PUBLISH)));
+        // 注目記事を取得する。
+        // 注目記事は新着記事順に大きい数字を表し、その数字をアクセス数に乗算して、数値を出し、その数値が大きい順に注目記事とする。
+        $posts = $this->Post->find('all', array('conditions' => array('publish_flg' => self::PUBLISH)));
 
-      // 注目を表す数値を計算する。
-      $posts_count = count($posts);
-      $posts_attention_number = array();
-      foreach ($posts as $key => $post) {
+        // 注目を表す数値を計算する。
+        $posts_count = count($posts);
+        $posts_attention_number = array();
+        foreach ($posts as $key => $post) {
           $posts_attention_number[$key] = ($posts_count - $key) * $post['Post']['access'];
-      }
+        }
 
-      // valueの大きい順に並び替える
-      arsort($posts_attention_number);
+        // valueの大きい順に並び替える
+        arsort($posts_attention_number);
 
-      $count = 0;
-      $count_max = self::ATTENTION_POST_LIMIT;
-      // 記事の数がATTENTION_POST_LIMITなら取得できた件数を表示する数とする。
-      if($posts_count < self::ATTENTION_POST_LIMIT){
+        $count = 0;
+        $count_max = self::ATTENTION_POST_LIMIT;
+        // 記事の数がATTENTION_POST_LIMITなら取得できた件数を表示する数とする。
+        if($posts_count < self::ATTENTION_POST_LIMIT){
           $count_max = $posts_count;
-      }
-      // 並び替えた先頭の記事から指定した数だけ取得する。
-      $side_attention_posts = array();
-      foreach ($posts_attention_number as $key => $value) {
+        }
+        // 並び替えた先頭の記事から指定した数だけ取得する。
+        $side_attention_posts = array();
+        foreach ($posts_attention_number as $key => $value) {
           $side_attention_posts[] = $posts[$key];
           if (++$count === $count_max) {
               break;
           }
-      }
+        }
 
-      $this->set('side_attention_posts', $side_attention_posts);
+        $this->set('side_attention_posts', $side_attention_posts);
+
+        /***footer関連***/
+        // フッターに表示するカテゴリ
+        $footer_categories = $this->Category->find('all');
+        $this->set('footer_categories', $footer_categories);
+
+        // フッターに表示するタグ
+        $footer_tags = $this->Tag->find('all');
+        $this->set('footer_tags', $footer_tags);
     }
 }

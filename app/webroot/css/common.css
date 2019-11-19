@@ -143,12 +143,15 @@ body{
 
 /* コンテンツ部分のスタイルを適用する */
 #content{
+    padding-top: 50px;
+    padding-bottom: 100px;
 }
 
 /* フッターのスタイルを定義する。 */
 #footer{
     background-color: #000;
     color: #fff;
+    padding-top: 50px;
 }
 
 #footer .copyright{
@@ -368,6 +371,12 @@ position:relative;
     margin-top: 10px;
 }
 
+/***** elements *****/
+
+
+#side-bar a{
+}
+
 /****** 全てのページに適用するスタイルを以下に定義する。 ******/
 
 /* モーダル専用のスタイル */
@@ -562,4 +571,42 @@ marginが入るようになっているので、0に設定する。
     max-height: 300px;
     background-color: #F2F2F2;
     object-fit: contain;
+}
+
+.list-design-husen-blue ul, .list-design-husen-blue ol {
+  padding: 0;
+  position: relative;
+}
+
+.list-design-husen-blue ul li, .list-design-husen-blue ol li {
+  color: #2d8fdd;
+  border-left: solid 6px #2d8fdd;/*左側の線*/
+  background: #f1f8ff;/*背景色*/
+  margin-bottom: 3px;/*下のバーとの余白*/
+   line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none!important;/*ポチ消す*/
+}
+
+.list-design-husen-yellow ul, .list-design-husen-yellow ol {
+  padding: 0;
+  position: relative;
+}
+
+.list-design-husen-yellow ul li, .list-design-husen-yellow ol li {
+  border: solid 1px #ffff00;
+  border-left: solid 6px #ffff00;/*左側の線*/
+  background: #000;/*背景色*/
+  margin-bottom: 3px;/*下のバーとの余白*/
+  line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none!important;/*ポチ消す*/
+}
+
+.list-design-husen-yellow ul li:hover, .list-design-husen-yellow ol li:hover {
+    background-color: #98fb98;
+}
+
+.list-design-husen-yellow a{
+    color: #fff;
 }

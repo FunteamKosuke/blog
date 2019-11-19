@@ -19,6 +19,42 @@
     );
 
     public $validate = array(
+        'huri_hira_sei' => array(
+            'rule1' => array(
+                'rule' => 'valiHiraSei',
+                'message' => 'Please enter your hiragana'
+            )
+        ),
+        'huri_hira_mei' => array(
+            'rule1' => array(
+                'rule' => 'valiHiraMei',
+                'message' => 'Please enter your hiragana'
+            )
+        ),
+        'huri_kata_sei' => array(
+            'rule1' => array(
+                'rule' => 'valiKataSei',
+                'message' => 'Please enter your katakana'
+            )
+        ),
+        'huri_kata_mei' => array(
+            'rule1' => array(
+                'rule' => 'valiKataMei',
+                'message' => 'Please enter your katakana'
+            )
+        ),
+        'huri_kanzi_sei' => array(
+            'rule1' => array(
+                'rule' => 'valiKanziSei',
+                'message' => 'Please enter your kanzi'
+            )
+        ),
+        'huri_kanzi_mei' => array(
+            'rule1' => array(
+                'rule' => 'valiKanziMei',
+                'message' => 'Please enter your kanzi'
+            )
+        ),
         'username' => array(
             'rule1' => array(
                 'rule' => 'notBlank',
@@ -109,6 +145,60 @@
             if ($user) {
                 $return = false;
             }
+        }
+        return $return;
+    }
+
+    public function valiHiraSei(){
+        $return = true;
+        $preg = '/[\x{3041}-\x{3096}]*/';
+        if (!preg_match($preg, $this->data['User']['huri_hira_sei'])) {
+            $return = false;
+        }
+        return $return;
+    }
+
+    public function valiHiraMei(){
+        $return = true;
+        $preg = '/[\x{3041}-\x{3096}]*/';
+        if (!preg_match($preg, $this->data['User']['huri_hira_mei'])) {
+            $return = false;
+        }
+        return $return;
+    }
+
+    public function valiKataSei(){
+        $return = true;
+        $preg = '/[\u30A1-\u30FA]*/';
+        if (!preg_match($preg, $this->data['User']['huri_kata_sei'])) {
+            $return = false;
+        }
+        return $return;
+    }
+
+    public function valiKataMei(){
+        $return = true;
+        $preg = '/[\u30A1-\u30FA]*/';
+        if (!preg_match($preg, $this->data['User']['huri_kata_mei'])) {
+            $return = false;
+        }
+        return $return;
+    }
+
+    public function valiKanziSei(){
+        $return = true;
+        $preg = '/[々〇〻\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF]*/';
+        if (!preg_match($preg, $this->data['User']['huri_kanzi_sei'])) {
+            $return = false;
+        }
+        return $return;
+    }
+
+    public function valiKanziMei(){
+        $return = true;
+        $preg = '/[々〇〻\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF]*/';
+        if (!preg_match($preg, $this->data['User']['huri_kanzi_mei'])) {
+            $return = false;
         }
         return $return;
     }

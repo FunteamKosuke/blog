@@ -139,7 +139,6 @@ $(function(){
                 url: "../addresses/search",
                 data: {
                     "zipcode": $('#zipcode').val()
-                    // "zipcode": '6991513'
                 },
                 success: function(json_search_result){
                     //データを受け取っていれば、住所欄に入力する。

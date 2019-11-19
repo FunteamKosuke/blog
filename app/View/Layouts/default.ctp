@@ -44,7 +44,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php include('content.ctp') ?>
 		<?php include('footer.ctp') ?>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
-	<?php echo $this->fetch('script'); ?>
+	<?php //echo $this->element('sql_dump'); ?>
+	<?php //echo $this->fetch('script'); ?>
 </body>
 </html>

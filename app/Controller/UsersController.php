@@ -32,6 +32,7 @@
                                 'loginTwitter',
                                 'callbackTwitter',
                                 'temp_complete');
+            $this->Security->unlockedActions = array('sendMsgAjax');
         }
 
         public function index() {
@@ -123,7 +124,14 @@
                         $this->User->set($this->request->data);
                         if (!$this->User->validates()) {
                             $this->Session->error('入力内容に不備があります。');
+                            $this->set('validate', $this->request->data);
                             return;
+                        }
+                        // セッション情報がない場合とformで画像が選択されていないときの画像情報がないときを判定しやすくするために
+                        // NULLで統一したいので、
+                        // formで画像が選択されていない時も、空文字ではなく、NULLが設定されている様にする。
+                        if ('' === $this->request->data['User']['profile_image']['name']) {
+                            $this->request->data['User']['profile_image']['name'] = NULL;
                         }
 
                         // 確認画面を通すと保存するときには一時ファイルが削除されているので、サーバー上に保存し直す。
@@ -131,12 +139,11 @@
                         if(!file_exists($upload_directory)){
                             mkdir($upload_directory, 0777);
                         }
+
                         // 仕様として、修正したときに画像が選択されていないときは、前に選択された画像を設定する画像とする。
                         $user = $this->Session->read('User');
-                        if (!('' === $this->request->data['User']['profile_image']['name'])) {
-                            // $this->log('' === $user['User']['profile_image']['name']);
-                            if ((!('' === $user['User']['profile_image']['name']))||(isset($user['User']['profile_image']['name']))) {
-                                $this->log('来てしまったね。');
+                        if (isset($this->request->data['User']['profile_image']['name'])) {
+                            if (isset($user['User']['profile_image']['name'])) {
                                 $file_exists = WWW_ROOT . 'files/profile/' . $user['User']['profile_image']['name'];
                                 unlink($file_exists);
                             }
@@ -145,11 +152,13 @@
                             move_uploaded_file($this->request->data['User']['profile_image']['tmp_name'], $upload_file);
 
                         }
+
                         // 画像が選択されていないときは、前セッションの画像情報を新たなセッションの画像情報として、設定する。
-                        if (('' === $this->request->data['User']['profile_image']['name']) &&
-                            ((!('' === $user['User']['profile_image']['name']))||(isset($user['User']['profile_image']['name'])))) {
+                        if (!isset($this->request->data['User']['profile_image']['name']) &&
+                            (isset($user['User']['profile_image']['name']))) {
                             $this->request->data['User']['profile_image'] = $user['User']['profile_image'];
                         }
+
                         $this->Session->write('User', $this->request->data);
                         $this->render('confirm');
                         break;
@@ -205,52 +214,6 @@
                           __('User registration failed.')
                         );
                 } //switch end
-                // if ($this->request->data['mode'] === 'confirm') {
-                //     // 確認画面へ行く前にバリデーションチェックをする。
-                //     $this->User->set($this->request->data);
-                //     if (!$this->User->validates()) {
-                //         $this->Session->error('入力内容に不備があります。');
-                //         return;
-                //     }
-                //     $this->set('data', $this->request->data['User']);
-                //     $this->render('confirm');
-                // } else {
-                //     $this->log($this->request->data['User']);
-                //     $this->User->create();
-                //     $this->request->data['User']['provider'] = 'normal';
-                //     if ($this->User->save($this->request->data)) {
-                //         // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
-                //         $hash_user_id = $this->User->id + self::HASH_USER_ID;
-                //         $token = $this->User->getActivationToken();
-                //
-                //         // トークンを保存する。
-                //         $this->User->saveField('token', $token);
-                //         // トークンの期限を設定する。
-                //         $token_deadline = date('Y-m-d H:i:s');
-                //         $this->User->saveField('token_deadline', $token_deadline);
-                //
-                //         $url =
-                //             DS . strtolower($this->name) .          // コントローラ
-                //             DS . 'activate' .                       // アクション
-                //             DS . $hash_user_id .                  // ユーザID
-                //             DS . $token;  // token
-                //         $url = Router::url( $url, true);  // ドメイン(+サブディレクトリ)を付与
-                //
-                //         // メールアドレスを取得する。
-                //         $email_address = $this->request->data['User']['email'];
-                //
-                //         // メールを送信する。
-                //         $email = new CakeEmail( 'gmail');                        // インスタンス化
-                //         $email->from( array( 'kosukefunteam@gmail.com' => 'Sender'));  // 送信元
-                //         $email->to( $email_address);                    // 送信先
-                //         $email->subject( '本登録用メール');                      // メールタイトル
-                //         $email->send('本登録するためにURLをクリックしてください。 ' . $url);                             // メール送信
-                //         return $this->redirect(array('action' => 'temp_complete'));
-                //     }
-                //     $this->Flash->error(
-                //       __('User registration failed.')
-                //     );
-                // }
             }
         }
         // 仮登録完了画面
