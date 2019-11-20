@@ -1,5 +1,10 @@
 <?php
   class ImagesController extends AppController {
+
+    public function beforeFilter(){
+        parent::beforeFilter();
+    }
+
     public function upload(){
       // 関連づけたい記事のidを渡す。
       $this->set('post_id', Hash::get($this->request->query, "post_id"));

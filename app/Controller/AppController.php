@@ -45,9 +45,9 @@ class AppController extends Controller {
     public $components = array(
       'Session',
       'Flash',
-      // 'Security' => array(
-      //               'csrfExpires' => '+1 hour'
-      //               ),
+      'Security' => array(
+                    'csrfExpires' => '+1 hour'
+                    ),
       'Auth' => array(
           'loginRedirect' => array(
               'controller' => 'posts',

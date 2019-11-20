@@ -7,6 +7,12 @@
         $user = $this->Session->read('User');
         if (isset($validate)) { //バリデーションエラーがあった場合
             $image_name = '未選択'; //画像の名前を渡しても実データはformに渡ってないので、未選択とする。
+            $huri_hira_sei = $validate['User']['huri_hira_sei'] ? $validate['User']['huri_hira_sei'] : '';
+            $huri_hira_mei = $validate['User']['huri_hira_mei'] ? $validate['User']['huri_hira_mei'] : '';
+            $huri_kata_sei = $validate['User']['huri_kata_sei'] ? $validate['User']['huri_kata_sei'] : '';
+            $huri_kata_mei = $validate['User']['huri_kata_mei'] ? $validate['User']['huri_kata_mei'] : '';
+            $name_sei = $validate['User']['name_sei'] ? $validate['User']['name_sei'] : '';
+            $name_mei = $validate['User']['name_mei'] ? $validate['User']['name_mei'] : '';
             $username   = $validate['User']['username'] ? $validate['User']['username'] : '';
             $email      = $validate['User']['email'] ? $validate['User']['email'] : '';
             $zipcode    = $validate['User']['zipcode'] ? $validate['User']['zipcode'] : '';
@@ -15,6 +21,12 @@
             $role       = $validate['User']['role'] ? $validate['User']['role'] : '';
         } elseif (isset($user)) { //セッションデータがある場合。(確認から修正した場合)
             $image_name = $user['User']['profile_image']['name'] ? $user['User']['profile_image']['name'] : '未選択';
+            $huri_hira_sei = $user['User']['huri_hira_sei'] ? $user['User']['huri_hira_sei'] : '';
+            $huri_hira_mei = $user['User']['huri_hira_mei'] ? $user['User']['huri_hira_mei'] : '';
+            $huri_kata_sei = $user['User']['huri_kata_sei'] ? $user['User']['huri_kata_sei'] : '';
+            $huri_kata_mei = $user['User']['huri_kata_mei'] ? $user['User']['huri_kata_mei'] : '';
+            $name_sei = $user['User']['name_sei'] ? $user['User']['name_sei'] : '';
+            $name_mei = $user['User']['name_mei'] ? $user['User']['name_mei'] : '';
             $username   = $user['User']['username'] ? $user['User']['username'] : '';
             $email      = $user['User']['email'] ? $user['User']['email'] : '';
             $zipcode    = $user['User']['zipcode'] ? $user['User']['zipcode'] : '';
@@ -23,6 +35,12 @@
             $role       = $user['User']['role'] ? $user['User']['role'] : '';
         } else { //そのほか
             $image_name = '未選択';
+            $huri_hira_sei = '';
+            $huri_hira_mei = '';
+            $huri_kata_sei = '';
+            $huri_kata_mei = '';
+            $name_sei = '';
+            $name_mei = '';
             $username   = '';
             $email      = '';
             $zipcode    = '';
@@ -53,13 +71,13 @@
                 性
                 <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $huri_hira_sei)); ?>
                 名
                 <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $huri_hira_mei)); ?>
             </div>
         </div>
         <div class="form-group">
@@ -68,28 +86,28 @@
                 性
                 <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $huri_kata_sei)); ?>
                 名
                 <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $huri_kata_mei)); ?>
             </div>
         </div>
         <div class="form-group">
             <h5><?php echo __('Name'); ?></h5>
             <div class="form-group form-inline">
                 性
-                <?php echo $this->Form->input('huri_kanzi_sei', array('label' => false,
+                <?php echo $this->Form->input('name_sei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $name_sei)); ?>
                 名
-                <?php echo $this->Form->input('huri_kanzi_mei', array('label' => false,
+                <?php echo $this->Form->input('name_mei', array('label' => false,
                                                                 'class' => 'form-control',
-                                                                'size'  =>  19,
-                                                                'value' => $username)); ?>
+                                                                'size'  =>  26,
+                                                                'value' => $name_mei)); ?>
             </div>
         </div>
         <div class="form-group">
@@ -177,4 +195,5 @@
             'class' => 'btn btn-outline-primary btn-block'
         )); ?>
     </div>
+    <?php echo $this->Form->end(); ?>
 </div>

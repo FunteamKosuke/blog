@@ -90,9 +90,11 @@
         // チェックボックスでタグを設定する。
         $save_data['Tag'] = $this->request->data['Tag'];
         // 画像を投稿する。
-        if ($this->request->data['PostImage']['files'][0]['name']) { //空のimageが作成されるのを防ぐ
+        // $this->log($this->request->data);
+        // $this->log($this);
+        if ($this->request->data['Image']['files'][0]['name']) { //空のimageが作成されるのを防ぐ
             $save_data['Image'] = array();
-            foreach ($this->request->data['PostImage']['files'] as $file) {
+            foreach ($this->request->data['Image']['files'] as $file) {
                 $image_data['image'] = $file;
                 $save_data['Image'][] = $image_data;
             }
@@ -111,7 +113,6 @@
         if ($this->request->data['Thumbnail']['thumbnail']['name']) { //空のthmbnailが作成されるのを防ぐ
             $save_data['Thumbnail']['thumbnail'] = $this->request->data['Thumbnail']['thumbnail'];
         }
-        $this->log($this->request->data);
 
         // 公開か非公開を表すフラグを設定する。1:公開 0:非公開
         $save_data['Post']['publish_flg'] = $this->request->data['publish_flg'];

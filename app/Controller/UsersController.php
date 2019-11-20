@@ -170,7 +170,7 @@
                         $user = $this->Session->consume('User');
                         // 画像が選択されているときだけ名前が設定されているので、画像が保存されている場所を設定する。
                         $upload_file = '';
-                        if (((!('' === $user['User']['profile_image']['name']))||(isset($user['User']['profile_image']['name'])))) {
+                        if (isset($user['User']['profile_image']['name'])) {
                             $upload_file = WWW_ROOT . 'files/profile/' . $user['User']['profile_image']['name'];
                             // 一時ファイルはすでに削除されているので、確認の処理で保存した場所をupload pluginに渡すパスとする。
                             $user['User']['profile_image']['tmp_name'] = $upload_file;
@@ -178,10 +178,12 @@
                         $this->User->create();
                         $user['User']['provider'] = 'normal';
                         if ($this->User->save($user)) {
-                            // 保存に成功したので、画像が選択されている場合は削除する。
-                            if (isset($upload_file)) {
-                                unlink($upload_file);
-                            }
+                            // 保存に成功したので、画像が選択されている場合は削除しないといけないと思ったが
+                            // uploadプラグインの仕様として、
+                            // 保存されたファイルは勝手に削除される様になっている。
+                            // この記述は一応残しておく。
+
+
                             // ユーザーIDをそのまま渡すとユーザーの人数を把握されてしまうので、別の数値にする。
                             $hash_user_id = $this->User->id + self::HASH_USER_ID;
                             $token = $this->User->getActivationToken();
@@ -213,6 +215,7 @@
                         $this->Flash->error(
                           __('User registration failed.')
                         );
+                        break;
                 } //switch end
             }
         }

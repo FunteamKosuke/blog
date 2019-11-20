@@ -9,7 +9,8 @@ echo $this->Form->create( 'Image', array( 'type'=>'file', 'enctype' => 'multipar
             echo $this->Form->input( 'files.', array(   'type' => 'file',
                                                         'multiple',
                                                         'id' => 'label-file-image',
-                                                        'class' => 'form-control-file label-file-name'));
+                                                        'class' => 'form-control-file label-file-name',
+                                                        'secure' => false));
         ?>
     </label>
     <div class="form-group">

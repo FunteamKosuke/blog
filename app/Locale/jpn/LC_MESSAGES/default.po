@@ -252,15 +252,6 @@ msgstr "フリガナ"
 msgid "Huri Hira"
 msgstr "ふりがな"
 
-msgid "Please enter your hiragana"
-msgstr "ひらがなを入力してください。"
-
-msgid "Please enter your katakana"
-msgstr "カタカナを入力してください。"
-
-msgid "Please enter your kanzi"
-msgstr "漢字を入力してください。"
-
 
 #########コントローラーのメッセージの翻訳##########
 
@@ -459,6 +450,14 @@ msgstr "メールアドレスを入力してください。"
 msgid "It does not match the confirmation password."
 msgstr "確認用のパスワードと一致していません。"
 
+msgid "Please enter your hiragana"
+msgstr "ひらがなを入力してください。"
+
+msgid "Please enter your katakana"
+msgstr "カタカナを入力してください。"
+
+msgid "Please enter your kanzi"
+msgstr "日本語を入力してください。"
 
 ### 共通 ###
 

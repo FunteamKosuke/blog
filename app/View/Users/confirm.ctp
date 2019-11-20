@@ -3,6 +3,16 @@
 <h3><?php echo __('Profile Image'); ?></h3>
 <?php $user = $this->Session->read('User'); ?>
 <p><?php echo h($user['User']['profile_image']['name']); ?></p>
+
+
+<h3><?php echo __('Huri Hira'); ?></h3>
+<p><?php echo h($user['User']['huri_hira_sei'].' '.$user['User']['huri_hira_mei']); ?></p>
+<h3><?php echo __('Huri Kata'); ?></h3>
+<p><?php echo h($user['User']['huri_kata_sei'].' '.$user['User']['huri_kata_mei']); ?></p>
+<h3><?php echo __('Name'); ?></h3>
+<p><?php echo h($user['User']['name_sei'].' '.$user['User']['name_mei']); ?></p>
+<h3><?php echo __('User Name'); ?></h3>
+<p><?php echo h($user['User']['username']); ?></p>
 <h3><?php echo __('E-Mail'); ?></h3>
 <p><?php echo h($user['User']['email']); ?></p>
 <h3><?php echo __('Zipcode'); ?></h3>
@@ -36,3 +46,4 @@
         </div>
     </div>
 </div>
+<?php echo $this->Form->end(); ?>
