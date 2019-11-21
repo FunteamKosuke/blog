@@ -25,6 +25,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $cakeDescription ?>:
 		<?php echo $this->fetch('title'); ?>
 	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php
 		echo $this->Html->meta('icon');
 

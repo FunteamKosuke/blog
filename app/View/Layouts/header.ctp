@@ -174,7 +174,7 @@
                               echo $this->Html->image($profile_image_path, array(
                                                                               'width'=>'60',
                                                                               'height'=>'60',
-                                                                              'alt'=>'検索フォームのアイコンです。'));
+                                                                              'alt'=>'ログインユーザーのアイコンです。'));
                           } else {
                               echo __('My Page');
                           } ?>
@@ -187,3 +187,14 @@
     </div><!-- .row -->
   </div><!-- contener -->
 </nav>
+
+<!-- モバイル用のヘッダー -->
+<div id="mobile-header" class="navbar navbar-expand-sm navbar-info bg-info sticky-top">
+    <div id="menu-icon">
+        <span>menu</span>
+        <?php $menu_icon_path = "../img/menu-icon.png" ?>
+        <?php echo $this->Html->image($menu_icon_path,array('width'=>'50',
+                                                        'height'=>'50',
+                                                        'alt'=>'メニュー用のアイコンです。')); ?>
+    </div>
+</div>

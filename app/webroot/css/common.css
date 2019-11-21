@@ -140,6 +140,12 @@ body{
   background-color: #000;
 }
 
+#mobile-header{
+    display: none;
+    height: 60px;
+    text-align: center;
+}
+
 
 /* コンテンツ部分のスタイルを適用する */
 #content{
@@ -609,4 +615,25 @@ marginが入るようになっているので、0に設定する。
 
 .list-design-husen-yellow a{
     color: #fff;
+}
+
+/*** iPhone6/7/8/X用(width=375px)のデザインを適用する ***/
+
+@media (max-width: 375px){
+    /* フッターでしているbootstrapの適用を変更する。 */
+    #footer .col-6{
+        max-width: 100%;
+        width: 100%;
+        flex: 0 0 100%;
+    }
+}
+
+/* ヘッダーの画面縮小デザイン レイアウトが崩れるのが1185なので修正する。 */
+@media (max-width: 1185px){
+    #header{
+        display: none;
+    }
+    #mobile-header{
+        display: block;
+    }
 }

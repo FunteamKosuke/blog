@@ -2,7 +2,7 @@
     <div class="blog-middle">
         <div class="container-fluid">
             <div class="row">
-                <div class="list-design-husen-yellow col-6">
+                <div id="category" class="list-design-husen-yellow col-6">
                     <h1><?php echo __('Category'); ?></h1>
                     <ul>
                         <?php foreach ($footer_categories as $category): ?>
@@ -15,7 +15,7 @@
                     </ul>
 
                 </div>
-                <div class="list-design-husen-yellow col-6">
+                <div id="tag" class="list-design-husen-yellow col-6">
                     <h1><?php echo __('Tag'); ?></h1>
                     <ul>
                         <?php foreach ($footer_tags as $tag): ?>
