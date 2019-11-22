@@ -143,9 +143,62 @@ body{
 #mobile-header{
     display: none;
     height: 60px;
-    text-align: center;
+    text-align: right;
 }
 
+#mobile-header-body{
+    /* display: none; */
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 100%;
+    z-index: 999999;
+    width: 100%;
+    background-color: #dcdcdc;
+    overflow: scroll;
+}
+
+#mobile-header-body ul{
+    list-style: none;
+}
+
+#mobile-header-body ul li ul li{
+    border-bottom: solid 1px #000;
+}
+
+#mobile-header-body #mobile-menu{
+    width: 94%;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+#mobile-header-body #mobile-search{
+    width: 94%;
+    margin-top: 30px;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+#mobile-header-body #mobile-login-user{
+    width: 94%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+#mobile-header-body #mobile-close{
+    width: 94%;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+#mobile-header-body #mobile-login-user img{
+    display: block;
+    border: solid 3px #ff7f50;
+    object-fit: contain;
+    background-color: #ff7f50;
+}
 
 /* コンテンツ部分のスタイルを適用する */
 #content{
@@ -442,10 +495,10 @@ div#msg-modal div.container {
   width: 912px;
 }
 
-@media (max-width: 912px){
+@media (max-width: 925px){
   .blog-middle{
-    margin: 0 0 0 0;
-    width: 100%;
+    margin: 0 0 2% 2%;
+    width: 96%;
   }
 }
 
@@ -594,6 +647,11 @@ marginが入るようになっているので、0に設定する。
   list-style-type: none!important;/*ポチ消す*/
 }
 
+.list-design-husen-blue a{
+    display: block;
+    text-decoration: none;
+}
+
 .list-design-husen-yellow ul, .list-design-husen-yellow ol {
   padding: 0;
   position: relative;
@@ -615,11 +673,13 @@ marginが入るようになっているので、0に設定する。
 
 .list-design-husen-yellow a{
     color: #fff;
+    display: block;
+    text-decoration: none;
 }
 
 /*** iPhone6/7/8/X用(width=375px)のデザインを適用する ***/
 
-@media (max-width: 375px){
+@media (max-width: 750px){
     /* フッターでしているbootstrapの適用を変更する。 */
     #footer .col-6{
         max-width: 100%;
@@ -635,5 +695,12 @@ marginが入るようになっているので、0に設定する。
     }
     #mobile-header{
         display: block;
+    }
+}
+
+/* ユーザー登録画面のモバイルデザイン */
+@media (max-width: 620px){
+    #users__add{
+        width: 100%;
     }
 }

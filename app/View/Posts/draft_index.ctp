@@ -2,7 +2,7 @@
     <h1><?php echo __('Draft Index'); ?></h1>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-5">
+            <div class="col-12">
                 <table class="table">
                   <thead>
                     <tr>
@@ -55,10 +55,6 @@
                   <?php echo $this->Paginator->next(); ?>
                 </div><!-- paginate -->
           </div>
-        <!-- 下書き一覧とサイドバーの間を開ける -->
-        <div class="col-1">
-        </div>
-        <?php echo $this->element('side-bar'); ?>
     </div><!-- row -->
     </div><!-- contener -->
 </div>

@@ -68,46 +68,58 @@
         <div class="form-group">
             <h5><?php echo __('Huri Hira'); ?></h5>
             <div class="form-group form-inline">
-                性
-                <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $huri_hira_sei)); ?>
-                名
-                <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $huri_hira_mei)); ?>
+                <div class="form-inline">
+                    性
+                    <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $huri_hira_sei)); ?>
+                </div>
+                <div class="form-inline">
+                    名
+                    <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $huri_hira_mei)); ?>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <h5><?php echo __('Huri Kata'); ?></h5>
             <div class="form-group form-inline">
-                性
-                <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $huri_kata_sei)); ?>
-                名
-                <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $huri_kata_mei)); ?>
+                <div class="form-inline">
+                    性
+                    <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $huri_kata_sei)); ?>
+                </div>
+                <div class="form-inline">
+                    名
+                    <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $huri_kata_mei)); ?>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <h5><?php echo __('Name'); ?></h5>
             <div class="form-group form-inline">
-                性
-                <?php echo $this->Form->input('name_sei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $name_sei)); ?>
-                名
-                <?php echo $this->Form->input('name_mei', array('label' => false,
-                                                                'class' => 'form-control',
-                                                                'size'  =>  26,
-                                                                'value' => $name_mei)); ?>
+                <div class="form-inline">
+                    性
+                    <?php echo $this->Form->input('name_sei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $name_sei)); ?>
+                </div>
+                <div class="form-inline">
+                    名
+                    <?php echo $this->Form->input('name_mei', array('label' => false,
+                                                                    'class' => 'form-control',
+                                                                    'size'  =>  26,
+                                                                    'value' => $name_mei)); ?>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -153,7 +165,7 @@
                                                             'class' => 'form-control',
                                                             'value' => $address)); ?>
         </div>
-        <div class="container-fluid">
+        <div id="select-address-elem"class="container-fluid">
             <div class="form-group row">
                 <!-- 地方選択ボックス -->
                 <select id="region-select" class='form-control col-5'></select>

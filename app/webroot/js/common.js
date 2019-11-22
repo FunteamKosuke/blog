@@ -4,6 +4,8 @@ $(function(){
     $('#search img').on('click',function(){
         $('.search_toggle').toggle();
     });
+    // モバイル用のメニューを表示する。
+    mobileMenuDisplay();
 
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
@@ -414,6 +416,47 @@ $(function(){
     sendContact();
 
     /***** 共通で使用する *****/
+    // モバイル用のデザインを適用する。
+    // 画面リサイズ時にデザインを変更する。
+    $(window).resize(function(){
+        if($(window).width() < 750){
+            // 画面サイズが750px以下になったらbootstrapのflexデザインを削除する。
+            flexDeleteSidebar('post__view');
+            flexDeleteSidebar('post__index');
+            flexDeleteSidebar('post__find');
+            flexDeleteSlAddress('users__add');
+        }
+    });
+
+    // 画面読み込み時にモバイルデザインを適用する。
+    if($(window).width() < 750){
+        // 画面サイズが750px以下になったらbootstrapのflexデザインを削除する。
+        flexDeleteSidebar('post__view');
+        flexDeleteSidebar('post__index');
+        flexDeleteSidebar('post__find');
+        flexDeleteSlAddress('users__add');
+    }
+
+    $(window).resize(function(){
+        if($(window).width() > 749){
+            // 画面サイズが750px以下になったらbootstrapのflexデザインを削除する。
+            flexAddSidebar('post__view');
+            flexAddSidebar('post__index');
+            flexAddSidebar('post__find');
+            flexAddSlAddress('users__add');
+        }
+    });
+
+    // 画面読み込み時にモバイルデザインを適用する。
+    if($(window).width() > 749){
+        // 画面サイズが750px以下になったらbootstrapのflexデザインを削除する。
+        flexAddSidebar('post__view');
+        flexAddSidebar('post__index');
+        flexAddSidebar('post__find');
+        flexAddSlAddress('users__add');
+    }
+
+
     // 選択したファイルのファイル名をinputタグに入力する。
     $('.label-file-name').on('change',function(){
         var file_str = "";
@@ -584,4 +627,60 @@ $(function(){
         return false;
         });
     }
+
+    function mobileMenuDisplay(){
+        $('#mobile-header #menu-icon img').click(function(){
+            $("#mobile-header-body")
+            .show()
+            .animate({
+                "left": "0%"
+            });
+
+            $("#mobile-header-body #mobile-close").click(function(){
+                $("#mobile-header-body").animate({
+                    "left": "100%"
+                });
+                // 変な動作になる可能性があるから消すのはやめる。
+            //     // すぐにメニューを非表示にしちゃうとスライドしてメニューが消えたようにできないので、
+            //     // ３秒後に非表示にする。
+            //     setTimeout(function(){
+            //          $("#mobile-header-body").hide();
+            //     },5000);
+            });
+        });
+    }
+    function mobileDesign(){
+        alert('gfhjfg');
+
+    }
+
+    function flexDeleteSidebar(view_target){
+        $('#'+view_target).find('.col-1').addClass('col-1bad').removeClass('col-1');
+        $('#'+view_target).find('#side-bar').removeClass('col-4').css({width: '100%'});
+        $('#'+view_target).find('.col-7').addClass('col-7bad').removeClass('col-7');
+    }
+
+    function flexAddSidebar(view_target){
+        $('#'+view_target).find('.col-1bad').addClass('col-1').removeClass('col-1bad');
+        $('#'+view_target).find('#side-bar').addClass('col-4');
+        $('#'+view_target).find('.col-7bad').addClass('col-7').removeClass('col-7bad');
+    }
+
+    function flexDeleteSlAddress(view_target){
+        $('#'+view_target).find('#region-select').removeClass('col-5');
+        $('#'+view_target).find('#pref-select').removeClass('col-5');
+        $('#'+view_target).find('#city-select').removeClass('col-5');
+        $('#'+view_target).find('#town-select').removeClass('col-5');
+        $('#'+view_target).find('.col-1').addClass('col-1bad').removeClass('col-1');
+    }
+
+    function flexAddSlAddress(view_target){
+        $('#'+view_target).find('#select-address-elem').find('#region-select').addClass('col-5');
+        $('#'+view_target).find('#select-address-elem').find('#pref-select').addClass('col-5');
+        $('#'+view_target).find('#select-address-elem').find('#city-select').addClass('col-5');
+        $('#'+view_target).find('#select-address-elem').find('#town-select').addClass('col-5');
+        $('#'+view_target).find('#select-address-elem').find('.col-1bad').addClass('col-1').removeClass('col-1bad');
+    }
+
+
 });

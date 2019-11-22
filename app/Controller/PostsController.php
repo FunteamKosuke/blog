@@ -11,6 +11,7 @@
     public function beforeFilter(){
         parent::beforeFilter();
         $this->Auth->allow('view', 'index', 'postDateRelatedPost', 'find');
+        // $this->Security->unlockedActions = array('find');
     }
 
     public function index() {
@@ -267,7 +268,11 @@
           'limit' => parent::POST_LIST_LIMIT, // 検索結果を４件ごとに表示する。
       );
       $this->set('posts', $this->paginate()); // paginate機能を利用して表示する。
+
+      $this->set('keyword', $this->request->data['Post']['keyword']);
     }
+
+
 
     /********** 認証関連 **********/
 

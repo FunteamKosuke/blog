@@ -109,7 +109,7 @@
     // Searchプラグインを使用するのに必要な設定
 
     public $filterArgs = array(
-        array('name' => 'keyword', 'type' => 'subquery', 'method' => 'searchTagOr', 'field' => 'Post.id'),
+        array('name' => 'keyword', 'type' => 'subquery', 'method' => 'search', 'field' => 'Post.id'),
         // 'category_id' => array('type' => 'value'),
         // Tag OR検索
         // array('name' => 'tag_id', 'type' => 'subquery', 'method' => 'searchTagOr', 'field' => 'Post.id'),
@@ -120,22 +120,23 @@
         $this->Behaviors->attach('Containable', array('autoFields' => false));
         $this->Behaviors->attach('Search.Searchable');
 
-        $this->PostsTag->Behaviors->attach('Containable', array('autoFields' => false));
-        $this->PostsTag->Behaviors->attach('Search.Searchable');
+        // $this->PostsTag->Behaviors->attach('Containable', array('autoFields' => false));
+        // $this->PostsTag->Behaviors->attach('Search.Searchable');
 
         $this->log($data['keyword']);
 
         $query = $this->getQuery('all', array(
   			'conditions' => array(
-  				'title' => $data['keyword']
-  			)
+  				'title LIKE' => "%".$data['keyword']."%"
+  			),
+            'fields' => array('Post.id'),
   		));
 
-        $this->log($this->find('all', array(
-  			'conditions' => array(
-  				'title' => $data['keyword']
-  			)
-  		)));
+        // $this->log($this->find('all', array(
+  		// 	'conditions' => array(
+  		// 		'title' => $data['keyword']
+  		// 	)
+  		// )));
         $this->log($query);
         return $query;
     }

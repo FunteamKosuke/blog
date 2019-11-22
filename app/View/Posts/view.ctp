@@ -68,36 +68,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <!-- 画像を削除する。 -->
-                        <div class="image-delete col-6">
-                            <?php
-                                echo $this->Form->postLink(
-                                    __('Delete Image'),
-                                    array('controller' => 'images',
-                                          'action' => 'delete',
-                                          $image['id'],
-                                          '?' => array('post_id' => $post['Post']['id'],
-                                                        'redirect_view' => 'view')),
-                                    array('confirm' => 'Are you sure?',
-                                          'class' => 'btn emphasis-color-low btn-block')
-                                ); ?>
-                        </div>
-
-                        <!-- 画像を編集する。 -->
-                        <div class="image-edit col-6">
-                            <?php // 画像を差し替えるリンク
-                            echo $this->Html->link(
-                                __('Edit Image'),
-                                array('controller' => 'images',
-                                      'action' => 'edit',
-                                      $image['id'],
-                                      '?' => array('post_id' => $post['Post']['id'],
-                                                    'redirect_view' => 'view')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
-                                array('class' => 'btn emphasis-color-normal btn-block' )
-                            ); ?>
-                        </div>
-                    </div>
                 </div>
           </div>
         <?php } ?>
@@ -109,13 +79,6 @@
                 <
             </div>
         </div>
-        <!-- 記事に画像を投稿するリンクを作成する。 -->
-        <p><?php echo $this->Html->link(__('Add Image'), array('controller' => 'Images',
-                                                      'action' => 'upload',
-                                                      '?' => array('post_id' => $post['Post']['id'],
-                                                                    'redirect_view' => 'view')),
-                                                  array('class' => 'btn emphasis-color-high font-white btn-block')); ?></p>
-
         <!-- 次の記事のリンク -->
         <div id="post-next">
             <?php if (isset($next_id)) {
