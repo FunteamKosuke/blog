@@ -5,10 +5,9 @@
         public function beforeFilter(){
     		parent::beforeFilter();
     		$this->Auth->allow('search','getSelectElem');
-            $this->Security->unlockedActions = array('search',
-                                                    'getSelectElem',
-                                                    'csv_import',
-                                                    'csv_update');
+            // $this->Security->unlockedActions = array('search',
+            //                                         'getSelectElem'
+            //                                     );
     	}
 
         // csvインポート用

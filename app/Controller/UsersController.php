@@ -32,7 +32,7 @@
                                 'loginTwitter',
                                 'callbackTwitter',
                                 'temp_complete');
-            $this->Security->unlockedActions = array('sendMsgAjax');
+            // $this->Security->unlockedActions = array('sendMsgAjax');
         }
 
         public function index() {
@@ -167,7 +167,7 @@
                         break;
                     case 'exec':
                         // 保存すると同時にセッション情報を削除する。
-                        $user = $this->Session->consume('User');
+                        $user = $this->Session->read('User');
                         // 画像が選択されているときだけ名前が設定されているので、画像が保存されている場所を設定する。
                         $upload_file = '';
                         if (isset($user['User']['profile_image']['name'])) {
@@ -221,7 +221,15 @@
         }
         // 仮登録完了画面
         public function temp_complete(){
-
+            // セッション情報がない場合は、完了画面を表示せず、topページを表示する。
+            // reloadで完了画面を何度も表示するのを防ぐ意図もある。
+            // グーグルアナリティクス的に間違った評価につながってしまう可能性があるため。
+            $user = $this->Session->read('User');
+            if (!isset($user)) {
+                return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+            }
+            // ユーザーのセッション情報のみ削除する。
+            $this->Session->delete('User');
         }
 
         // 本登録処理を実施する。

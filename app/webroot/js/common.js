@@ -63,13 +63,15 @@ $(function(){
     // 選択された都道府県に関連する市区町村の選択ボックスを作成する。
     $('#pref-select').change(function(){
         if (!('選択してください' == $('#pref-select option:selected').text())) {
+            console.log($('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val());
             $.ajax({
                 type: "POST",
                 url: "../addresses/getSelectElem",
                 data: {
                     "distinct_column": 'city_kannzi',
                     "get_column": 'prefectures_kannzi',
-                    "get_data": $('#pref-select option:selected').text()
+                    "get_data": $('#pref-select option:selected').text(),
+                    'data[_Token][key]': $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val()
                 },
                 success: function(json_search_result){
                     var search_result = $.parseJSON(json_search_result);
@@ -95,13 +97,15 @@ $(function(){
     // 選択された市区町村に関連する町域の選択ボックスを作成する。
     $('#city-select').change(function(){
         if (!('選択してください' == $('#city-select option:selected').text())) {
+            alert($('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val());
             $.ajax({
                 type: "POST",
                 url: "../addresses/getSelectElem",
                 data: {
                     "distinct_column": 'town_area_kannzi',
                     "get_column": 'city_kannzi',
-                    "get_data": $('#city-select option:selected').text()
+                    "get_data": $('#city-select option:selected').text(),
+                    'data[_Token][key]': $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val()
                 },
                 success: function(json_search_result){
                     var search_result = $.parseJSON(json_search_result);

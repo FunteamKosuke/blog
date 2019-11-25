@@ -29,8 +29,7 @@
                         $this->render('add');
                         break;
                     case 'exec':
-                        // 保存すると同時にセッション情報を削除する。
-                        if ($this->Contact->save($this->Session->consume('Contact'))) {
+                        if ($this->Contact->save($this->Session->read('Contact'))) {
                             $this->Flash->success(__('Your inquiry has been sent.'));
                             return $this->redirect(array('action' => 'thanks'));
                         }
@@ -50,7 +49,15 @@
 
         // お問い合わせありがとうページ
         public function thanks(){
-
+            // セッション情報がない場合は、完了画面を表示せず、topページを表示する。
+            // reloadで完了画面を何度も表示するのを防ぐ意図もある。
+            // グーグルアナリティクス的に間違った評価につながってしまう可能性があるため。
+            $contact = $this->Session->read('Contact');
+            if (!isset($contact)) {
+                return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+            }
+            // お問い合わせのセッション情報のみ削除する。
+            $this->Session->delete('Contact');
         }
 
         public function sendContact($contact_id = null){

@@ -6,47 +6,47 @@
         <?php
         $user = $this->Session->read('User');
         if (isset($validate)) { //バリデーションエラーがあった場合
-            $image_name = '未選択'; //画像の名前を渡しても実データはformに渡ってないので、未選択とする。
-            $huri_hira_sei = $validate['User']['huri_hira_sei'] ? $validate['User']['huri_hira_sei'] : '';
-            $huri_hira_mei = $validate['User']['huri_hira_mei'] ? $validate['User']['huri_hira_mei'] : '';
-            $huri_kata_sei = $validate['User']['huri_kata_sei'] ? $validate['User']['huri_kata_sei'] : '';
-            $huri_kata_mei = $validate['User']['huri_kata_mei'] ? $validate['User']['huri_kata_mei'] : '';
-            $name_sei = $validate['User']['name_sei'] ? $validate['User']['name_sei'] : '';
-            $name_mei = $validate['User']['name_mei'] ? $validate['User']['name_mei'] : '';
-            $username   = $validate['User']['username'] ? $validate['User']['username'] : '';
-            $email      = $validate['User']['email'] ? $validate['User']['email'] : '';
-            $zipcode    = $validate['User']['zipcode'] ? $validate['User']['zipcode'] : '';
-            $address    = $validate['User']['address'] ? $validate['User']['address'] : '';
-            $sl_address = $validate['User']['sl_address'] ? $validate['User']['sl_address'] : '';
-            $role       = $validate['User']['role'] ? $validate['User']['role'] : '';
+            $image_name     = '未選択'; //画像の名前を渡しても実データはformに渡ってないので、未選択とする。
+            $huri_hira_sei  = $validate['User']['huri_hira_sei'] ? $validate['User']['huri_hira_sei'] : '';
+            $huri_hira_mei  = $validate['User']['huri_hira_mei'] ? $validate['User']['huri_hira_mei'] : '';
+            $huri_kata_sei  = $validate['User']['huri_kata_sei'] ? $validate['User']['huri_kata_sei'] : '';
+            $huri_kata_mei  = $validate['User']['huri_kata_mei'] ? $validate['User']['huri_kata_mei'] : '';
+            $name_sei       = $validate['User']['name_sei'] ? $validate['User']['name_sei'] : '';
+            $name_mei       = $validate['User']['name_mei'] ? $validate['User']['name_mei'] : '';
+            $username       = $validate['User']['username'] ? $validate['User']['username'] : '';
+            $email          = $validate['User']['email'] ? $validate['User']['email'] : '';
+            $zipcode        = $validate['User']['zipcode'] ? $validate['User']['zipcode'] : '';
+            $address        = $validate['User']['address'] ? $validate['User']['address'] : '';
+            $sl_address     = $validate['User']['sl_address'] ? $validate['User']['sl_address'] : '';
+            $role           = $validate['User']['role'] ? $validate['User']['role'] : '';
         } elseif (isset($user)) { //セッションデータがある場合。(確認から修正した場合)
-            $image_name = $user['User']['profile_image']['name'] ? $user['User']['profile_image']['name'] : '未選択';
-            $huri_hira_sei = $user['User']['huri_hira_sei'] ? $user['User']['huri_hira_sei'] : '';
-            $huri_hira_mei = $user['User']['huri_hira_mei'] ? $user['User']['huri_hira_mei'] : '';
-            $huri_kata_sei = $user['User']['huri_kata_sei'] ? $user['User']['huri_kata_sei'] : '';
-            $huri_kata_mei = $user['User']['huri_kata_mei'] ? $user['User']['huri_kata_mei'] : '';
-            $name_sei = $user['User']['name_sei'] ? $user['User']['name_sei'] : '';
-            $name_mei = $user['User']['name_mei'] ? $user['User']['name_mei'] : '';
-            $username   = $user['User']['username'] ? $user['User']['username'] : '';
-            $email      = $user['User']['email'] ? $user['User']['email'] : '';
-            $zipcode    = $user['User']['zipcode'] ? $user['User']['zipcode'] : '';
-            $address    = $user['User']['address'] ? $user['User']['address'] : '';
-            $sl_address = $user['User']['sl_address'] ? $user['User']['sl_address'] : '';
-            $role       = $user['User']['role'] ? $user['User']['role'] : '';
+            $image_name     = $user['User']['profile_image']['name'] ? $user['User']['profile_image']['name'] : '未選択';
+            $huri_hira_sei  = $user['User']['huri_hira_sei'] ? $user['User']['huri_hira_sei'] : '';
+            $huri_hira_mei  = $user['User']['huri_hira_mei'] ? $user['User']['huri_hira_mei'] : '';
+            $huri_kata_sei  = $user['User']['huri_kata_sei'] ? $user['User']['huri_kata_sei'] : '';
+            $huri_kata_mei  = $user['User']['huri_kata_mei'] ? $user['User']['huri_kata_mei'] : '';
+            $name_sei       = $user['User']['name_sei'] ? $user['User']['name_sei'] : '';
+            $name_mei       = $user['User']['name_mei'] ? $user['User']['name_mei'] : '';
+            $username       = $user['User']['username'] ? $user['User']['username'] : '';
+            $email          = $user['User']['email'] ? $user['User']['email'] : '';
+            $zipcode        = $user['User']['zipcode'] ? $user['User']['zipcode'] : '';
+            $address        = $user['User']['address'] ? $user['User']['address'] : '';
+            $sl_address     = $user['User']['sl_address'] ? $user['User']['sl_address'] : '';
+            $role           = $user['User']['role'] ? $user['User']['role'] : '';
         } else { //そのほか
-            $image_name = '未選択';
-            $huri_hira_sei = '';
-            $huri_hira_mei = '';
-            $huri_kata_sei = '';
-            $huri_kata_mei = '';
-            $name_sei = '';
-            $name_mei = '';
-            $username   = '';
-            $email      = '';
-            $zipcode    = '';
-            $address    = '';
-            $sl_address = '';
-            $role       = '';
+            $image_name     = '未選択';
+            $huri_hira_sei  = '';
+            $huri_hira_mei  = '';
+            $huri_kata_sei  = '';
+            $huri_kata_mei  = '';
+            $name_sei       = '';
+            $name_mei       = '';
+            $username       = '';
+            $email          = '';
+            $zipcode        = '';
+            $address        = '';
+            $sl_address     = '';
+            $role           = '';
         }
 
         ?>
