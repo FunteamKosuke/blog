@@ -13,6 +13,7 @@
 
         public function add(){
             if ($this->request->is('post')) {
+                $this->log($this->request->data);
                 $mode = $this->request->data['mode'];
                 switch ($mode) {
                     case 'confirm':

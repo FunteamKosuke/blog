@@ -140,15 +140,32 @@ $(function(){
     $('#zipcode').keyup(function() {
         // 郵便番号入力欄に7桁の数字が入力されたら検索を開始する。
         if(0 == $(this).val().search(/\d{7}/)){
+            var formdata = new FormData($("#UserAddForm")[0]);
+            formdata.append('data[_Token][key]', $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val());
+            for (let value of formdata.entries()) {
+                console.log(value);
+            }
+
+            alert($('#users__add').find('input[name="data[_Token][debug]"]').val());
             $.ajax({
                 type: "POST",
                 url: "../addresses/search",
-                data: {
-                    "zipcode": $('#zipcode').val()
+                dataType: 'json',
+                // data: formdata,
+                // processData: false,
+                // contentType: false,
+                data:
+                {
+                    "zipcode": $('#zipcode').val(),
+                    "data[_Token][key]": $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val(),
+                    "data[_Token][fields]": $('#users__add').find('input[name="data[_Token][fields]"]').val(),
+                    "data[_Token][unlocked]": $('#users__add').find('input[name="data[_Token][unlocked]"]').val(),
+                    "data[_Token][debug]": $('#users__add').find('input[name="data[_Token][debug]"]').val()
                 },
                 success: function(json_search_result){
                     //データを受け取っていれば、住所欄に入力する。
-                    var search_result = $.parseJSON(json_search_result);
+                    // var search_result = $.parseJSON(json_search_result);
+                    var search_result = json_search_result;
                     if (search_result.length > 0) {
                         //住所選択欄を最初に空にする
                         $('#address_msg').empty().hide();
@@ -319,12 +336,15 @@ $(function(){
     var ajaxHandle = null;
     $('#addresses__csv_import #csv-upload').submit(function(){
         $('#result_msg').empty();
-        var filedata = new FormData($("#addresses__csv_import #csv-upload")[0]); //選択されたファイルデータを取得する。
+        var formdata = new FormData($("#addresses__csv_import #csv-upload")[0]); //選択されたファイルデータを取得する。
+        for (let value of formdata.entries()) {
+            console.log(value);
+        }
         ajaxHandle = $.ajax({ //キャンs流処理を有効にするためにajaxのハンドルを取得する。
             type: "POST",
             url: "csv_import",
             dataType: 'json',
-            data: filedata,
+            data: formdata,
             processData: false,
             contentType: false,
             success: function(msg)
@@ -365,12 +385,12 @@ $(function(){
 
     $('#addresses__csv_update #csv-update').submit(function(){
         $('#result_msg').empty();
-        var filedata = new FormData($("#addresses__csv_update #csv-update")[0]); //選択されたファイルデータを取得する。
+        var formdata = new FormData($("#addresses__csv_update #csv-update")[0]); //選択されたファイルデータを取得する。
         ajaxHandle = $.ajax({ //キャンs流処理を有効にするためにajaxのハンドルを取得する。
             type: "POST",
             url: "csv_update",
             dataType: 'json',
-            data: filedata,
+            data: formdata,
             processData: false,
             contentType: false,
             success: function(msg)
@@ -632,30 +652,53 @@ $(function(){
         });
     }
 
+    // モバイル用のメニューを表示する
+    var display_flg = false;
     function mobileMenuDisplay(){
-        $('#mobile-header #menu-icon img').click(function(){
-            $("#mobile-header-body")
-            .show()
-            .animate({
-                "left": "0%"
-            });
+        $('#mobile-header .menu-trigger').click(function(){
+            if (!display_flg) {
+                $("#mobile-header-body")
+                .show()
+                .animate({
 
-            $("#mobile-header-body #mobile-close").click(function(){
-                $("#mobile-header-body").animate({
-                    "left": "100%"
+                    "left": ($(window).width()-$("#mobile-header-body").width())+'px'
                 });
-                // 変な動作になる可能性があるから消すのはやめる。
-            //     // すぐにメニューを非表示にしちゃうとスライドしてメニューが消えたようにできないので、
-            //     // ３秒後に非表示にする。
-            //     setTimeout(function(){
-            //          $("#mobile-header-body").hide();
-            //     },5000);
-            });
-        });
-    }
-    function mobileDesign(){
-        alert('gfhjfg');
 
+                $('#header .back-curtain')
+                .css({
+                    'width' : $(window).width(),    // ウィンドウ幅
+                    'height': $(window).height()    // 同 高さ
+                })
+                .show();
+
+                $('#mobile-header .menu-trigger').toggleClass('active');
+
+                display_flg = true;
+
+            } else {
+                $("#mobile-header-body")
+                .show()
+                .animate({
+
+                    "left": '100%'
+                });
+
+                display_flg = false;
+
+                $('#mobile-header .menu-trigger').toggleClass('active');
+
+                $('#header .back-curtain').hide();
+            }
+        });
+
+        $("#mobile-header-body #mobile-close, #header .back-curtain").click(function(){
+            $("#mobile-header-body").animate({
+                "left": "100%"
+            });
+            $('#mobile-header .menu-trigger').toggleClass('active');
+            $('.back-curtain').hide();
+            display_flg = false;
+        });
     }
 
     function flexDeleteSidebar(view_target){

@@ -300,8 +300,9 @@
         }
 
         public function search(){
-            $this->autoRender = FALSE; // 自動でviewが読み込まれるのを防ぐ
             if($this->request->is('ajax')) {
+                $this->autoRender = FALSE; // 自動でviewが読み込まれるのを防ぐ
+                $this->log($this->request->data);
                 $search_result = $this->Address->find('all', array(
                             			    'conditions'=>array(
                             			         'zipcode'=>$this->request->data['zipcode'],
@@ -309,6 +310,7 @@
                             			));
                 //別言語に渡す時はjson形式で渡さないとエラーになる。
                 return json_encode($search_result);
+                // return json_encode('hjgfhk');
             }
         }
 
