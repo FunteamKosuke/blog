@@ -270,6 +270,10 @@ body{
     border: solid 1px #E6E6E6;
 }
 
+#users__add #select-address-elem .form-group{
+    margin-bottom: 0;
+}
+
 #users__add #address-select, #users__add #address_msg{
     display: none;
 }
@@ -674,6 +678,11 @@ marginが入るようになっているので、0に設定する。
     object-fit: contain;
 }
 
+.margin-top-15{
+    margin-top: 15px;
+}
+
+/* リストを付箋風のデザインにする */
 .list-design-husen-blue ul, .list-design-husen-blue ol {
   padding: 0;
   position: relative;

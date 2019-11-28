@@ -68,14 +68,14 @@
         <div class="form-group">
             <h5><?php echo __('Huri Hira'); ?></h5>
             <div class="form-group form-inline">
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     性
                     <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $huri_hira_sei)); ?>
                 </div>
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     名
                     <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
                                                                     'class' => 'form-control',
@@ -87,14 +87,14 @@
         <div class="form-group">
             <h5><?php echo __('Huri Kata'); ?></h5>
             <div class="form-group form-inline">
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     性
                     <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $huri_kata_sei)); ?>
                 </div>
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     名
                     <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
                                                                     'class' => 'form-control',
@@ -106,14 +106,14 @@
         <div class="form-group">
             <h5><?php echo __('Name'); ?></h5>
             <div class="form-group form-inline">
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     性
                     <?php echo $this->Form->input('name_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $name_sei)); ?>
                 </div>
-                <div class="form-inline">
+                <div class="form-inline margin-top-15">
                     名
                     <?php echo $this->Form->input('name_mei', array('label' => false,
                                                                     'class' => 'form-control',
@@ -168,21 +168,21 @@
         <div id="select-address-elem"class="container-fluid">
             <div class="form-group row">
                 <!-- 地方選択ボックス -->
-                <select id="region-select" class='form-control col-5'></select>
+                <select id="region-select" class='form-control col-5 margin-top-15'></select>
                 <div class="col-1"></div>
                 <!-- 都道府県選択ボックス -->
-                <select id="pref-select" class='form-control col-5'></select>
+                <select id="pref-select" class='form-control col-5 margin-top-15'></select>
             </div>
             <div class="form-group row">
                 <!-- 市区町村選択ボックス -->
-                <select id="city-select" class='form-control col-5'></select>
+                <select id="city-select" class='form-control col-5 margin-top-15'></select>
                 <div class="col-1"></div>
                 <!-- 町域選択ボックス -->
-                <select id="town-select" class='form-control col-5'></select>
+                <select id="town-select" class='form-control col-5 margin-top-15'></select>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group margin-top-15">
             <h5><?php echo __('Select Address'); ?></h5>
             <?php echo $this->Form->input('sl_address', array('label' => false,
                                                                 'id' => 'select-address',

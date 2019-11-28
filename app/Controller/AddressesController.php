@@ -5,9 +5,9 @@
         public function beforeFilter(){
     		parent::beforeFilter();
     		$this->Auth->allow('search','getSelectElem');
-            // $this->Security->unlockedActions = array('search',
-            //                                         'getSelectElem'
-            //                                     );
+            $this->Security->unlockedActions = array('search',
+                                                    'getSelectElem'
+                                                );
     	}
 
         // csvインポート用
