@@ -198,6 +198,36 @@ body{
 
 #mobile-header-body ul li{
     margin-top: 20px;
+    position: relative;
+}
+
+#mobile-header-body ul li ul{
+    display: none;
+}
+
+#mobile-header-body ul li span::before,
+#mobile-header-body ul li span::after {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 3px;
+  border-radius: 5px;
+  background: #000;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+#mobile-header-body ul li span::after {
+  background: #000;
+  transform: translateY(-50%) rotate(90deg);
+  transition: 0.5s;
+}
+
+#mobile-header-body ul li .active::after {
+  transform: rotate(0);
+  transition: 0.5s;
 }
 
 #mobile-header-body ul li ul li{

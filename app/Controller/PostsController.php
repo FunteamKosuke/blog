@@ -11,7 +11,7 @@
     public function beforeFilter(){
         parent::beforeFilter();
         $this->Auth->allow('view', 'index', 'postDateRelatedPost', 'find');
-        // $this->Security->unlockedActions = array('find');
+        $this->Security->unlockedActions = array('find');
     }
 
     public function index() {

@@ -252,6 +252,40 @@ msgstr "フリガナ"
 msgid "Huri Hira"
 msgstr "ふりがな"
 
+msgid "User Regist"
+msgstr "ユーザー登録"
+
+msgid "Logout"
+msgstr "ログアウト"
+
+msgid "Auth Twitter"
+msgstr "Twitter認証"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "Auth Related"
+msgstr "認証関連"
+
+msgid "Auth Related"
+msgstr "認証関連"
+
+msgid "Post Related"
+msgstr "記事関連"
+
+msgid "Address Related"
+msgstr "住所関連"
+
+msgid "Contact Related"
+msgstr "お問合せ関連"
+
+msgid "Next"
+msgstr "次へ"
+
+msgid "Prev"
+msgstr "前へ"
+
+
 
 #########コントローラーのメッセージの翻訳##########
 

@@ -79,29 +79,34 @@
                 <
             </div>
         </div>
-        <!-- 次の記事のリンク -->
-        <div id="post-next">
-            <?php if (isset($next_id)) {
-                echo $this->Html->link(
-                    __('Next'),
-                    array('controller' => 'posts',
-                          'action' => 'view',
-                          $next_id),
-                    array('class' => 'btn btn-outline-primary')
-                );
-            } ?>
-        </div>
-        <!-- 前の記事のリンク -->
-        <div id="post-prev">
-            <?php if (isset($prev_id)) {
-                echo $this->Html->link(
-                    __('Prev'),
-                    array('controller' => 'posts',
-                          'action' => 'view',
-                          $prev_id),
-                    array('class' => 'btn btn-outline-primary')
-                );
-            } ?>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- 次の記事のリンク -->
+                <div id="post-next" class="col-3">
+                    <?php if (isset($next_id)) {
+                        echo $this->Html->link(
+                            __('Next'),
+                            array('controller' => 'posts',
+                                  'action' => 'view',
+                                  $next_id),
+                            array('class' => 'btn btn-outline-primary')
+                        );
+                    } ?>
+                </div>
+                <div class="col-6"></div>
+                <!-- 前の記事のリンク -->
+                <div id="post-prev" class="col-3">
+                    <?php if (isset($prev_id)) {
+                        echo $this->Html->link(
+                            __('Prev'),
+                            array('controller' => 'posts',
+                                  'action' => 'view',
+                                  $prev_id),
+                            array('class' => 'btn btn-outline-primary')
+                        );
+                    } ?>
+                </div>
+            </div>
         </div>
         <!-- 関連記事を表示する。 -->
         <div id="related_post">

@@ -7,6 +7,8 @@ $(function(){
     // モバイル用のメニューを表示する。
     mobileMenuDisplay();
 
+    mobileAcodion();
+
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
 
@@ -616,7 +618,10 @@ $(function(){
             $("#msg-modal #footer").hide();
             $("#msg-modal .cake-sql-log").hide();
             // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
-            $("#msg-modal #content").css({width: "100%"});
+            $("#msg-modal #content").css({width: "100%", margin: '0'});
+            if ($(window).width() < 500) {
+                $("#msg-modal .container").css({width: "100%"});
+            }
 
     	} else {
     		$("div#msg-modal").fadeOut(250);
@@ -729,5 +734,12 @@ $(function(){
         $('#'+view_target).find('#select-address-elem').find('.col-1bad').addClass('col-1').removeClass('col-1bad');
     }
 
+    // モバイルメニューをアコーディオン表示できるようにする。
+    function mobileAcodion(){
+        $('#mobile-header-body ul li').click(function() {
+            $(this).find('span').toggleClass('active');
+            $(this).find('ul').slideToggle();
+        });
+    }
 
 });

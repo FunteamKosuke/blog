@@ -4,29 +4,29 @@
         <div class="row">
           <div id="menu" class="col-5">
             <ul class="navbar-nav">
-              <li class="nav-item"><?php echo $this->Html->link('Home', array('controller' => 'posts',
+              <li class="nav-item"><?php echo $this->Html->link(__('Home'), array('controller' => 'posts',
                                                             'action' => 'index',
                                                             'class' => 'nav-link')); ?></li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  認証操作
+                  <?php echo __('Auth Related'); ?>
                 </a>
                 <div class="dropdown-menu">
                   <?php
                     echo $this->Html->link(
-                        'ユーザー登録',
+                        __('User Regist'),
                         array('controller' => 'users',
                               'action' => 'add'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        'ログイン',
+                        __('Login'),
                         array('controller' => 'users',
                               'action' => 'login'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        'ログアウト',
+                        __('Logout'),
                         array('controller' => 'users',
                               'action' => 'logout'),
                         array('class' => 'dropdown-item')
@@ -38,7 +38,7 @@
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        __('Login Twitter'),
+                        __('Auth Twitter'),
                         array('controller' => 'users',
                               'action' => 'loginTwitter'),
                         array('class' => 'dropdown-item')
@@ -48,30 +48,30 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  記事操作
+                  <?php echo __('Post Related'); ?>
                 </a>
                 <div class="dropdown-menu">
                   <?php
                     echo $this->Html->link(
-                        '記事追加',
+                        __('Add Post'),
                         array('controller' => 'posts',
                               'action' => 'add'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        'カテゴリ追加',
+                        __('Add Category'),
                         array('controller' => 'categories',
                               'action' => 'add'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        'タグ追加',
+                        __('Add Tag'),
                         array('controller' => 'tags',
                               'action' => 'add'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        '下書き一覧',
+                        __('Draft Index'),
                         array('controller' => 'posts',
                               'action' => 'draftIndex'),
                         array('class' => 'dropdown-item')
@@ -81,50 +81,38 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  住所操作
+                  <?php echo __('Address Related'); ?>
                 </a>
                 <div class="dropdown-menu">
                   <?php
                     echo $this->Html->link(
-                        'csvファイルアップロード',
+                        __('Import Address'),
                         array('controller' => 'addresses',
                               'action' => 'csv_import'),
                         array('class' => 'dropdown-item')
                     );
                     echo $this->Html->link(
-                        'csvファイルアップデート',
+                        __('Update Address'),
                         array('controller' => 'addresses',
                               'action' => 'csv_update'),
                         array('class' => 'dropdown-item')
                     );
-                    // echo $this->Html->link(
-                    //     'csvインポート',
-                    //     array('controller' => 'zipcodes',
-                    //           'action' => 'csv_import'),
-                    //     array('class' => 'dropdown-item')
-                    // );
-                    // echo $this->Html->link(
-                    //     '住所情報',
-                    //     array('controller' => 'zipcodes',
-                    //           'action' => 'zip_info'),
-                    //     array('class' => 'dropdown-item')
-                    // );
                   ?>
                 </div>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  お問合せ関連
+                  <?php echo __('Contact Related'); ?>
                 </a>
                 <div class="dropdown-menu">
                   <?php
                     echo $this->Html->link(
-                      'お問い合わせ',
+                      __('Contact Us'),
                       array('controller' => 'contacts',
                             'action' => 'add')
                     );
                     echo $this->Html->link(
-                        'お問い合わせ一覧',
+                        __('Contact Index'),
                         array('controller' => 'contacts',
                               'action' => 'index'),
                         array('class' => 'dropdown-item')
@@ -205,10 +193,10 @@
         <!-- メニュー一覧 -->
         <div id="mobile-menu">
             <ul>
-                <li><?php echo $this->Html->link('Home', array('controller' => 'posts',
+                <li><?php echo $this->Html->link(__('Home'), array('controller' => 'posts',
                                                               'action' => 'index')); ?></li>
                 <li>
-                    認証操作
+                    <span><?php echo __('Auth Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                             __('User Regist'),
@@ -231,14 +219,14 @@
                                   'action' => 'index')
                         ); ?></li>
                         <li><?php echo $this->Html->link(
-                            __('Login Twitter'),
+                            __('Auth Twitter'),
                             array('controller' => 'users',
                                   'action' => 'loginTwitter')
                         ); ?></li>
                     </ul>
                 </li>
                 <li>
-                    記事操作
+                    <span><?php echo __('Post Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                             __('Add Post'),
@@ -263,26 +251,26 @@
                     </ul>
                 </li>
                 <li>
-                    住所操作
+                    <span><?php echo __('Address Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
-                            __('CSV Upload'),
+                            __('Import Address'),
                             array('controller' => 'addresses',
                                   'action' => 'csv_import')
                         );
                          ?></li>
                          <li><?php echo $this->Html->link(
-                             __('CSV Update'),
+                             __('Update Address'),
                              array('controller' => 'addresses',
                                    'action' => 'csv_update')
                          ); ?></li>
                     </ul>
                 </li>
                 <li>
-                    お問合せ関連
+                    <span><?php echo __('Contact Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
-                          __('Contact'),
+                          __('Contact Us'),
                           array('controller' => 'contacts',
                                 'action' => 'add')
                         );
