@@ -52,15 +52,17 @@
         ?>
         <div class="form-group">
             <h5><?php echo __('Add Profile Image'); ?></h5>
-            <label class="label-file btn btn-outline-primary" for="label-file-profile-image">
-            <?php echo __('Select Image File'); ?>
-            <?php /// サムネイルを設定する。
-            echo $this->Form->input('profile_image', array(
-                                                                'type' => 'file',
-                                                                'id' => 'label-file-profile-image',
-                                                                'class' => 'form-control-file label-file-name',
-                                                                'error' => false)); ?>
-            </label>
+            <div class="mobile-align-button">
+                <label class="label-file btn btn-outline-primary" for="label-file-profile-image">
+                <?php echo __('Select Image File'); ?>
+                <?php /// サムネイルを設定する。
+                echo $this->Form->input('profile_image', array(
+                                                                    'type' => 'file',
+                                                                    'id' => 'label-file-profile-image',
+                                                                    'class' => 'form-control-file label-file-name',
+                                                                    'error' => false)); ?>
+                </label>
+            </div>
             <div class="form-group">
                 <input type="text" id="file-name-profile-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo $image_name; ?>">
             </div>

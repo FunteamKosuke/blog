@@ -3,14 +3,16 @@
     echo $this->Form->create( 'Address', array( 'id' => 'csv-upload', 'type'=>'file', 'accept' => "text/csv"));
     ?>
     <h3><?php echo __('Import Address'); ?></h3>
-    <label class="label-file btn btn-outline-primary" for="label-file-image">
-        <?php echo __('Select CSV File'); ?>
-        <?php
-            echo $this->Form->input( 'csv_file', array(   'type' => 'file',
-                                                        'id' => 'label-file-image',
-                                                        'class' => 'form-control-file label-file-name'));
-        ?>
-    </label>
+    <div class="mobile-align-button">
+        <label class="label-file btn btn-outline-primary" for="label-file-image">
+            <?php echo __('Select CSV File'); ?>
+            <?php
+                echo $this->Form->input( 'csv_file', array(   'type' => 'file',
+                                                            'id' => 'label-file-image',
+                                                            'class' => 'form-control-file label-file-name'));
+            ?>
+        </label>
+    </div>
     <div class="form-group">
         <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="未選択">
     </div>

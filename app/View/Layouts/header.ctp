@@ -337,7 +337,7 @@
                 </div>
            <?php } ?>
         </div>
-        <div id="mobile-close">
+        <div id="mobile-close" class="mobile-align-button">
             <label class="btn btn-outline-primary">
                 <?php echo __('Close Menu'); ?>
             </label>

@@ -7,7 +7,12 @@ $(function(){
     // モバイル用のメニューを表示する。
     mobileMenuDisplay();
 
+    //モバイルメニューにてアコーディオンメニューで表示できるようにする。
     mobileAcodion();
+
+    // mobile-align-buttonクラスがついているボタンは、モバイル端末でアクセス
+    // している時だけ右側に表示されるようにする。右手操作意識
+    ActiveMobileAlineButton();
 
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
@@ -493,7 +498,7 @@ $(function(){
                 file_str += ',';
             }
         });
-        $(this).parent('.input').parent('.label-file').next('.form-group').children('.file-name-input').val(file_str);
+        $(this).parent('.input').parent('.label-file').parent('div').next('.form-group').children('.file-name-input').val(file_str);
         $('.label-file-button').show();
     });
 
@@ -740,6 +745,13 @@ $(function(){
             $(this).find('span').toggleClass('active');
             $(this).find('ul').slideToggle();
         });
+    }
+
+    function ActiveMobileAlineButton(){
+        var ua = navigator.userAgent;
+        if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
+            $('.mobile-align-button').addClass('active');
+        }
     }
 
 });

@@ -179,7 +179,8 @@ body{
     top: 60px;
     left: 100%;
     z-index: 1000;
-    width: 375px;
+    width: 100%;
+    max-width: 375px;
     background-color: #fff;
     overflow: scroll;
     font-weight: 600;
@@ -274,7 +275,7 @@ body{
 
 /* コンテンツ部分のスタイルを適用する */
 #content{
-    padding-top: 50px;
+    padding-top: 100px;
     padding-bottom: 100px;
 }
 
@@ -799,7 +800,7 @@ marginが入るようになっているので、0に設定する。
   transform: translateY(-20px) rotate(45deg);
 }
 
-/*** iPhone6/7/8/X用(width=375px)のデザインを適用する ***/
+/*** 画面縮小時のデザインを以下に示す ***/
 
 @media (max-width: 750px){
     /* フッターでしているbootstrapの適用を変更する。 */
@@ -825,4 +826,11 @@ marginが入るようになっているので、0に設定する。
     #users__add{
         width: 100%;
     }
+}
+
+/*** モバイル用のデザインをいかに示す ***/
+
+/* モバイル画面ではボタンの位置を右側に移動する。*/
+.mobile-align-button.active{
+    text-align: right;
 }

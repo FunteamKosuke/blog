@@ -27,7 +27,7 @@
               } ?>
               <?php echo h($body); ?>
             </div>
-            <div class="read-next">
+            <div class="read-next mobile-align-button">
                 <?php echo $this->Html->link(
                     __('Read Post'),
                     array('controller' => 'posts',
@@ -37,7 +37,7 @@
                 ); ?>
             </div>
             <?php if ($post['Post']['user_id'] == $login_user['id']) {?>
-                <div class="delete">
+                <div class="delete mobile-align-button">
                     <?php echo $this->Form->postLink(
                         __('Delete Post'),
                         array('controller' => 'posts','action' => 'delete', $post['Post']['id']),

@@ -285,7 +285,8 @@ msgstr "次へ"
 msgid "Prev"
 msgstr "前へ"
 
-
+msgid "Close Menu"
+msgstr "メニューを閉じる"
 
 #########コントローラーのメッセージの翻訳##########
 

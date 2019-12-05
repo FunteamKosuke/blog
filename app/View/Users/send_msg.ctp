@@ -12,7 +12,9 @@
         <?php echo __('Send'); ?>
     <?php echo $this->Form->end(array('id' => 'label-submit')); ?>
     </label>
-    <label id='close-window' class='label-submit btn btn-outline-secondary'>
-        <?php echo __('Close Window'); ?>
-    </label>
+    <div class="mobile-align-button">
+        <label id='close-window' class='label-submit btn btn-outline-secondary'>
+            <?php echo __('Close Window'); ?>
+        </label>
+    </div>
 </div>
