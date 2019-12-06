@@ -363,13 +363,13 @@ body{
 
 #post__view .view-image .largeImg{
     position: fixed;
-    height: 500px;
+    height: 50%;
     background-color: #A4A4A4;
-    top: 0;
+    top: 27%;
     left: 0;
     right: 0;
-    bottom: 0;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     z-index: 1000;
     display: none;
     border-radius: 10px;
@@ -402,8 +402,7 @@ position:relative;
     z-index: 999;
 }
 
-#post__view .next{
-    display: none;
+#post__view .slide-operation .next{
     position:absolute;
     top: 40%;
     left: 85%;
@@ -415,8 +414,7 @@ position:relative;
     cursor: pointer;
 }
 
-#post__view .prev{
-    display: none;
+#post__view .slide-operation .prev{
     position: absolute;
     top: 40%;
     left: 10%;
@@ -428,10 +426,21 @@ position:relative;
     cursor: pointer;
 }
 
+#post__view .mobile-slide-operation{
+    display: none;
+    position:fixed;
+    width: 100%;
+    top: 80%;
+    left: 0;
+    z-index: 999;
+}
+
 #post__view .view-image .image-delete{
     width: 50%;
     padding: 2px 5px;
 }
+
+
 
 #post__view .view-image .image-edit{
     width: 50%;
@@ -824,6 +833,13 @@ marginが入るようになっているので、0に設定する。
 /* ユーザー登録画面のモバイルデザイン */
 @media (max-width: 620px){
     #users__add{
+        width: 100%;
+    }
+}
+
+/* 画面縮小時のスライドショーの画面デザイン */
+@media (max-width: 800px){
+    #post__view .view-image .largeImg{
         width: 100%;
     }
 }

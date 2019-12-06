@@ -71,12 +71,26 @@
                 </div>
           </div>
         <?php } ?>
+        <!-- 通常用のスライドショー の次へ前へボタン -->
         <div class="slide-operation">
             <div class="next">
                 >
             </div>
             <div class="prev">
                 <
+            </div>
+        </div>
+        <!-- モバイル用のスライドショー の次へ前へボタン -->
+        <div class="mobile-slide-operation">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="prev col-6">
+                        <label class="btn btn-light btn-block">前の画像</label>
+                    </div>
+                    <div class="next col-6">
+                        <label class="btn btn-light btn-block">次の画像</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container-fluid">

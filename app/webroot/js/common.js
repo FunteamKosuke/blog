@@ -1,14 +1,24 @@
 $(function(){
     /*** ヘッダー ***/
     // 検索フォームをクリックしたら表示する
-    $('#search img').on('click',function(){
+    $('#search img').off('click').on('click',function(){
+        console.log($('#search img').length);
         $('.search_toggle').toggle();
+        // モーダルダイアログによる、２重読み込み防止
+        // if ($('.search_toggle').css('display') == 'none') {
+        //     alert('fgjh');
+        //     $('.search_toggle').css({display: 'block'});
+        // } else {
+        //     $('.search_toggle').css({display: 'none'});
+        // }
     });
     // モバイル用のメニューを表示する。
-    mobileMenuDisplay();
+    mobileHeaderMenuDisplay();
 
     //モバイルメニューにてアコーディオンメニューで表示できるようにする。
-    mobileAcodion();
+    mobileHeaderAcodion();
+
+
 
     // mobile-align-buttonクラスがついているボタンは、モバイル端末でアクセス
     // している時だけ右側に表示されるようにする。右手操作意識
@@ -218,126 +228,10 @@ $(function(){
         }
     });
 
-    /*** users/index ***/
-    setModal();
 
-    /*** users/send_msg ***/
-    sendMsg();
     /*** posts/view ***/
     //現在表示している画像が何枚目かを表す
-    var page = 0;
-
-    //画像の最後が何枚目かを表す
-    var lastPage =parseInt($(".slide .largeImg img").length-1);
-
-    $('.image').click(function(e) {
-
-
-        page = $('.image').index(this);
-
-        //最初に全部のイメージを一旦非表示にします
-        $(".slide .largeImg img").css("display","none");
-        $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
-        //初期ページを表示
-        $(".slide .largeImg img").eq(page).css({display: "block"});
-        $(".slide .largeImg").eq(page).css({display: "block"});
-
-        // スライドショーの戻るボタンと次へボタンを表示する
-        $('#post__view .next').show();
-        $('#post__view .prev').show();
-        // 戻るボタンと次へボタンの位置を設定しやすくするための要素を表示する。
-        $('#post__view .slide-operation')
-        .css({
-            'width' : $(window).width(),    // ウィンドウ幅
-            'height': $(window).height()
-        })
-        .show();
-
-        // ポップアップ画像の後ろに幕を張る
-        $('#post__view .back-curtain')
-        .css({
-            'width' : $(window).width(),    // ウィンドウ幅
-            'height': $(window).height()    // 同 高さ
-        })
-        .show();
-
-        startTimer(); //時間で画像をスライドできるようにする。
-    });
-
-    $('.back-curtain, .largeImg, .slide-operation').click(function() {
-        $('.largeImg').fadeOut('slow', function() {$('.back-curtain').hide();
-                                                   $("#post__view .next").hide();
-                                                   $("#post__view .prev").hide();
-                                                    $("#post__view .slide-operation").hide();});
-        stopTimer(); //画像を非表示にしたらタイマーイベントも停止させる。
-    });
-
-    //次の画像を表示する
-    $("#post__view .next").click(function(e) {
-    //タイマー停止＆スタート（クリックした時点から～秒とする為）
-        stopTimer();
-        startTimer();
-          if(page === lastPage){
-                         page = 0;
-                         changePage();
-               }else{
-                         page ++;
-                         changePage();
-          };
-          e.stopPropagation(); //親要素のクリックイベントが発生するのを防ぐ
-    });
-
-    //「一つ前の画像を表示する
-    $("#post__view .prev").click(function(e) {
-      //タイマー停止＆スタート（クリックした時点から～秒とする為）
-      stopTimer();
-      startTimer();
-      if(page === 0){
-                     page = lastPage;
-                     changePage();
-           }else{
-                     page --;
-                     changePage();
-      };
-      e.stopPropagation(); //親要素のクリックイベントが発生するのを防ぐ
-    });
-
-    $(window).on('resize', function(){
-        $('#post__view .slide-operation')
-        .css({
-            'width' : $(window).width(),    // ウィンドウ幅
-            'height': $(window).height()
-        })
-        $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
-    });
-
-
-
-    //ページ切換用、自作関数作成
-    function changePage(){
-                             $(".slide .largeImg img").fadeOut(1000);
-                             $(".slide .largeImg img").eq(page).fadeIn(1000);
-                             $(".slide .largeImg").hide();
-                             $(".slide .largeImg").eq(page).show();
-    };
-
-    //～秒間隔でイメージ切換の発火設定
-    var Timer;
-    function startTimer(){
-        Timer =setInterval(function(){
-              if(page === lastPage){
-                             page = 0;
-                             changePage();
-                   }else{
-                             page ++;
-                             changePage();
-              };
-         },6000);
-    }
-    //（７）～秒間隔でイメージ切換の停止設定
-    function stopTimer(){
-        clearInterval(Timer);
-    }
+    slideShow();
 
     /*** address/upload ***/
     var ajaxHandle = null;
@@ -443,8 +337,7 @@ $(function(){
 
     /*** address/apdate ***/
 
-    /*** contacts/sendContact ***/
-    sendContact();
+
 
     /***** 共通で使用する *****/
     // モバイル用のデザインを適用する。
@@ -502,6 +395,9 @@ $(function(){
         $('.label-file-button').show();
     });
 
+    // モーダルを表示する。
+    setModal();
+
     /*** 以下に関数を定義する ***/
     var lockId = "lockId";
     /*
@@ -553,118 +449,10 @@ $(function(){
         $('#town-select').hide();
     }
 
-    function setModal() {
-        // //HTML読み込み時にモーダルウィンドウの位置をセンターに調整
-        // adjustCenter("div#msg-modal div.container");
-        //
-        // //ウィンドウリサイズ時にモーダルウィンドウの位置をセンターに調整
-        // $(window).resize(function() {
-        // 	adjustCenter("div#msg-modal div.container");
-        // });
-
-        //背景がクリックされた時にモーダルウィンドウを閉じる
-        $("div#msg-modal div.background, #close-window").click(function() {
-        	displayModal(false);
-        });
-
-        //リンクがクリックされた時にAjaxでコンテンツを読み込む
-        $("a.msg-modal").click(function() {
-        	$("div#msg-modal div.container").load($(this).attr("href"), data="html", onComplete);
-        	return false;
-        });
-
-        //コンテンツの読み込み完了時にモーダルウィンドウを開く
-        function onComplete() {
-        	displayModal(true);
-        }
-    }
-
-    //ウィンドウの位置をセンターに調整
-    function adjustCenter(target) {
-    	var margin_top = ($(window).height()-$(target).height())/2;
-    	var margin_left = ($(window).width()-$(target).width())/2;
-    	$(target).css({top:margin_top+"px", left:margin_left+"px"});
-    }
-
-    function sendMsg(){
-        $('#send-msg-form').submit(function(){
-            var formdata = new FormData($("#send-msg-form")[0]);
-            $.ajax({
-                type: "POST",
-                url: "../users/sendMsgAjax",
-                dataType: 'text',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(json_msg){
-                    msg = $.parseJSON(json_msg);
-                    // $('#ajax-message').text(msg);
-                    alert(msg);
-                    displayModal(false);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown){
-                    alert('通信に失敗しました。');
-                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-                    console.log("textStatus     : " + textStatus);
-                    console.log("errorThrown    : " + errorThrown.message);
-                }
-            });
-        return false;
-        });
-    }
-
-    //モーダルウィンドウを開く
-    function displayModal(sign) {
-    	if (sign) {
-    		$("div#msg-modal").fadeIn(500);
-            $("#msg-modal #close-window").show();
-            // モーダルダイアログに不必要な要素を非表示にする。
-            $("#msg-modal #header").hide();
-            $("#msg-modal #footer").hide();
-            $("#msg-modal .cake-sql-log").hide();
-            // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
-            $("#msg-modal #content").css({width: "100%", margin: '0'});
-            if ($(window).width() < 500) {
-                $("#msg-modal .container").css({width: "100%"});
-            }
-
-    	} else {
-    		$("div#msg-modal").fadeOut(250);
-            $("#msg-modal #close-window").hide();
-    	}
-    }
-
-    function sendContact(){
-        $('#send-contact-form').submit(function(){
-            var formdata = new FormData($("#send-contact-form")[0]);
-            $.ajax({
-                type: "POST",
-                url: "../contacts/sendContactAjax",
-                dataType: 'text',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(json_msg){
-                    $('#contacts__send-contact .loading').hide();
-                    msg = $.parseJSON(json_msg);
-                    $('#ajax-message').text(msg)
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown){
-                    $('#contacts__send-contact .loading').hide();
-                    alert('通信に失敗しました。');
-                    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-                    console.log("textStatus     : " + textStatus);
-                    console.log("errorThrown    : " + errorThrown.message);
-                }
-            });
-        $('#contacts__send-contact .loading').show();
-        return false;
-        });
-    }
-
     // モバイル用のメニューを表示する
     var display_flg = false;
-    function mobileMenuDisplay(){
+    function mobileHeaderMenuDisplay(){
+        $('#mobile-header .menu-trigger').off('click');
         $('#mobile-header .menu-trigger').click(function(){
             if (!display_flg) {
                 $("#mobile-header-body")
@@ -701,6 +489,7 @@ $(function(){
             }
         });
 
+        $("#mobile-header-body #mobile-close, #header .back-curtain").off('click');
         $("#mobile-header-body #mobile-close, #header .back-curtain").click(function(){
             $("#mobile-header-body").animate({
                 "left": "100%"
@@ -740,7 +529,8 @@ $(function(){
     }
 
     // モバイルメニューをアコーディオン表示できるようにする。
-    function mobileAcodion(){
+    function mobileHeaderAcodion(){
+        $('#mobile-header-body ul li').off('click');
         $('#mobile-header-body ul li').click(function() {
             $(this).find('span').toggleClass('active');
             $(this).find('ul').slideToggle();
@@ -754,4 +544,204 @@ $(function(){
         }
     }
 
+    function slideShow(){
+        var page = 0; //現在何枚目の画像を表示しているかを表す。
+        var mobile_display_flg = false;
+        var slide_flg = false;
+
+        //画像の最後が何枚目かを表す
+        var lastPage =parseInt($(".slide .largeImg img").length-1);
+
+        $('.slide .image').click(function(e) {
+
+            slide_flg = true;
+            page = $('.slide .image').index(this);
+
+            //最初に全部のイメージを一旦非表示にします
+            $(".slide .largeImg img").css("display","none");
+            if ($(window).width() > 800) {
+                $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
+                // 戻るボタンと次へボタンの位置を設定しやすくするための要素を表示する。
+                $('#post__view .slide-operation')
+                .css({
+                    'width' : $(window).width(),    // ウィンドウ幅
+                    'height': $(window).height()
+                })
+                .show();
+            } else {
+                $(".slide .largeImg").css({'width' : '100%'});
+                $('#post__view .mobile-slide-operation').show();
+                mobile_display_flg = true;
+            }
+            //初期ページを表示
+            $(".slide .largeImg img").eq(page).css({display: "block"});
+            $(".slide .largeImg").eq(page).css({display: "block"});
+
+            // ポップアップ画像の後ろに幕を張る
+            $('#post__view .back-curtain')
+            .css({
+                'width' : $(window).width(),    // ウィンドウ幅
+                'height': $(window).height()    // 同 高さ
+            })
+            .show();
+
+            startTimer(); //時間で画像をスライドできるようにする。
+        });
+
+        // スライドショー を無効にする処理
+        $('.back-curtain, .largeImg, .slide-operation').click(function() {
+            slide_flg = false;
+            $('.largeImg').fadeOut('slow', function(){
+                $('.back-curtain').hide();
+                $("#post__view .slide-operation").hide();
+                $("#post__view .mobile-slide-operation").hide();
+            });
+            stopTimer(); //画像を非表示にしたらタイマーイベントも停止させる。
+        });
+
+        //次の画像を表示する
+        $("#post__view .next").click(function(e) {
+        //タイマー停止＆スタート（クリックした時点から～秒とする為）
+            stopTimer();
+            startTimer();
+              if(page === lastPage){
+                             page = 0;
+                             changePage();
+                   }else{
+                             page ++;
+                             changePage();
+              };
+              e.stopPropagation(); //親要素のクリックイベントが発生するのを防ぐ
+        });
+
+        //「一つ前の画像を表示する
+        $("#post__view .prev").click(function(e) {
+          //タイマー停止＆スタート（クリックした時点から～秒とする為）
+          stopTimer();
+          startTimer();
+          if(page === 0){
+                         page = lastPage;
+                         changePage();
+               }else{
+                         page --;
+                         changePage();
+          };
+          e.stopPropagation(); //親要素のクリックイベントが発生するのを防ぐ
+        });
+
+        $(window).on('resize', function(){
+            // スライドショー が有効の時だけ以下の処理をする。
+            if (slide_flg) {
+                $('#post__view .back-curtain')
+                .css({
+                    'width' : $(window).width(),    // ウィンドウ幅
+                    'height': $(window).height()    // 同 高さ
+                });
+
+                if ($(window).width() > 800) {
+                    $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
+                    $('#post__view .slide-operation')
+                    .css({
+                        'width' : $(window).width(),    // ウィンドウ幅
+                        'height': $(window).height()
+                    });
+                    // スライドショーの戻るボタンと次へボタンを表示する
+                    if (mobile_display_flg == true) {
+                        // 戻るボタンと次へボタンの位置を設定しやすくするための要素を表示する。
+                        $('#post__view .slide-operation').show();
+                        $('#post__view .mobile-slide-operation').hide();
+                        mobile_display_flg = false;
+                    }
+                } else if (mobile_display_flg == false) {
+                    $(".slide .largeImg").css({'width' : '100%'});
+                    // スライドショーの戻るボタンと次へボタンを表示する
+                    $('#post__view .slide-operation').hide();
+                    $('#post__view .mobile-slide-operation').show();
+                    mobile_display_flg = true;
+                }
+            }
+        });
+
+
+
+        //ページ切換用、自作関数作成
+        function changePage(){
+                                 $(".slide .largeImg img").fadeOut(1000);
+                                 $(".slide .largeImg img").eq(page).fadeIn(1000);
+                                 $(".slide .largeImg").hide();
+                                 $(".slide .largeImg").eq(page).show();
+        };
+
+        //～秒間隔でイメージ切換の発火設定
+        var Timer;
+        function startTimer(){
+            Timer =setInterval(function(){
+                  if(page === lastPage){
+                                 page = 0;
+                                 changePage();
+                       }else{
+                                 page ++;
+                                 changePage();
+                  };
+             },6000);
+        }
+        //（７）～秒間隔でイメージ切換の停止設定
+        function stopTimer(){
+            clearInterval(Timer);
+        }
+    }
+
+    function setModal() {
+        // //HTML読み込み時にモーダルウィンドウの位置をセンターに調整
+        // adjustCenter("div#msg-modal div.container");
+        //
+        // //ウィンドウリサイズ時にモーダルウィンドウの位置をセンターに調整
+        // $(window).resize(function() {
+        // 	adjustCenter("div#msg-modal div.container");
+        // });
+
+        //背景がクリックされた時にモーダルウィンドウを閉じる
+        $("div#msg-modal div.background").click(function() {
+            displayModal(false);
+        });
+
+        //リンクがクリックされた時にAjaxでコンテンツを読み込む
+        $("a.msg-modal").click(function() {
+            $("div#msg-modal div.container").load($(this).attr("href"), data="html", onComplete);
+            return false;
+        });
+
+        //コンテンツの読み込み完了時にモーダルウィンドウを開く
+        function onComplete() {
+            displayModal(true);
+        }
+    }
+
+    //ウィンドウの位置をセンターに調整
+    function adjustCenter(target) {
+        var margin_top = ($(window).height()-$(target).height())/2;
+        var margin_left = ($(window).width()-$(target).width())/2;
+        $(target).css({top:margin_top+"px", left:margin_left+"px"});
+    }
+
+    //モーダルウィンドウを開く
+    function displayModal(sign) {
+        if (sign) {
+            $("div#msg-modal").fadeIn(500);
+            $("#msg-modal #close-window").show();
+            // モーダルダイアログに不必要な要素を非表示にする。
+            $("#msg-modal #header").remove();
+            $("#msg-modal #footer").remove();
+            $("#msg-modal .cake-sql-log").remove();
+            // モーダルダイアログだとcssのクエリメディアが有効にならないので、content要素を直接width100%にする。
+            $("#msg-modal #content").css({width: "100%", margin: '0'});
+            if ($(window).width() < 500) {
+                $("#msg-modal .container").css({width: "100%"});
+            }
+
+        } else {
+            $("div#msg-modal").fadeOut(250);
+            $("#msg-modal #close-window").hide();
+        }
+    }
 });
