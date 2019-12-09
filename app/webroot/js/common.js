@@ -2,15 +2,9 @@ $(function(){
     /*** ヘッダー ***/
     // 検索フォームをクリックしたら表示する
     $('#search img').off('click').on('click',function(){
-        console.log($('#search img').length);
-        $('.search_toggle').toggle();
-        // モーダルダイアログによる、２重読み込み防止
-        // if ($('.search_toggle').css('display') == 'none') {
-        //     alert('fgjh');
-        //     $('.search_toggle').css({display: 'block'});
-        // } else {
-        //     $('.search_toggle').css({display: 'none'});
-        // }
+        if(confirm('表示していいですか？')){
+            $('.search_toggle').toggle();
+        }
     });
     // モバイル用のメニューを表示する。
     mobileHeaderMenuDisplay();
@@ -114,7 +108,6 @@ $(function(){
     // 選択された市区町村に関連する町域の選択ボックスを作成する。
     $('#city-select').change(function(){
         if (!('選択してください' == $('#city-select option:selected').text())) {
-            alert($('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val());
             $.ajax({
                 type: "POST",
                 url: "../addresses/getSelectElem",
@@ -157,20 +150,10 @@ $(function(){
     $('#zipcode').keyup(function() {
         // 郵便番号入力欄に7桁の数字が入力されたら検索を開始する。
         if(0 == $(this).val().search(/\d{7}/)){
-            var formdata = new FormData($("#UserAddForm")[0]);
-            formdata.append('data[_Token][key]', $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val());
-            for (let value of formdata.entries()) {
-                console.log(value);
-            }
-
-            alert($('#users__add').find('input[name="data[_Token][debug]"]').val());
             $.ajax({
                 type: "POST",
                 url: "../addresses/search",
                 dataType: 'json',
-                // data: formdata,
-                // processData: false,
-                // contentType: false,
                 data:
                 {
                     "zipcode": $('#zipcode').val(),
@@ -273,11 +256,6 @@ $(function(){
                 console.log("errorThrown    : " + errorThrown.message);
             }
         });
-        // .done(function( data ) {
-        //     // alert(data);
-        //     alert('hkfjgk');
-        //     // $('#result').text(data.width + "x" + data.height);
-        // });
         $('.loading').show();
         $('#addresses__csv_import #cancel').show();
         lockScreen(lockId);
@@ -319,11 +297,6 @@ $(function(){
                 console.log("errorThrown    : " + errorThrown.message);
             }
         });
-        // .done(function( data ) {
-        //     // alert(data);
-        //     alert('hkfjgk');
-        //     // $('#result').text(data.width + "x" + data.height);
-        // });
         $('.loading').show();
         $('#addresses__csv_update #cancel').show();
         lockScreen(lockId);

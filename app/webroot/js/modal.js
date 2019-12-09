@@ -25,7 +25,6 @@ $(function(){
                 contentType: false,
                 success: function(json_msg){
                     msg = $.parseJSON(json_msg);
-                    // $('#ajax-message').text(msg);
                     alert(msg);
                     displayModal(false);
                 },

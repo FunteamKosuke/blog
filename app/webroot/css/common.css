@@ -512,8 +512,12 @@ position:relative;
     margin: 0;
 }
 /* contacts/index */
-#contacts__index .delete{
+#contacts__index #normal-index .delete{
     margin-top: 10px;
+}
+
+#contacts__index #mobile-index{
+    display: none;
 }
 
 /***** elements *****/
@@ -841,6 +845,16 @@ marginが入るようになっているので、0に設定する。
 @media (max-width: 800px){
     #post__view .view-image .largeImg{
         width: 100%;
+    }
+}
+
+/* お問い合わせ一覧画面の画面縮小時のデザイン */
+@media (max-width: 700px){
+    #contacts__index #normal-index{
+        display: none;
+    }
+    #contacts__index #mobile-index{
+        display: block;
     }
 }
 
