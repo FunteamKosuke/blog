@@ -3,18 +3,16 @@ echo $this->Form->create( 'Image', array( 'type'=>'file', 'enctype' => 'multipar
 ?>
     <h3><?php echo __('Add Image'); ?></h3>
     <small>*<?php echo __('Multiple Add Possible'); ?></small><br>
-    <div class="mobile-align-button">
-        <label class="label-file btn btn-outline-primary" for="label-file-image">
-            <?php echo __('Select Image File'); ?>
-            <?php
-                echo $this->Form->input( 'files.', array(   'type' => 'file',
-                                                            'multiple',
-                                                            'id' => 'label-file-image',
-                                                            'class' => 'form-control-file label-file-name',
-                                                            'secure' => false));
-            ?>
-        </label>
-    </div>
+    <label class="label-file btn btn-outline-primary" for="label-file-image">
+        <?php echo __('Select Image File'); ?>
+        <?php
+            echo $this->Form->input( 'files.', array(   'type' => 'file',
+                                                        'multiple',
+                                                        'id' => 'label-file-image',
+                                                        'class' => 'form-control-file label-file-name',
+                                                        'secure' => false));
+        ?>
+    </label>
     <div class="form-group">
         <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo __('No Select'); ?>">
     </div>

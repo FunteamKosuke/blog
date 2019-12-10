@@ -12,11 +12,9 @@
         <?php echo __('Send'); ?>
     <?php echo $this->Form->end(array('id' => 'label-submit')); ?>
     </label>
-    <div class="mobile-align-button">
-        <label id='close-window' class='label-submit btn btn-outline-secondary'>
-            <?php echo __('Close Window'); ?>
-        </label>
-    </div>
+    <label id='close-window' class='label-submit btn btn-outline-secondary'>
+        <?php echo __('Close Window'); ?>
+    </label>
     <!-- ajaxの実行結果を表示する。 -->
     <div id="ajax-message"></div>
     <div class="loading">

@@ -32,36 +32,32 @@
     <div class="form-group">
         <h3><?php echo __('Add Image'); ?></h3>
         <small>*<?php echo __('Multiple Add Possible'); ?></small><br>
-        <div class="mobile-align-button">
-            <label class="label-file btn btn-outline-primary" for="label-file-image">
-            <?php echo __('Select Image File'); ?>
-            <?php // 画像を投稿する。
-            echo $this->Form->input( 'Image.files.', array(
-                                                            'type' => 'file',
-                                                            'multiple',
-                                                            'id' => 'label-file-image',
-                                                            'class' => 'form-control-file label-file-name',
-                                                            'secure' => false //csrf防御を無効にしないと複数ファイルアップロードができない。
-                                                        )); ?>
-            </label>
-        </div>
+        <label class="label-file btn btn-outline-primary" for="label-file-image">
+        <?php echo __('Select Image File'); ?>
+        <?php // 画像を投稿する。
+        echo $this->Form->input( 'Image.files.', array(
+                                                        'type' => 'file',
+                                                        'multiple',
+                                                        'id' => 'label-file-image',
+                                                        'class' => 'form-control-file label-file-name',
+                                                        'secure' => false //csrf防御を無効にしないと複数ファイルアップロードができない。
+                                                    )); ?>
+        </label>
         <div class="form-group">
             <input type="text" id="file-name-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo __('No Select'); ?>">
         </div>
     </div>
     <div class="form-group">
         <h3><?php echo __('Add Thumbnail'); ?></h3>
-        <div class="mobile-align-button">
-            <label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
-            <?php echo __('Select Image File'); ?>
-            <?php /// サムネイルを設定する。
-            echo $this->Form->input('Thumbnail.thumbnail', array(
-                                                                'type' => 'file',
-                                                                'id' => 'label-file-thumbnail',
-                                                                'class' => 'form-control-file label-file-name',
-                                                                'error' => false)); ?>
-            </label>
-        </div>
+        <label class="label-file btn btn-outline-primary" for="label-file-thumbnail">
+        <?php echo __('Select Image File'); ?>
+        <?php /// サムネイルを設定する。
+        echo $this->Form->input('Thumbnail.thumbnail', array(
+                                                            'type' => 'file',
+                                                            'id' => 'label-file-thumbnail',
+                                                            'class' => 'form-control-file label-file-name',
+                                                            'error' => false)); ?>
+        </label>
         <div class="form-group">
             <input type="text" id="file-name-thumbnail" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo __('No Select'); ?>">
         </div>

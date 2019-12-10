@@ -52,17 +52,15 @@
         ?>
         <div class="form-group">
             <h5><?php echo __('Add Profile Image'); ?></h5>
-            <div class="mobile-align-button">
-                <label class="label-file btn btn-outline-primary" for="label-file-profile-image">
-                <?php echo __('Select Image File'); ?>
-                <?php /// サムネイルを設定する。
-                echo $this->Form->input('profile_image', array(
-                                                                    'type' => 'file',
-                                                                    'id' => 'label-file-profile-image',
-                                                                    'class' => 'form-control-file label-file-name',
-                                                                    'error' => false)); ?>
-                </label>
-            </div>
+            <label class="label-file btn btn-outline-primary" for="label-file-profile-image">
+            <?php echo __('Select Image File'); ?>
+            <?php /// サムネイルを設定する。
+            echo $this->Form->input('profile_image', array(
+                                                                'type' => 'file',
+                                                                'id' => 'label-file-profile-image',
+                                                                'class' => 'form-control-file label-file-name',
+                                                                'error' => false)); ?>
+            </label>
             <div class="form-group">
                 <input type="text" id="file-name-profile-image" class="form-control file-name-input" readonly="readonly" placeholder="<?php echo $image_name; ?>">
             </div>
@@ -71,14 +69,14 @@
             <h5><?php echo __('Huri Hira'); ?></h5>
             <div class="form-group form-inline">
                 <div class="form-inline margin-top-15">
-                    性
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Surname'); ?></span>
                     <?php echo $this->Form->input('huri_hira_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $huri_hira_sei)); ?>
                 </div>
                 <div class="form-inline margin-top-15">
-                    名
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Name'); ?></span>
                     <?php echo $this->Form->input('huri_hira_mei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
@@ -90,14 +88,14 @@
             <h5><?php echo __('Huri Kata'); ?></h5>
             <div class="form-group form-inline">
                 <div class="form-inline margin-top-15">
-                    性
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Surname'); ?></span>
                     <?php echo $this->Form->input('huri_kata_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $huri_kata_sei)); ?>
                 </div>
                 <div class="form-inline margin-top-15">
-                    名
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Name'); ?></span>
                     <?php echo $this->Form->input('huri_kata_mei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
@@ -109,14 +107,14 @@
             <h5><?php echo __('Name'); ?></h5>
             <div class="form-group form-inline">
                 <div class="form-inline margin-top-15">
-                    性
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Surname'); ?></span>
                     <?php echo $this->Form->input('name_sei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,
                                                                     'value' => $name_sei)); ?>
                 </div>
                 <div class="form-inline margin-top-15">
-                    名
+                    <span class="hurigana-left-and-right-margin"><?php echo __('Huri Name'); ?></span>
                     <?php echo $this->Form->input('name_mei', array('label' => false,
                                                                     'class' => 'form-control',
                                                                     'size'  =>  26,

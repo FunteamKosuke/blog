@@ -145,7 +145,7 @@
                 ?>
                 <p><?php echo h($body); ?></p>
                 <!-- 記事を読むボタン -->
-                <div class="read-next mobile-align-button">
+                <div class="read-next">
                     <?php echo $this->Html->link(
                         __('Read Post'),
                         array('controller' => 'posts',

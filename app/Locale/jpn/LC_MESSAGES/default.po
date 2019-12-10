@@ -288,6 +288,12 @@ msgstr "前へ"
 msgid "Close Menu"
 msgstr "メニューを閉じる"
 
+msgid "Huri Surname"
+msgstr "姓"
+
+msgid "Huri Name"
+msgstr "名"
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
