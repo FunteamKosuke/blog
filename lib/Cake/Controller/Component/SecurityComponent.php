@@ -17,7 +17,7 @@
  */
 
 App::uses('Component', 'Controller');
-App::uses('CakeText', 'Utility');
+App::uses('CakeTextFmis', 'Utility');
 App::uses('Hash', 'Utility');
 App::uses('Security', 'Utility');
 
@@ -226,38 +226,41 @@ class SecurityComponent extends Component {
  */
 	public function startup(Controller $controller) {
 		$this->request = $controller->request;
-		$this->_action = $controller->request->params['action'];
-		$hasData = ($controller->request->data || $controller->request->is(array('put', 'post', 'delete', 'patch')));
-		try {
-			$this->_methodsRequired($controller);
-			$this->_secureRequired($controller);
-			$this->_authRequired($controller);
+		// 送信元がblog.dvだった場合はセキュリティチェックはしない。
+		if (!(strpos($_SERVER['HTTP_REFERER'], "://blog.dv"))) {
+			$this->_action = $controller->request->params['action'];
+			$hasData = ($controller->request->data || $controller->request->is(array('put', 'post', 'delete', 'patch')));
+			try {
+				$this->_methodsRequired($controller);
+				$this->_secureRequired($controller);
+				$this->_authRequired($controller);
 
-			$isNotRequestAction = (
-				!isset($controller->request->params['requested']) ||
-				$controller->request->params['requested'] != 1
-			);
+				$isNotRequestAction = (
+					!isset($controller->request->params['requested']) ||
+					$controller->request->params['requested'] != 1
+				);
 
-			if ($this->_action === $this->blackHoleCallback) {
-				throw new AuthSecurityException(sprintf('Action %s is defined as the blackhole callback.', $this->_action));
+				if ($this->_action === $this->blackHoleCallback) {
+					throw new AuthSecurityException(sprintf('Action %s is defined as the blackhole callback.', $this->_action));
+				}
+
+				if (!in_array($this->_action, (array)$this->unlockedActions) && $hasData && $isNotRequestAction) {
+					if ($this->validatePost) {
+						$this->_validatePost($controller);
+					}
+					if ($this->csrfCheck) {
+						$this->_validateCsrf($controller);
+					}
+				}
+
+			} catch (SecurityException $se) {
+				return $this->blackHole($controller, $se->getType(), $se);
 			}
 
-			if (!in_array($this->_action, (array)$this->unlockedActions) && $hasData && $isNotRequestAction) {
-				if ($this->validatePost) {
-					$this->_validatePost($controller);
-				}
-				if ($this->csrfCheck) {
-					$this->_validateCsrf($controller);
-				}
+			$this->generateToken($controller->request);
+			if ($hasData && is_array($controller->request->data)) {
+				unset($controller->request->data['_Token']);
 			}
-
-		} catch (SecurityException $se) {
-			return $this->blackHole($controller, $se->getType(), $se);
-		}
-
-		$this->generateToken($controller->request);
-		if ($hasData && is_array($controller->request->data)) {
-			unset($controller->request->data['_Token']);
 		}
 	}
 
@@ -659,6 +662,8 @@ class SecurityComponent extends Component {
 	protected function _debugPostTokenNotMatching(Controller $controller, $hashParts) {
 		$messages = array();
 		$expectedParts = json_decode(urldecode($controller->request->data['_Token']['debug']), true);
+		// $this->log($expectedParts);
+		// $this->log(Router::url(null,true));
 		if (!is_array($expectedParts) || count($expectedParts) !== 3) {
 			return 'Invalid security debug token.';
 		}

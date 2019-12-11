@@ -195,8 +195,8 @@
             <ul>
                 <li><?php echo $this->Html->link(__('Home'), array('controller' => 'posts',
                                                               'action' => 'index')); ?></li>
+                <span  class="d-flex align-items-center"><?php echo __('Auth Related'); ?></span>
                 <li>
-                    <span><?php echo __('Auth Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                             __('User Regist'),
@@ -225,8 +225,8 @@
                         ); ?></li>
                     </ul>
                 </li>
+                <span class="d-flex align-items-center"><?php echo __('Post Related'); ?></span>
                 <li>
-                    <span><?php echo __('Post Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                             __('Add Post'),
@@ -250,8 +250,8 @@
                         ); ?></li>
                     </ul>
                 </li>
+                <span class="d-flex align-items-center"><?php echo __('Address Related'); ?></span>
                 <li>
-                    <span><?php echo __('Address Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                             __('Import Address'),
@@ -266,8 +266,8 @@
                          ); ?></li>
                     </ul>
                 </li>
+                <span  class="d-flex align-items-center"><?php echo __('Contact Related'); ?></span>
                 <li>
-                    <span><?php echo __('Contact Related'); ?></span>
                     <ul>
                         <li><?php echo $this->Html->link(
                           __('Contact Us'),
@@ -285,7 +285,7 @@
             </ul>
         </div>
         <!-- 検索フォーム -->
-        <div id="mobile-search">
+        <div id="mobile-search" class="d-flex align-items-center">
             <?php echo $this->Form->create('Post', array(
             'url' => array_merge(
                 array(

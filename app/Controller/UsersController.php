@@ -32,7 +32,6 @@
                                 'loginTwitter',
                                 'callbackTwitter',
                                 'temp_complete');
-            // $this->Security->unlockedActions = array('sendMsgAjax');
         }
 
         public function index() {

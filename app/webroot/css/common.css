@@ -5,6 +5,7 @@
 }
 
 html,body{
+    width: 100%;
     height: 100%;
 }
 
@@ -12,11 +13,9 @@ body{
     word-break: break-all;
 }
 
-body.fixed {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
+/* モーダルやモバイルヘッダーで背景がスクロールされないようにするために使用する。 */
+body.bg-fixed {
+    overflow-y: hidden;
 }
 
 /* ヘッダー、コンテンツ、フッターの親ブロックのスタイルを定義する */
@@ -204,8 +203,12 @@ body.fixed {
     list-style: none;
 }
 
-#mobile-header-body ul li{
+#mobile-header-body ul span{
     margin-top: 20px;
+}
+
+#mobile-header-body ul li{
+    /* margin-top: 20px; */
     position: relative;
 }
 
@@ -213,8 +216,8 @@ body.fixed {
     display: none;
 }
 
-#mobile-header-body ul li span::before,
-#mobile-header-body ul li span::after {
+#mobile-header-body ul span::before,
+#mobile-header-body ul span::after {
   content: '';
   display: block;
   width: 15px;
@@ -222,30 +225,29 @@ body.fixed {
   border-radius: 5px;
   background: #000;
   position: absolute;
-  right: 10px;
-  top: 0;
+  right: 20px;
   transform: translateY(-50%);
 }
 
-#mobile-header-body ul li span::after {
+#mobile-header-body ul span::after {
   background: #000;
   transform: translateY(-50%) rotate(90deg);
   transition: 0.5s;
 }
 
-#mobile-header-body ul li .active::after {
+#mobile-header-body ul .active::after {
   transform: rotate(0);
   transition: 0.5s;
 }
 
 #mobile-header-body ul li ul li{
     border-bottom: groove 1px #000;
-    height: 50px;
+    height: 60px;
     margin-left: 30px;
 }
 
 #mobile-header-body ul li ul li a{
-    padding-top: 10px;
+    padding-top: 20px;
     height: 100%;
 }
 

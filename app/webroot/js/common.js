@@ -7,10 +7,7 @@ $(function(){
         }
     });
     // モバイル用のメニューを表示する。
-    mobileHeaderMenuDisplay();
-
-    //モバイルメニューにてアコーディオンメニューで表示できるようにする。
-    mobileHeaderAcodion();
+    mobileHeaderMenuInit();
 
     /*** コントローラー固有のjsを以下に記述する ***/
     /*** users/add **/
@@ -150,11 +147,11 @@ $(function(){
                 dataType: 'json',
                 data:
                 {
-                    "zipcode": $('#zipcode').val(),
-                    "data[_Token][key]": $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val(),
-                    "data[_Token][fields]": $('#users__add').find('input[name="data[_Token][fields]"]').val(),
-                    "data[_Token][unlocked]": $('#users__add').find('input[name="data[_Token][unlocked]"]').val(),
-                    "data[_Token][debug]": $('#users__add').find('input[name="data[_Token][debug]"]').val()
+                    "zipcode": $('#zipcode').val()
+                    // "data[_Token][key]": $('#UserAddForm').find('input:hidden[name="data[_Token][key]"]').val(),
+                    // "data[_Token][fields]": $('#users__add').find('input[name="data[_Token][fields]"]').val(),
+                    // "data[_Token][unlocked]": $('#users__add').find('input[name="data[_Token][unlocked]"]').val(),
+                    // "data[_Token][debug]": $('#users__add').find('input[name="data[_Token][debug]"]').val()
                 },
                 success: function(json_search_result){
                     //データを受け取っていれば、住所欄に入力する。
@@ -417,54 +414,69 @@ $(function(){
     }
 
     // モバイル用のメニューを表示する
-    var display_flg = false;
-    function mobileHeaderMenuDisplay(){
+    function mobileHeaderMenuInit(){
+        // メニューのハンバーガーアイコンを押下したときの処理を設定する。
         $('#mobile-header .menu-trigger').off('click');
         $('#mobile-header .menu-trigger').click(function(){
-            if (!display_flg) {
-                $("#mobile-header-body")
-                .show()
-                .animate({
-
-                    "left": ($(window).width()-$("#mobile-header-body").width())+'px'
-                });
-
-                $('#header .back-curtain')
-                .css({
-                    'width' : $(window).width(),    // ウィンドウ幅
-                    'height': $(window).height()    // 同 高さ
-                })
-                .show();
-
-                $('#mobile-header .menu-trigger').toggleClass('active');
-
-                display_flg = true;
-
-            } else {
-                $("#mobile-header-body")
-                .show()
-                .animate({
-
-                    "left": '100%'
-                });
-
-                display_flg = false;
-
-                $('#mobile-header .menu-trigger').toggleClass('active');
-
-                $('#header .back-curtain').hide();
-            }
+            mobileHeaderMenuTrigger();
         });
 
+        // モバイルメニューのクローズボタンと背景の暗幕をクリックした時の処理を設定する。
         $("#mobile-header-body #mobile-close, #header .back-curtain").off('click');
         $("#mobile-header-body #mobile-close, #header .back-curtain").click(function(){
-            $("#mobile-header-body").animate({
-                "left": "100%"
-            });
-            $('#mobile-header .menu-trigger').toggleClass('active');
-            $('.back-curtain').hide();
-            display_flg = false;
+            mobileHeaderMenuTrigger();
         });
+
+        //モバイルメニューにてアコーディオンメニューで表示できるようにする。
+        mobileHeaderAcodion();
+    }
+
+    var display_flg = false; // 現在の表示/非表示を表すフラグ
+    function mobileHeaderMenuTrigger(){
+        if (!display_flg) { // 非表示か
+            //表示する。
+            $("#mobile-header-body")
+            .show()
+            .animate({
+
+                "left": ($(window).width()-$("#mobile-header-body").width())+'px'
+            });
+
+            $('#header .back-curtain')
+            .css({
+                'width' : $(window).width(),    // ウィンドウ幅
+                'height': $(window).height()    // 同 高さ
+            })
+            .show();
+
+            // ハンバーグアイコンを×印にする。
+            $('#mobile-header .menu-trigger').toggleClass('active');
+
+            display_flg = true;
+
+            // モーダルの背景がスクロールされないように固定する。
+            bg_fixed(true, 'mobile-header-body')
+
+        } else {
+            // 非表示にする。
+
+            $("#mobile-header-body")
+            .animate({
+
+                "left": '100%'
+            });
+
+            display_flg = false;
+
+            // ハンバーグアイコンを三本線にする。
+            $('#mobile-header .menu-trigger').toggleClass('active');
+
+            // 背景の暗幕を非表示にする。
+            $('#header .back-curtain').hide();
+
+            // 背景のスクロール固定を解除する。
+            bg_fixed(false);
+        }
     }
 
     function flexDeleteSidebar(view_target){
@@ -498,9 +510,9 @@ $(function(){
     // モバイルメニューをアコーディオン表示できるようにする。
     function mobileHeaderAcodion(){
         $('#mobile-header-body ul li').off('click');
-        $('#mobile-header-body ul li').click(function() {
-            $(this).find('span').toggleClass('active');
-            $(this).find('ul').slideToggle();
+        $('#mobile-header-body ul span').click(function() {
+            $(this).toggleClass('active');
+            $(this).next('li').children('ul').slideToggle();
         });
     }
 
@@ -698,10 +710,54 @@ $(function(){
             if ($(window).width() < 500) {
                 $("#msg-modal .container").css({width: "100%"});
             }
-
+            bg_fixed(true, 'msg-modal')
         } else {
             $("div#msg-modal").fadeOut(250);
             $("#msg-modal #close-window").hide();
+            // 背景固定の解除
+            bg_fixed(false);
+        }
+    }
+    /*
+    *概要：背景を固定化するための関数
+    *引数:
+    *bg_fixed_flg
+    *背景を固定するか解除するかを表すフラグ
+    *op_elem
+    *スクロールの固定をしない操作対象の要素
+    */
+    function bg_fixed(bg_fixed_flg, op_elem = null){
+        if(bg_fixed_flg){
+
+
+            // overflow:hiddenにするとスクロールバーが非表示になり、画面が少しずれるため、
+            // overflow:hiddenを付加する時の横幅を取得して、その幅をwidthのサイズとする。
+            $('body').css({'width': $(window).width()+'px'});
+
+            // モーダルの背景がスクロールされないように固定する。
+            $('body').addClass('bg-fixed');
+
+            // ios端末では以下の処理も追加しないとスクロールが固定されない。
+            var ua = navigator.userAgent;
+            if(ua.indexOf('iPhone') > 0 || ua.indexOf('iPad') > 0) {
+                var elem = $('#'+op_elem);
+                elem.addEventListener('touchmove', function(e) {
+                    var scroll = elem.scrollTop;
+                    var range = elem.scrollHeight - elem.offsetHeight - 1;
+                    if (scroll < 1) {
+                        e.preventDefault();
+                        elem.scrollTop = 1;
+                    } else if(scroll > range) {
+                        e.preventDefault();
+                        elem.scrollTop = range;
+                    }
+                });
+            }
+        }else{
+            // スクロールバーが表示されるので、width100%に戻す。
+            $('body').css({'width': '100%'});
+            // スクロール固定を解除する。
+            $('body').removeClass('bg-fixed');
         }
     }
 });
