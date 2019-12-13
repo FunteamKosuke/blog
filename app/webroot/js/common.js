@@ -518,11 +518,25 @@ $(function(){
 
     function slideShow(){
         var page = 0; //現在何枚目の画像を表示しているかを表す。
+        var nav_elem_width = 0;
         var mobile_display_flg = false;
         var slide_flg = false;
 
-        //画像の最後が何枚目かを表す
-        var lastPage =parseInt($(".slide .largeImg img").length-1);
+        //画像の数と最後が何ページ目かを表す数を取得する。
+        var image_count = parseInt($(".slide .largeImg img").length);
+
+        // 最後のページを表す数を取得する。
+        var lastPage = image_count-1;
+
+        // 画像の数だけナビゲーション領域にdiv要素を作成する。
+        for (var i=0; i<image_count; i++) {
+            $('.slide .slide-nav .elem').append('<div></div>');
+        }
+        // 現在位置を表す要素のtop位置に使用する。
+        var nav_elem_margin_left = parseInt($('.slide .slide-nav .elem div').css('margin-left'),10);
+
+        // 現在位置を表す要素をwidthを指定するのに使用する。
+        var nav_elem_margin = nav_elem_margin_left+parseInt($('.slide .slide-nav .elem div').css('margin-right'),10);
 
         $('.slide .image').click(function(e) {
 
@@ -533,6 +547,7 @@ $(function(){
             $(".slide .largeImg img").css("display","none");
             if ($(window).width() > 800) {
                 $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
+                $(".slide .slide-nav").css({'width' : $(window).width() * 0.6});
                 // 戻るボタンと次へボタンの位置を設定しやすくするための要素を表示する。
                 $('#post__view .slide-operation')
                 .css({
@@ -542,9 +557,26 @@ $(function(){
                 .show();
             } else {
                 $(".slide .largeImg").css({'width' : '100%'});
+                $(".slide .slide-nav").css({'width' : '96%'});
                 $('#post__view .mobile-slide-operation').show();
                 mobile_display_flg = true;
             }
+
+            $('.slide-nav').show();
+
+            // ナビゲーションブロックの一つのサイズを算出する。
+            nav_elem_width = $('.slide .slide-nav').width() / image_count;
+
+            $('.slide .slide-nav .elem div').css({width: nav_elem_width+'px'});
+            $('.slide .slide-nav .pos').css({width: nav_elem_width-nav_elem_margin+'px'});
+
+            // ナビゲーションの現在の画像位置を表す場所を指定する。
+            var pos = page == 0 ? nav_elem_margin_left : (nav_elem_width)*(page)+nav_elem_margin_left;
+            $('.slide-nav .pos')
+            .css({
+                "left": pos+'px'
+            });
+
             //初期ページを表示
             $(".slide .largeImg img").eq(page).css({display: "block"});
             $(".slide .largeImg").eq(page).css({display: "block"});
@@ -569,6 +601,7 @@ $(function(){
                 $("#post__view .mobile-slide-operation").hide();
             });
             stopTimer(); //画像を非表示にしたらタイマーイベントも停止させる。
+            $('.slide-nav').hide(); //ナビゲーションの非表示
         });
 
         //次の画像を表示する
@@ -612,6 +645,7 @@ $(function(){
 
                 if ($(window).width() > 800) {
                     $(".slide .largeImg").css({'width' : $(window).width() * 0.6});
+                    $(".slide .slide-nav").css({'width' : $(window).width() * 0.6});
                     $('#post__view .slide-operation')
                     .css({
                         'width' : $(window).width(),    // ウィンドウ幅
@@ -626,11 +660,20 @@ $(function(){
                     }
                 } else if (mobile_display_flg == false) {
                     $(".slide .largeImg").css({'width' : '100%'});
+                    $(".slide .slide-nav").css({'width' : '96%'});
                     // スライドショーの戻るボタンと次へボタンを表示する
                     $('#post__view .slide-operation').hide();
                     $('#post__view .mobile-slide-operation').show();
                     mobile_display_flg = true;
                 }
+                nav_elem_width = $('.slide .slide-nav').width() / image_count;
+                $('.slide .slide-nav .elem div').css({width: nav_elem_width+'px'});
+                $('.slide .slide-nav .pos').css({width: nav_elem_width-nav_elem_margin+'px'});
+                var pos = page == 0 ? nav_elem_margin_left : (nav_elem_width)*(page)+nav_elem_margin_left;
+                $('.slide-nav .pos')
+                .css({
+                    "left": pos+'px'
+                });
             }
         });
 
@@ -639,9 +682,14 @@ $(function(){
         //ページ切換用、自作関数作成
         function changePage(){
                                  $(".slide .largeImg img").fadeOut(1000);
-                                 $(".slide .largeImg img").eq(page).fadeIn(1000);
                                  $(".slide .largeImg").hide();
                                  $(".slide .largeImg").eq(page).show();
+                                 $(".slide .largeImg img").eq(page).fadeIn(1000);
+                                 var pos = page == 0 ? nav_elem_margin_left : (nav_elem_width)*(page)+nav_elem_margin_left;
+                                 $('.slide-nav .pos')
+                                 .animate({
+                                     "left": pos+'px'
+                                 });
         };
 
         //～秒間隔でイメージ切換の発火設定
@@ -741,7 +789,8 @@ $(function(){
             var ua = navigator.userAgent;
             if(ua.indexOf('iPhone') > 0 || ua.indexOf('iPad') > 0) {
                 var elem = $('#'+op_elem);
-                elem.addEventListener('touchmove', function(e) {
+                elem.off('touchmove');
+                elem.on('touchmove', function(e) {
                     var scroll = elem.scrollTop;
                     var range = elem.scrollHeight - elem.offsetHeight - 1;
                     if (scroll < 1) {

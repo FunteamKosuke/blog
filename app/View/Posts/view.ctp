@@ -71,6 +71,14 @@
                 </div>
           </div>
         <?php } ?>
+        <!-- スライドショー のナビゲーション -->
+        <div class="slide-nav">
+            <div class="elem">
+            </div>
+            <div class="pos">
+
+            </div>
+        </div>
         <!-- 通常用のスライドショー の次へ前へボタン -->
         <div class="slide-operation">
             <div class="next">

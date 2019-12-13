@@ -77,6 +77,55 @@
     <?php } ?>
         </div>
     </div>
+    <div id="edit-image-mobile" class="container-fluid">
+        <div class="row">
+            <?php foreach ($draft_post['Image'] as $image) { ?>
+            <div class="view-image">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="image">
+                            <?php
+                                $image_path = '../files/image/image';
+                                $image_path .= '/' . $image['image_dir'];
+                                $image_path .= '/' . $image['image'];
+                                echo $this->Html->image($image_path);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- 画像を削除する。 -->
+                        <div class="image-delete">
+                            <?php
+                                echo $this->Form->postLink(
+                                    __('Delete'),
+                                    array('controller' => 'images',
+                                          'action' => 'delete',
+                                          $image['id'],
+                                          '?' => array('post_id' => $draft_post['Post']['id'],
+                                                        'redirect_view' => 'editDraft')),
+                                    array('confirm' => 'Are you sure?',
+                                          'class' => 'btn emphasis-color-low btn-block')
+                                ); ?>
+                        </div>
+                        <!-- 画像を編集する。 -->
+                        <div class="image-edit">
+                            <?php // 画像を差し替えるリンク
+                            echo $this->Html->link(
+                                __('Edit'),
+                                array('controller' => 'images',
+                                      'action' => 'edit',
+                                      $image['id'],
+                                      '?' => array('post_id' => $draft_post['Post']['id'],
+                                                    'redirect_view' => 'editDraft')), // 画像差し替え後に表示していた記事に戻るため、記事のIDを渡す。
+                                array('class' => 'btn emphasis-color-normal btn-block' )
+                            ); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <?php } ?>
+        </div>
+    </div>
     <!-- 記事に画像を追加する。 -->
     <p><?php echo $this->Html->link(__('Add Image'), array('controller' => 'Images',
                                               'action' => 'upload',

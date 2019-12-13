@@ -1,8 +1,8 @@
 /* webサイトの一番下の余白を消す */
-*{
+/* *{
     margin: 0;
     padding: 0;
-}
+} */
 
 html,body{
     width: 100%;
@@ -201,6 +201,7 @@ body.bg-fixed {
 
 #mobile-header-body ul{
     list-style: none;
+    padding: 0;
 }
 
 #mobile-header-body ul span{
@@ -265,6 +266,10 @@ body.bg-fixed {
 
 #mobile-header-body #mobile-search{
     margin-top: 30px;
+}
+
+#mobile-header-body #mobile-search .search_toggle{
+    margin-bottom: 0;
 }
 
 #mobile-header-body #mobile-login-user{
@@ -405,13 +410,48 @@ position:relative;
     object-fit: contain;
 }
 
+#post__view .slide .slide-nav{
+    position:fixed;
+    display: none;
+    width: 96%;
+    margin: auto 2%;
+    height: 20px;
+    background-color: #ff4500;
+    top: 78%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 999;
+}
+
+#post__view .slide .slide-nav .elem{
+    display: flex;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+}
+
+#post__view .slide .slide-nav .elem div{
+    height: 20px;
+    margin-left: 1px;
+    margin-right: 1px;
+    background-color: #000;
+}
+
+#post__view .slide .slide-nav .pos{
+    position: absolute;
+    height: 20px;
+    background-color: #ffff00;
+    top: 0
+}
+
 #post__view .slide-operation{
     display: none;
     position:fixed;
     top: 0;
     left: 0;
-    /* width: 100000px;
-    height: 100000px; */
     z-index: 999;
 }
 
@@ -443,7 +483,7 @@ position:relative;
     display: none;
     position:fixed;
     width: 100%;
-    top: 80%;
+    top: 83%;
     left: 0;
     z-index: 999;
 }
@@ -485,16 +525,48 @@ position:relative;
     margin-bottom: 10px;
 }
 
-#posts__edit-draft #edit-image{
+#posts__edit-draft #edit-image,#posts__edit-draft #edit-image-mobile{
     margin-bottom: 30px;
 }
 
-#posts__edit-draft #edit-image img{
+#posts__edit-draft #edit-image img,#posts__edit-draft #edit-image-mobile img{
     width: 100%;
     height: 100px;
     background-color: #F2F2F2;
     object-fit: contain;
     margin-top: 20px;
+}
+
+#posts__edit-draft #edit-image-mobile img{
+    height: 200px;
+}
+
+#posts__edit-draft #edit-image-mobile{
+    display:none;
+}
+
+#posts__edit-draft #edit-image-mobile .view-image{
+    flex: 0 0 50%;
+    position: relative;
+    width: 100%;
+    padding: auto 1px;
+}
+
+#posts__edit-draft #edit-image-mobile .image{
+    flex: 0 0 100%;
+    max-width: 96%;
+    position: relative;
+    width: 100%;
+    margin: auto 2%;
+}
+
+#posts__edit-draft #edit-image-mobile .image-delete,
+#posts__edit-draft #edit-image-mobile .image-edit{
+    flex: 0 0 46%;
+    position: relative;
+    max-width: 96%;
+    width: 100%;
+    margin: auto 2%;
 }
 
 /* images/upload */
@@ -868,6 +940,16 @@ marginが入るようになっているので、0に設定する。
     }
     #contacts__index #mobile-index{
         display: block;
+    }
+}
+
+/* 編集画面の画像一覧の画面縮小時のデザイン */
+@media (max-width: 925px){
+    #posts__edit-draft #edit-image-mobile{
+        display:block;
+    }
+    #posts__edit-draft #edit-image{
+        display: none;
     }
 }
 

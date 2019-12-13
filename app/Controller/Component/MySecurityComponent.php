@@ -6,7 +6,7 @@ class MySecurityComponent extends Component {
 
     public function startup(Controller $controller) {
         // 送信元がblog.dvだった場合はセキュリティチェックはしない。
-		if (strpos($_SERVER['HTTP_REFERER'], "://blog.dv")) {
+		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], "://blog.dv")) {
             return true;
         }
         $this->Security->startup($controller);
