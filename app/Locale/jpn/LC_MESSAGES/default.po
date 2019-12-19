@@ -294,6 +294,13 @@ msgstr "姓"
 msgid "Huri Name"
 msgstr "名"
 
+msgid "Revive"
+msgstr "復活"
+
+msgid "Index Delete Post"
+msgstr "削除した記事一覧"
+
+
 #########コントローラーのメッセージの翻訳##########
 
 ### posts ###
@@ -451,6 +458,13 @@ msgstr "お問い合わせ内容の送信に失敗しました。"
 
 msgid "We have resent the registration email."
 msgstr "本登録用のメールを再送信しました。"
+
+msgid "The article has been revived."
+msgstr "記事を復活させました。"
+
+msgid "Failed to revive the article."
+msgstr "記事を復活させるのに失敗しました。"
+
 
 ########## バリデーションメッセージ ##########
 

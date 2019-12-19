@@ -681,10 +681,13 @@ $(function(){
 
         //ページ切換用、自作関数作成
         function changePage(){
-                                 $(".slide .largeImg img").fadeOut(1000);
-                                 $(".slide .largeImg").hide();
-                                 $(".slide .largeImg").eq(page).show();
-                                 $(".slide .largeImg img").eq(page).fadeIn(1000);
+                                 $(".slide .largeImg img").hide('Transfer');
+                                 setTimeout(function(){
+                                     $(".slide .largeImg").hide();
+                                     $(".slide .largeImg").eq(page).show();
+                                     $(".slide .largeImg img").eq(page).show('Transfer');
+                                 },700);
+
                                  var pos = page == 0 ? nav_elem_margin_left : (nav_elem_width)*(page)+nav_elem_margin_left;
                                  $('.slide-nav .pos')
                                  .animate({

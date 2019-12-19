@@ -174,6 +174,34 @@
       return $this->redirect(array('action' => 'index'));
     }
 
+    // 論理削除した記事の一覧ページ
+    public function indexDeletePost(){
+        $this->Post->softDelete(false); //論理削除した記事を取得するのに必要な設定。
+        $delete_Posts = $this->Post->find('all', array('conditions'  => array('deleted' => 1)));
+        $this->set('delete_posts', $delete_Posts);
+    }
+
+
+    // 論理削除した記事を復活させる
+    public function revivePost($post_id = null){
+        $this->Post->softDelete(false); //論理削除した記事を取得するのに必要な設定。
+        if ($this->request->is('get')) {
+            throw new MethodNotAllowedException();
+        }
+        self::checkId($post_id);
+
+        $delete_post = $this->Post->findById($post_id);
+        $delete_post['Post']['deleted'] = 0;
+        if (isset($delete_post) && $this->Post->save($delete_post)) {
+            $this->Flash->success(__('The article has been revived.'));
+        } else {
+            $this->Flash->error(__('Failed to revive the article.'));
+        }
+        return $this->redirect(array('action' => 'indexDeletePost'));
+
+    }
+
+
     public function postDateRelatedPost($post_id = null){
         self::checkId($post_id);
         $post = $this->Post->findById($post_id);
@@ -209,11 +237,12 @@
 
         $draft_post = $this->Post->findById($id);
         $draft_post['Post']['publish_flg'] = parent::PUBLISH;
-        if ($draft_post && $this->Post->save($draft_post)) {
+        if (isset($draft_post) && $this->Post->save($draft_post)) {
             $this->Flash->success(__('An article has been published.'));
-            return $this->redirect(array('action' => 'index'));
+        } else {
+            $this->Flash->error(__('The article could not be published.'));
         }
-        $this->Flash->error(__('The article could not be published.'));
+        return $this->redirect(array('action' => 'index'));
     }
 
     // 下書きを編集する。

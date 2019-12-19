@@ -76,6 +76,12 @@
                               'action' => 'draftIndex'),
                         array('class' => 'dropdown-item')
                     );
+                    echo $this->Html->link(
+                        __('Index Delete Post'),
+                        array('controller' => 'posts',
+                              'action' => 'indexDeletePost'),
+                        array('class' => 'dropdown-item')
+                    );
                   ?>
                 </div>
               </li>
@@ -248,6 +254,13 @@
                             array('controller' => 'posts',
                                   'action' => 'draftIndex')
                         ); ?></li>
+                        <li>
+                            <?php echo $this->Html->link(
+                                __('Index Delete Post'),
+                                array('controller' => 'posts',
+                                      'action' => 'indexDeletePost')
+                            ); ?>
+                        </li>
                     </ul>
                 </li>
                 <span class="d-flex align-items-center"><?php echo __('Address Related'); ?></span>
