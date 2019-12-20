@@ -18,6 +18,26 @@ body.bg-fixed {
     overflow-y: hidden;
 }
 
+#scroll-top-move{
+    width: 80px;
+    height: 80px;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #87cefa;
+    font-size: 40px;
+    position: fixed;
+    top: 90%;
+    left: 90%;
+    display: none;
+    z-index: 100;
+    cursor: pointer;
+}
+
+#scroll-top-move img{
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* ヘッダー、コンテンツ、フッターの親ブロックのスタイルを定義する */
 #container{
     height: 100%;
@@ -612,6 +632,10 @@ position:relative;
 }
 
 /****** 全てのページに適用するスタイルを以下に定義する。 ******/
+.pagination{
+    /* padding: 0 auto; */
+    justify-content: center;
+}
 
 /* モーダル専用のスタイル */
 div#msg-modal {

@@ -4837,7 +4837,7 @@ input[type="button"].btn-block {
 .pagination {
   display: -ms-flexbox;
   display: flex;
-  padding-left: 0;
+  padding-left: 0 auto;
   list-style: none;
   border-radius: 0.25rem;
 }

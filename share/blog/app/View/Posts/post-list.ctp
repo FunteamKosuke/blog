@@ -17,8 +17,10 @@
                   }
                 ?>
             </div>
-            <?php $post_date = $post['Post']['created']; ?>
+            <!-- 時間は表示せずに投稿日だけ表示する。 -->
+            <?php $post_date = explode(' ', $post['Post']['created'])[0]; ?>
             <p class="post-date"><?php echo __('Post Date'); ?>：<?php echo h($post_date); ?></p>
+            <p class="category"><?php echo __('Category'); ?>：<?php echo h($post['Category']['name']); ?></p>
             <div class="body">
               <!-- 記事の内容を１００文字まで表示する。 -->
               <?php $body = mb_substr($post['Post']['body'], 0, 100); ?>
@@ -36,22 +38,20 @@
                     array('class' => 'btn btn-outline-primary')
                 ); ?>
             </div>
-            <?php if ($post['Post']['user_id'] == $login_user['id']) {?>
-                <div class="delete">
-                    <?php echo $this->Form->postLink(
-                        __('Delete Post'),
-                        array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
-                        array('confirm' => 'Are you sure?','class' => 'btn btn-outline-danger')
-                    ); ?>
-                </div>
-            <?php } ?>
+            <div class="delete">
+                <?php echo $this->Form->postLink(
+                    __('Delete Post'),
+                    array('controller' => 'posts','action' => 'delete', $post['Post']['id']),
+                    array('confirm' => 'Are you sure?','class' => 'btn btn-outline-primary')
+                ); ?>
+            </div>
             <hr>
           <?php endforeach; ?>
           <?php echo $this->element('bootstrap-paginate'); ?>
         </div><!-- post-list -->
         <div class="col-1">
         </div>
-        <?php echo $this->element('side-bar'); ?>
+        <?php include('side-bar.ctp') ?>
       </div><!-- row -->
     </div><!-- contener -->
 </div><!-- post-list -->

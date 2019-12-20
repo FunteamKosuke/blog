@@ -43,6 +43,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<div id="container">
 		<?php include('header.ctp') ?>
 		<?php include('content.ctp') ?>
+		<!-- 画面topにスクロールするためのボタンを設置する。 -->
+		<div id="scroll-top-move">
+			<?php $icon_path = "../img/scroll-top-move-icon.png" ?>
+			<?php echo $this->Html->image($icon_path,array('id' => 'scroll-top-move-icon',
+															'width'=>'70',
+															'height'=>'70',
+															'alt'=>'画面topにスクロールすためのアイコンです。')); ?>
+		</div>
 		<?php include('footer.ctp') ?>
 	</div>
 	<?php //echo $this->element('sql_dump'); ?>

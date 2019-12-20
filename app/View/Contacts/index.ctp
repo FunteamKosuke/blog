@@ -68,9 +68,5 @@
             <hr>
         <?php endforeach; ?>
     </div>
-        <div class="paginate">
-          <?php echo $this->Paginator->prev(); ?>&nbsp;
-          <?php echo $this->Paginator->numbers(); ?>&nbsp;
-          <?php echo $this->Paginator->next(); ?>
-        </div><!-- paginate -->
+        <?php echo $this->element('bootstrap-paginate'); ?>
 </div>

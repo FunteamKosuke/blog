@@ -37,10 +37,7 @@
                 <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="paginate">
-                  <?php echo $this->Paginator->prev(); ?>&nbsp;
-                  <?php echo $this->Paginator->numbers(); ?>&nbsp;
-                  <?php echo $this->Paginator->next(); ?>
+                <?php echo $this->element('bootstrap-paginate'); ?>
                 </div><!-- paginate -->
           </div>
     </div><!-- row -->

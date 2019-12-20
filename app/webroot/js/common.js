@@ -1,4 +1,17 @@
+const SCROLL_TOP_MOVE_ICON_SHOW_POS = 200;
+
 $(function(){
+    scrollTopMoveIconToggle();
+
+    $(window).scroll(function(){
+        scrollTopMoveIconToggle();
+    });
+
+    $('#scroll-top-move').click(function(){
+        $("html,body").animate({scrollTop: 0});
+    });
+
+
     /*** ヘッダー ***/
     // 検索フォームをクリックしたら表示する
     $('#search img').off('click').on('click',function(){
@@ -810,6 +823,15 @@ $(function(){
             $('body').css({'width': '100%'});
             // スクロール固定を解除する。
             $('body').removeClass('bg-fixed');
+        }
+    }
+
+    // 画面topに移動させるためのiconを画面top位置によって表示の有無を決める。
+    function scrollTopMoveIconToggle(){
+        if($(window).scrollTop() > SCROLL_TOP_MOVE_ICON_SHOW_POS){
+            $('#scroll-top-move').fadeIn();
+        } else {
+            $('#scroll-top-move').fadeOut();
         }
     }
 });
