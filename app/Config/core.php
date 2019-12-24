@@ -18,6 +18,9 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+ // MySucurityComponentのドメインチェック用の定数
+ Configure::write('domainName', 'blog.dv');
+
 //setLocale(LC_ALL, 'deu');
 Configure::write('Config.language', 'jpn');
 

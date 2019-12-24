@@ -753,12 +753,12 @@ $(function(){
         }
     }
 
-    //ウィンドウの位置をセンターに調整
-    function adjustCenter(target) {
-        var margin_top = ($(window).height()-$(target).height())/2;
-        var margin_left = ($(window).width()-$(target).width())/2;
-        $(target).css({top:margin_top+"px", left:margin_left+"px"});
-    }
+    // //ウィンドウの位置をセンターに調整
+    // function adjustCenter(target) {
+    //     var margin_top = ($(window).height()-$(target).height())/2;
+    //     var margin_left = ($(window).width()-$(target).width())/2;
+    //     $(target).css({top:margin_top+"px", left:margin_left+"px"});
+    // }
 
     //モーダルウィンドウを開く
     function displayModal(sign) {

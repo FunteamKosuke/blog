@@ -5,8 +5,8 @@ class MySecurityComponent extends Component {
     public $components = array('Security');
 
     public function startup(Controller $controller) {
-        // 送信元がblog.dvだった場合はセキュリティチェックはしない。
-		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], "://blog.dv")) {
+        // 送信元がcore.phpで設定したドメインだった場合はセキュリティチェックはしない。
+		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], Configure::read('domainName'))) {
             return true;
         }
         $this->Security->startup($controller);

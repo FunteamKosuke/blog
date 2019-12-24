@@ -435,8 +435,7 @@ position:relative;
     display: none;
     width: 96%;
     margin: auto 2%;
-    height: 20px;
-    background-color: #ff4500;
+    background-color: #f0e68c;
     top: 78%;
     left: 0;
     right: 0;
@@ -454,7 +453,6 @@ position:relative;
 }
 
 #post__view .slide .slide-nav .elem div{
-    height: 20px;
     margin-left: 1px;
     margin-right: 1px;
     background-color: #000;
@@ -462,10 +460,18 @@ position:relative;
 
 #post__view .slide .slide-nav .pos{
     position: absolute;
-    height: 20px;
-    background-color: #ffff00;
+    background-color: #4169e1;
     top: 0
 }
+
+/* ナビゲーションはばの設定用 */
+#post__view .slide .slide-nav,
+#post__view .slide .slide-nav .elem div,
+#post__view .slide .slide-nav .pos{
+    height: 10px;
+}
+
+
 
 #post__view .slide-operation{
     display: none;
@@ -658,12 +664,18 @@ div#msg-modal div.background {
 	-ms-filter: "alpha(opacity=75)";
 }
 div#msg-modal div.container {
-	position: relative;
+	position: absolute;
     z-index: 10003;
 	width: 500px;
 	height: 500px;
 	background-color: #ffffff;
-    overflow: scroll;
+    overflow: hidden;
+    /* 上下中央 */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
 }
 
 /* 記事を一覧で表示する部分のスタイル */
